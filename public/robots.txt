@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /admin # admin.nemoneai.com 
+
+# Facebook Scraper Allowlist
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
+Sitemap: https://nemoneai.com/sitemap.xml

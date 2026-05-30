@@ -1,0 +1,56 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#F5E070"/>
+      <stop offset="30%" style="stop-color:#D4A017"/>
+      <stop offset="55%" style="stop-color:#F0C040"/>
+      <stop offset="75%" style="stop-color:#B8860B"/>
+      <stop offset="100%" style="stop-color:#E8C040"/>
+    </linearGradient>
+    <linearGradient id="goldStroke" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFE97A"/>
+      <stop offset="50%" style="stop-color:#C8960A"/>
+      <stop offset="100%" style="stop-color:#F0C040"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="100" fill="#0D0D0D"/>
+
+  <!-- Subtle inner vignette -->
+  <radialGradient id="vignette" cx="50%" cy="50%" r="70%">
+    <stop offset="60%" style="stop-color:#0D0D0D;stop-opacity:0"/>
+    <stop offset="100%" style="stop-color:#000000;stop-opacity:0.6"/>
+  </radialGradient>
+  <rect width="512" height="512" rx="100" fill="url(#vignette)"/>
+
+  <!-- Gold M letterform — elegant serif-style -->
+  <g filter="url(#glow)">
+    <path d="
+      M 112 370
+      L 112 142
+      L 148 142
+      L 256 298
+      L 364 142
+      L 400 142
+      L 400 370
+      L 364 370
+      L 364 210
+      L 272 354
+      L 240 354
+      L 148 210
+      L 148 370
+      Z
+    " fill="url(#goldGrad)" stroke="url(#goldStroke)" stroke-width="1.5"/>
+  </g>
+
+  <!-- Thin gold decorative line under M -->
+  <rect x="152" y="388" width="208" height="2" rx="1" fill="url(#goldGrad)" opacity="0.6"/>
+</svg>

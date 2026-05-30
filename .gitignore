@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+.env*
+*.tar.gz
+*.log
+*.log.out
+*_log.out
+nohup.out
+.DS_Store
+app_backup/
+*.bak
+src/app/_admin_backup/
+index.nginx-debian.html

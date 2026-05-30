@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">네모네AIM</string>
+    <string name="title_activity_main">네모네AIM</string>
+    <string name="package_name">com.nemoneai.matmatch</string>
+    <string name="custom_url_scheme">com.nemoneai.matmatch</string>
+</resources>
