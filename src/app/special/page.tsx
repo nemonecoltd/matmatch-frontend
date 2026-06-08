@@ -12,6 +12,21 @@ export const metadata: Metadata = {
   title: "SPECIAL SERIES | 네모네AIM",
   description: "네모네AIM이 큐레이션한 프리미엄 기사 묶음 시리즈",
   alternates: { canonical: 'https://nemoneai.com/special' },
+  openGraph: {
+    title: "SPECIAL SERIES | 네모네AIM",
+    description: "네모네AIM이 큐레이션한 프리미엄 기사 묶음 시리즈",
+    url: 'https://nemoneai.com/special',
+    siteName: '네모네AIM',
+    images: [{ url: 'https://nemoneai.com/banner_store.png', width: 1200, height: 630, alt: '네모네AIM Special Series' }],
+    locale: 'ko_KR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "SPECIAL SERIES | 네모네AIM",
+    description: "네모네AIM이 큐레이션한 프리미엄 기사 묶음 시리즈",
+    images: ['https://nemoneai.com/banner_store.png'],
+  },
 };
 
 const getThumbnail = (url: string) => {
@@ -62,7 +77,7 @@ export default async function SpecialListPage() {
           {specials.length > 0 ? specials.map((special) => (
             <Link key={special.id} href={`/special/${special.id}`} className="group block no-underline">
               <div className="relative aspect-[16/9] rounded-[40px] overflow-hidden bg-[#111] border border-white/5 mb-8">
-                <img src={getThumbnail(special.bg_image_url)} alt="" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[1500ms]" />
+                <img src={getThumbnail(special.bg_image_url)} alt={special.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[1500ms]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0c] via-transparent to-transparent opacity-80" />
                 <div className="absolute bottom-10 left-10 right-10">
                    <div className="flex items-center gap-3 mb-4">

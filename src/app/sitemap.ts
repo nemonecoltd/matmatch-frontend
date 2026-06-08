@@ -10,8 +10,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   let specials: any[] = []
   try {
     const [resPosts, resSpecials] = await Promise.all([
-      fetch('http://127.0.0.1:8080/posts', { cache: 'force-cache' }),
-      fetch('http://127.0.0.1:8080/specials', { cache: 'force-cache' })
+      fetch('http://127.0.0.1:8080/posts?limit=10000', { next: { revalidate: 3600 } }),
+      fetch('http://127.0.0.1:8080/specials', { next: { revalidate: 3600 } })
     ])
     
     if (resPosts.ok) {

@@ -8,6 +8,32 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://nemoneai.com'),
+  verification: {
+    google: '1c2e780ad63d3fcf',
+    other: { 'naver-site-verification': '0ec75936430ae731c770662e72c81fd3' },
+  },
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: '네모네AIM',
+  url: 'https://nemoneai.com',
+  description: '당신의 시간을 알차게 채워줄 프리미엄 콘텐츠',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: { '@type': 'EntryPoint', urlTemplate: 'https://nemoneai.com/?q={search_term_string}' },
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: '네모네 주식회사',
+  url: 'https://nemoneai.com',
+  logo: 'https://nemoneai.com/matmatch_icon_512.svg',
+  contactPoint: { '@type': 'ContactPoint', email: 'nemonecoltd@gmail.com', contactType: 'customer service' },
 };
 
 export default function RootLayout({
@@ -24,6 +50,8 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4274957638983041"
           crossOrigin="anonymous"
         />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
       </head>
       <body>
         {/* Google tag (gtag.js) */}

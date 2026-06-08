@@ -8,7 +8,7 @@ const Footer = () => {
 
   const footerLinks = [
     { name: '글로벌미식탐험대', href: 'https://www.youtube.com/@MatMatch' },
-    { name: 'PODCAST', href: 'https://open.spotify.com/show/62nfTOr0QFm1o3FIRrcEc7?si=1c9d3582aa404257' },
+    { name: 'PODCAST', href: 'https://podcasts.apple.com/kr/channel/%EB%84%A4%EB%AA%A8%EB%84%A4aim/id6753140870' },
     { name: 'ABOUT', href: 'https://home.nemoneai.com' }, // 공식 홈페이지 연결 
     { name: 'BLOG', href: 'https://brunch.co.kr/@you1' }, 
   ];

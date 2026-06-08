@@ -21,11 +21,29 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   try {
     const res = await fetch(`http://127.0.0.1:8080/specials/${id}`);
     const data = await res.json();
+    const title = `${data.title} | 네모네AIM Special`;
+    const description = data.description || '네모네AIM이 큐레이션한 프리미엄 기사 묶음 시리즈';
+    const imageUrl = getThumbnail(data.bg_image_url) || 'https://nemoneai.com/banner_store.png';
     return {
-      title: `${data.title} | 네모네AIM Special`,
-      description: data.description,
+      title,
+      description,
       keywords: data.tags,
       alternates: { canonical: `https://nemoneai.com/special/${id}` },
+      openGraph: {
+        title,
+        description,
+        url: `https://nemoneai.com/special/${id}`,
+        siteName: '네모네AIM',
+        images: [{ url: imageUrl, width: 1200, height: 630, alt: data.title }],
+        locale: 'ko_KR',
+        type: 'article',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title,
+        description,
+        images: [imageUrl],
+      },
     };
   } catch (e) {
     return { title: "Special Series | 네모네AIM", alternates: { canonical: `https://nemoneai.com/special/${id}` } };
@@ -50,8 +68,19 @@ export default async function SpecialDetailPage({ params }: { params: Promise<{ 
 
   if (!data) return <div className="min-h-screen bg-[#0c0c0c] flex items-center justify-center text-[#D4AF37] font-serif italic text-2xl">Loading...</div>;
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: data.title,
+    description: data.description,
+    url: `https://nemoneai.com/special/${id}`,
+    image: getThumbnail(data.bg_image_url) || 'https://nemoneai.com/banner_store.png',
+    publisher: { '@type': 'Organization', name: '네모네 주식회사', url: 'https://nemoneai.com' },
+  };
+
   return (
     <div className="bg-[#0c0c0c] text-white selection:bg-[#D4AF37] selection:text-black font-serif italic overflow-x-hidden min-h-screen flex flex-col pb-32">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* HEADER */}
       <header className="fixed top-0 left-0 w-full z-[100] px-4 md:px-10 py-4 md:py-8 flex justify-between items-center bg-[#0c0c0c]/80 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
@@ -117,7 +146,7 @@ export default async function SpecialDetailPage({ params }: { params: Promise<{ 
             {data.posts && data.posts.length > 0 ? data.posts.map((post: any, idx: number) => (
               <Link key={post.id} href={`/posts/${post.id}`} className="group flex flex-col md:flex-row gap-10 items-center no-underline border-b border-white/5 pb-6 last:border-0">
                 <div className="relative w-full md:w-[400px] aspect-video rounded-[30px] overflow-hidden bg-[#111] border border-white/5 flex-shrink-0">
-                  <img src={getThumbnail(post.image_url)} alt="" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
+                  <img src={getThumbnail(post.image_url)} alt={post.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
                   <div className="absolute top-6 left-6 w-10 h-10 bg-black/60 backdrop-blur-xl rounded-full border border-white/10 flex items-center justify-center text-[#D4AF37] font-black text-sm italic">
                     {idx + 1}
                   </div>

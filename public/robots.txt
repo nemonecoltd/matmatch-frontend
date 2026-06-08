@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
-Disallow: /admin # admin.nemoneai.com 
+Disallow: /admin # admin.nemoneai.com
+Disallow: /*?_rsc=
 
 # Facebook Scraper Allowlist
 User-agent: facebookexternalhit

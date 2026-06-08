@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "네모네AIM - 당신 시간의 알찬 소비",
   description: "네모네가 만드는 고품격 라이프스타일 매거진. 미식, 문화, 라이프, 테크 콘텐츠로 당신의 시간을 알차게 채워드립니다.",
   alternates: { canonical: "https://nemoneai.com" },
+  robots: { index: true, follow: true },
   openGraph: {
     title: "네모네AIM - 당신 시간의 알찬 소비",
     description: "네모네가 만드는 고품격 라이프스타일 매거진. 미식, 문화, 라이프, 테크 콘텐츠로 당신의 시간을 알차게 채워드립니다.",
