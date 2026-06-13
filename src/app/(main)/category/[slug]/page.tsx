@@ -10,10 +10,10 @@ interface CategoryPageProps {
 }
 
 const CATEGORY_META: Record<string, { title: string; description: string }> = {
-  Taste: { title: "미식 | 네모네AIM", description: "네모네AIM이 엄선한 미식 콘텐츠. 레스토랑, 요리, 음식 문화 등 풍성한 미식 이야기를 만나보세요." },
-  Culture: { title: "문화 | 네모네AIM", description: "예술, 음악, 영화, 공연 등 네모네AIM이 큐레이션한 문화 콘텐츠를 경험하세요." },
-  Life: { title: "라이프 | 네모네AIM", description: "여행, 인테리어, 라이프스타일 등 삶의 질을 높이는 네모네AIM의 라이프 콘텐츠." },
-  Tech: { title: "테크 | 네모네AIM", description: "AI, 스타트업, 가젯 등 네모네AIM이 바라보는 기술과 혁신 이야기." },
+  Taste: { title: "미식", description: "네모네AIM이 엄선한 미식 콘텐츠. 맛의문명사, 최고의대료를 찾아서 등 풍성한 미식 이야기를 만나보세요." },
+  Culture: { title: "문화", description: "예술, 여행, 건축, 드라마 등 네모네AIM이 큐레이션한 문화 콘텐츠를 경험하세요." },
+  Life: { title: "라이프", description: "마인드셋, 세뇌의기술, 라이프스타일 등 삶의 질을 높이는 네모네AIM의 라이프 콘텐츠." },
+  Tech: { title: "테크", description: "AI, 스타트업, 가젯 등 네모네AIM이 바라보는 기술과 혁신 이야기." },
 };
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {

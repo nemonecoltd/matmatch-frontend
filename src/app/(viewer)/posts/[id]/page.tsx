@@ -66,7 +66,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     };
   } catch (e) {
     console.error("Failed to generate metadata:", e);
-    return { title: "네모네AIM", description: "네모네AIM, 당신의 시간을 알차게 채워줄 프리미엄 콘텐츠." };
+    return {
+      title: `포스트 #${(await params).id} | 네모네AIM`,
+      description: "네모네가 만드는 고품격 라이프스타일 매거진. 미식, 문화, 라이프, 테크 콘텐츠.",
+      alternates: { canonical: `https://nemoneai.com/posts/${(await params).id}` },
+    };
   }
 }
 
@@ -113,25 +117,19 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
   return (
     <div className="bg-[#0c0c0c] text-white selection:bg-[#D4AF37] selection:text-black font-serif italic overflow-x-hidden min-h-screen flex flex-col">
       <AnalyticsTracker postId={id} />
-      {/* Schema Markup for Article */}
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Article",
+        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://nemoneai.com/posts/${id}` },
         "headline": data.title,
-        "image": [bgImage], // 첫 번째 이미지를 썸네일로 사용
+        ...(bgImage ? { "image": [bgImage] } : {}),
         "datePublished": data.created_at,
-        "dateModified": data.created_at, // 수정일이 없다면 생성일과 동일하게
-        "author": {
-          "@type": "Person",
-          "name": "네모네AIM Editor" // 저자 이름 (고정 또는 동적으로 변경 가능)
-        },
+        "dateModified": data.updated_at || data.created_at,
+        "author": { "@type": "Person", "name": "탐험대장" },
         "publisher": {
           "@type": "Organization",
           "name": "네모네AIM",
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://nemoneai.com/logo.png" // 로고 이미지 URL
-          }
+          "logo": { "@type": "ImageObject", "url": "https://nemoneai.com/matmatch_icon_512.svg" }
         },
         "description": (data.body_text || "").replace(/<[^>]*>/g, '').substring(0, 150)
       })}} />
@@ -188,10 +186,23 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
 
           {/* 본문 및 Drop Cap 스타일 보존 (이탤릭 제거로 가독성 강화) */}
           <div className="text-gray-200 leading-[1.9] text-lg md:text-xl space-y-10 max-w-7xl mx-auto mb-12 prose-custom font-light tracking-wide not-italic">
-            {/* 첫 번째 문단에 Drop Cap 스타일 적용 */}
-            {data.body_text && (
-              <div dangerouslySetInnerHTML={{ __html: data.body_text }} />
-            )}
+            {(() => {
+              if (!data.body_text) return null;
+              const paragraphs = data.body_text.split('</p>');
+              const mid = Math.floor(paragraphs.length / 2);
+              if (paragraphs.length < 5) {
+                return <div dangerouslySetInnerHTML={{ __html: data.body_text }} />;
+              }
+              const firstHalf = paragraphs.slice(0, mid).join('</p>') + '</p>';
+              const secondHalf = paragraphs.slice(mid).join('</p>');
+              return (
+                <>
+                  <div dangerouslySetInnerHTML={{ __html: firstHalf }} />
+                  <AdSlot adSlot="6725352413" />
+                  <div dangerouslySetInnerHTML={{ __html: secondHalf }} />
+                </>
+              );
+            })()}
           </div>
 
           {adjacent && (adjacent.prev || adjacent.next) && (
@@ -228,11 +239,6 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
               </div>
             </div>
           )}
-
-          {/* 본문 하단 광고 슬롯 (viewer_up 슬롯 재사용) */}
-          {/* <div className="max-w-7xl mx-auto mb-20">
-            <AdSlot adSlot="6725352413" />
-          </div> */}
 
           <div className="flex flex-wrap gap-3 mb-20 max-w-7xl mx-auto">
             {data.tags?.split(',').map((tag: string) => (
