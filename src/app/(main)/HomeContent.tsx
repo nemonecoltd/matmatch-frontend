@@ -30,9 +30,7 @@ const getThumbnail = (postOrUrl: any) => {
 };
 
 export default function HomeContent({ initialPosts, rankingData = [], mainSpecial = null }: { initialPosts: any[], rankingData?: any[], mainSpecial?: any }) {
-  // SSR 초기값: 전체 포스트 수 → 크롤러가 모든 링크를 HTML에서 발견
-  // hydration 이후 useEffect에서 10으로 리셋 → 사용자는 10개부터 시작
-  const [visibleCount, setVisibleCount] = useState(initialPosts.length);
+  const [visibleCount, setVisibleCount] = useState(10);
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get('q') || '';
 

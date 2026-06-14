@@ -59,6 +59,12 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#0c0c0c] text-white selection:bg-[#D4AF37] selection:text-black font-serif italic pb-32">
+      {/* 크롤러용 전체 포스트 링크 — 사용자 화면에 보이지 않음 */}
+      <div className="h-0 overflow-hidden" aria-hidden="true">
+        {posts.map(post => (
+          <a key={post.id} href={`/posts/${post.id}`}>{post.title}</a>
+        ))}
+      </div>
       <main className="max-w-7xl mx-auto px-6 md:px-8 py-5 md:py-10">
         <HomeContent initialPosts={posts} rankingData={rankingData} mainSpecial={mainSpecial} />
       </main>
