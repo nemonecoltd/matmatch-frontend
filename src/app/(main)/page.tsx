@@ -2,7 +2,7 @@ import React from 'react';
 import { Metadata } from "next";
 import HomeContent from './HomeContent';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 // [SEO] 메인 전용 메타데이터 (대표님 확정안 보존)
 export const metadata: Metadata = {
