@@ -46,7 +46,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       },
     };
   } catch (e) {
-    return { title: "Special Series | 네모네AIM", alternates: { canonical: `https://nemoneai.com/special/${id}` } };
+    return {
+      title: `Special Series #${id} | 네모네AIM`,
+      description: "네모네AIM이 큐레이션한 프리미엄 기사 묶음 시리즈",
+      alternates: { canonical: `https://nemoneai.com/special/${id}` },
+    };
   }
 }
 

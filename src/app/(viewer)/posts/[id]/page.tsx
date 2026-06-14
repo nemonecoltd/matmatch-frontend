@@ -1,4 +1,5 @@
 import React from 'react';
+import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { Mail, ChevronLeft } from 'lucide-react';
@@ -33,7 +34,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
     const imageUrl = data?.image_url || `https://nemoneai.com/api/og-image?title=${encodeURIComponent(data?.title || '네모네AIM.')}`; // OG 이미지 URL
     const pageTitle = data?.title || "네모네AIM";
-    const pageDescription = (data?.body_text || "").replace(/<[^>]*>/g, '').substring(0, 150) || "네모네AIM, 당신의 시간을 알차게 채워줄 프리미엄 콘텐츠.";
+    const pageDescription = (data?.body_text || "")
+      .replace(/<[^>]*>/g, '')
+      .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"')
+      .replace(/\s+/g, ' ').trim().substring(0, 150) || "네모네AIM, 당신의 시간을 알차게 채워줄 프리미엄 콘텐츠.";
 
     return {
       title: pageTitle,
@@ -76,7 +80,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export async function generateStaticParams() {
   try {
-    const res = await fetch('http://127.0.0.1:8080/posts', { cache: 'no-store' });
+    const res = await fetch('http://127.0.0.1:8080/posts?limit=10000', { cache: 'no-store' });
     const data = await res.json();
     const posts = Array.isArray(data) ? data : (data.posts || []);
     return posts.map((post: any) => ({ id: post.id.toString() }));
@@ -96,7 +100,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
     adjacent = await adjRes.json();
   } catch (e) { console.error(e); }
 
-  if (!data) return <div className="min-h-screen bg-[#0c0c0c] flex items-center justify-center text-[#D4AF37] font-serif italic text-2xl">Loading...</div>;
+  if (!data) notFound();
 
   const getVid = (u: string) => {
     if(!u || u.includes('spotify.com') || u.includes('open.spotify')) return null;
@@ -131,7 +135,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
           "name": "네모네AIM",
           "logo": { "@type": "ImageObject", "url": "https://nemoneai.com/matmatch_icon_512.svg" }
         },
-        "description": (data.body_text || "").replace(/<[^>]*>/g, '').substring(0, 150)
+        "description": (data.body_text || "").replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim().substring(0, 150)
       })}} />
       
       {/* 헤더: 네모네AIM 디자인 원형 엄수 (900 두께, -0.07em 자간) */}

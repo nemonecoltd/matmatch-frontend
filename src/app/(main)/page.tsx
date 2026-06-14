@@ -2,17 +2,17 @@ import React from 'react';
 import { Metadata } from "next";
 import HomeContent from './HomeContent';
 
-export const revalidate = 0;
+export const revalidate = 60;
 
 // [SEO] 메인 전용 메타데이터 (대표님 확정안 보존)
 export const metadata: Metadata = {
-  title: "네모네AIM - 당신 시간의 알찬 소비",
-  description: "네모네가 만드는 고품격 라이프스타일 매거진. 미식, 문화, 라이프, 테크 콘텐츠로 당신의 시간을 알차게 채워드립니다.",
+  title: "네모네AIM - 당신 시간의 알찬 소비, 사람과 문명의 변화를 탐구하는 미디어",
+  description: "네모네가 만드는 고품격 라이프스타일 매거진. 미식, 문화, 라이프, 테크 콘텐츠로 당신의 시간을 알차게 채워드립니다. | We explore how people, ideas, food, technology, and places shape the lives we live",
   alternates: { canonical: "https://nemoneai.com" },
   robots: { index: true, follow: true },
   openGraph: {
-    title: "네모네AIM - 당신 시간의 알찬 소비",
-    description: "네모네가 만드는 고품격 라이프스타일 매거진. 미식, 문화, 라이프, 테크 콘텐츠로 당신의 시간을 알차게 채워드립니다.",
+    title: "네모네AIM - 당신 시간의 알찬 소비, 사람과 문명의 변화를 탐구하는 미디어",
+    description: "네모네가 만드는 고품격 라이프스타일 매거진. 미식, 문화, 라이프, 테크 콘텐츠로 당신의 시간을 알차게 채워드립니다.| We explore how people, ideas, food, technology, and places shape the lives we live",
     url: "https://nemoneai.com",
     siteName: "네모네AIM",
     images: [{ url: "https://nemoneai.com/banner_store.png", width: 1200, height: 630, alt: "네모네AIM" }],
@@ -21,8 +21,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "네모네AIM - 당신 시간의 알찬 소비",
-    description: "네모네가 만드는 고품격 라이프스타일 매거진.",
+    title: "네모네AIM - 당신 시간의 알찬 소비, 사람과 문명의 변화를 탐구하는 미디어",
+    description: "We explore how people, ideas, food, technology, and places shape the lives we live.",
     images: ["https://nemoneai.com/banner_store.png"],
   },
 };

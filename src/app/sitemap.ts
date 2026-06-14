@@ -40,11 +40,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }))
 
-  // 3. 고정 페이지 URL 생성
+  // 3. 고정 페이지 URL 생성 (nemoneai.com 도메인만 포함)
   const staticUrls = [
     { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 1.0 },
-    { url: 'https://home.nemoneai.com', lastModified: new Date(), changeFrequency: 'daily' as const, priority: 1.0 },
-    { url: 'https://now.nemoneai.com', lastModified: new Date(), changeFrequency: 'daily' as const, priority: 1.0 },
     { url: `${baseUrl}/special`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.9 },
     { url: `${baseUrl}/category/Taste`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.8 },
     { url: `${baseUrl}/category/Culture`, lastModified: new Date(), changeFrequency: 'daily' as const, priority: 0.8 },

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://nemoneai.com'),
   title: {
     template: '%s | 네모네AIM',
-    default: '네모네AIM - 당신 시간의 알찬 소비', 
+    default: '네모네AIM - 당신 시간의 알찬 소비, 사람과 문명의 변화를 탐구하는 미디어', 
   },
 };
 

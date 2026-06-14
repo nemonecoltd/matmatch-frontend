@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
-Disallow: /admin # admin.nemoneai.com
+# admin 페이지 차단 (admin.nemoneai.com 별도 운영)
+Disallow: /admin
+# Next.js RSC 내부 요청 크롤 차단 (크롤 버짓 낭비 방지)
 Disallow: /*?_rsc=
 
 # Facebook Scraper Allowlist

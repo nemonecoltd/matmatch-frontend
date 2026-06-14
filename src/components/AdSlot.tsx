@@ -15,8 +15,7 @@ export default function AdSlot({ adSlot, className }: AdSlotProps) {
     const loadAd = () => {
       try {
         // @ts-ignore
-        const adsbygoogle = window.adsbygoogle || [];
-        adsbygoogle.push({});
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
       } catch (err: any) {
         // 이미 광고가 채워졌다는 에러(TagError)는 무시
         if (!err.message?.includes("already have ads")) {
