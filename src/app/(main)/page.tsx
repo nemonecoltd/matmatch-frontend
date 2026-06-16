@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Metadata } from "next";
 import HomeContent from './HomeContent';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 60;
 
 // [SEO] 메인 전용 메타데이터 (대표님 확정안 보존)
 export const metadata: Metadata = {
@@ -33,9 +33,9 @@ export default async function HomePage() {
   let mainSpecial: any = null;
   try {
     const [resPosts, resRanking, resSpecial] = await Promise.all([
-      fetch('http://127.0.0.1:8080/posts', { cache: 'no-store' }),
-      fetch('http://127.0.0.1:8080/posts/ranking', { cache: 'no-store' }),
-      fetch('http://127.0.0.1:8080/specials/main', { cache: 'no-store' })
+      fetch('http://127.0.0.1:8080/posts', { next: { revalidate: 60 } }),
+      fetch('http://127.0.0.1:8080/posts/ranking', { next: { revalidate: 60 } }),
+      fetch('http://127.0.0.1:8080/specials/main', { next: { revalidate: 60 } })
     ]);
     
     if (resPosts.ok) {
@@ -66,7 +66,9 @@ export default async function HomePage() {
         ))}
       </div>
       <main className="max-w-7xl mx-auto px-6 md:px-8 py-5 md:py-10">
-        <HomeContent initialPosts={posts} rankingData={rankingData} mainSpecial={mainSpecial} />
+        <Suspense fallback={null}>
+          <HomeContent initialPosts={posts} rankingData={rankingData} mainSpecial={mainSpecial} />
+        </Suspense>
       </main>
     </div>
   );
