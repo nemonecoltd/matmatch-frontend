@@ -65,10 +65,10 @@
 
   /* [추가] 에디터 콘텐츠(HTML) 가독성 최적화 */
   .prose-custom p {
-    margin-bottom: 0.75rem; /* 엔터 간격 최적화 */
-    color: #e5e7eb; /* gray-200 */
-    white-space: pre-wrap; /* 공백 및 줄바꿈 유지 */
-    font-style: normal; /* 본문 텍스트는 정갈한 고딕 */
+    margin-bottom: 0.75rem;
+    color: #e5e7eb;
+    font-style: normal;
+    /* white-space: pre-wrap 제거 — Quill이 삽입하는 후행 공백을 그대로 렌더링하는 문제 방지 */
   }
 
   .prose-custom h1 {
@@ -126,11 +126,9 @@
     font-weight: 900;
   }
 
-  /* 엔터 2칸 현상 방지를 위해 br 태그의 강제 여백 제거 */
-  .prose-custom br {
-    display: block;
-    content: "";
-    margin-top: 0;
+  /* Quill이 빈 줄을 <p><br></p>로 삽입 — 여기서 발생하는 "2칸 띄우기" 현상 제거 */
+  .prose-custom p:has(> br:only-child) {
+    display: none;
   }
 
   /* [추가] 에디터 내 텍스트 크기 클래스 호환 */

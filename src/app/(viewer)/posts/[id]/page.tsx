@@ -25,6 +25,12 @@ const getSpotifyEmbedUrl = (url: string | null) => {
   return null;
 };
 
+const getApplePodcastEmbedUrl = (url: string | null) => {
+  if (!url || !url.includes('podcasts.apple.com')) return null;
+  return url.replace('https://podcasts.apple.com', 'https://embed.podcasts.apple.com')
+            .replace('https://embed.embed.podcasts.apple.com', 'https://embed.podcasts.apple.com');
+};
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   try {
@@ -110,6 +116,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
 
   const videoId = getVid(data.youtube_url || data.video_url);
   const spotifyUrl = getSpotifyEmbedUrl(data.video_url || data.youtube_url);
+  const applePodcastUrl = getApplePodcastEmbedUrl(data.video_url || data.youtube_url);
   
   // [수정] 클로드 명령 1순위: API 필드명 4중 방어막 구축
   const bgImage = data.thumbnail_url 
@@ -129,7 +136,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
         ...(bgImage ? { "image": [bgImage] } : {}),
         "datePublished": data.created_at,
         "dateModified": data.updated_at || data.created_at,
-        "author": { "@type": "Person", "name": "탐험대장" },
+        "author": { "@type": "Person", "name": "애들빙자여행러" },
         "publisher": {
           "@type": "Organization",
           "name": "네모네AIM",
@@ -165,7 +172,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
             <div className="flex justify-between items-center py-8 border-y border-white/10 text-sm tracking-widest font-bold uppercase not-italic">
               <div className="flex items-center gap-4">
                 <span className="text-white/40">by</span>
-                <span className="text-white">탐험대장</span>
+                <span className="text-white">애들빙자여행러</span>
                 <a href="mailto:nemonecoltd@gmail.com" className="text-[#D4AF37] hover:text-white transition-colors ml-2">
                   <Mail size={18} />
                 </a>
@@ -186,10 +193,16 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
                 <iframe src={spotifyUrl} width="100%" height="232" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />
               </div>
             )}
+
+            {applePodcastUrl && (
+              <div className="w-full my-20 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+                <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameBorder="0" height="175" style={{width:'100%', maxWidth:'100%', overflow:'hidden', borderRadius:'10px'}} sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src={applePodcastUrl} />
+              </div>
+            )}
           </header>
 
           {/* 본문 및 Drop Cap 스타일 보존 (이탤릭 제거로 가독성 강화) */}
-          <div className="text-gray-200 leading-[1.9] text-lg md:text-xl space-y-10 max-w-7xl mx-auto mb-12 prose-custom font-light tracking-wide not-italic">
+          <div className="text-gray-200 leading-[1.9] text-lg md:text-xl max-w-7xl mx-auto mb-12 prose-custom font-light tracking-wide not-italic">
             {(() => {
               if (!data.body_text) return null;
               const paragraphs = data.body_text.split('</p>');
@@ -202,7 +215,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
               return (
                 <>
                   <div dangerouslySetInnerHTML={{ __html: firstHalf }} />
-                  <AdSlot adSlot="6725352413" />
+                  <AdSlot adSlot="6725352413" className="my-10" />
                   <div dangerouslySetInnerHTML={{ __html: secondHalf }} />
                 </>
               );
