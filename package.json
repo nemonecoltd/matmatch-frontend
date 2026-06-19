@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "NODE_OPTIONS='--max-old-space-size=1536' next build",
+    "build": "rm -rf .next/cache/fetch-cache && NODE_OPTIONS='--max-old-space-size=1536' next build",
     "start": "next start",
     "lint": "eslint",
     "deploy": "pm2 stop all && sudo sync && echo 3 | sudo tee /proc/sys/vm/drop_caches && npm run build && pm2 restart all"
