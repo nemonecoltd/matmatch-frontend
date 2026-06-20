@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
 import { Play, Zap, Mic, FileText, ChevronDown } from 'lucide-react';
 import AdSlot from '@/components/AdSlot';
 
@@ -31,59 +30,15 @@ const getThumbnail = (postOrUrl: any) => {
 
 export default function HomeContent({ initialPosts, rankingData = [], mainSpecial = null }: { initialPosts: any[], rankingData?: any[], mainSpecial?: any }) {
   const [visibleCount, setVisibleCount] = useState(10);
-  const searchParams = useSearchParams();
-  const searchQuery = searchParams.get('q') || '';
 
-  useEffect(() => {
-    setVisibleCount(10);
-  }, [searchQuery]);
-
-  const filteredPosts = initialPosts.filter(post => {
-    const query = searchQuery.toLowerCase();
-    return (
-      post.title?.toLowerCase().includes(query) || 
-      post.body_text?.toLowerCase().includes(query) ||
-      post.category?.toLowerCase().includes(query) ||
-      post.tags?.toLowerCase().includes(query)
-    );
-  });
-  
-  const isSearching = searchQuery.length > 0;
-  const visiblePosts = filteredPosts.slice(0, visibleCount);
-  const hasMore = filteredPosts.length > visibleCount;
+  const visiblePosts = initialPosts.slice(0, visibleCount);
+  const hasMore = initialPosts.length > visibleCount;
 
   return (
     <>
-      <div className={isSearching ? "flex flex-col gap-12 max-w-5xl mx-auto" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12 md:gap-y-16"}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12 md:gap-y-16">
         {visiblePosts.length > 0 ? (
           visiblePosts.map((post, idx) => {
-            if (isSearching) {
-              return (
-                <Link key={post.id} href={`/posts/${post.id}`} className="group flex flex-col md:flex-row gap-8 items-center border-b border-white/5 pb-12 no-underline">
-                  <div className="w-full md:w-64 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-[#111] border border-white/5 flex-shrink-0">
-                    <img 
-                      src={getThumbnail(post)} 
-                      alt={post.title}
-                      className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                    />
-                  </div>
-                  <div className="flex-grow flex flex-col gap-3 py-2 text-left">
-                    <div className="flex items-center gap-3">
-                      <span className="text-[#D4AF37] text-[10px] font-black tracking-widest uppercase not-italic px-2 py-0.5 border border-[#D4AF37]/30 rounded">
-                        {post.category}
-                      </span>
-                    </div>
-                    <h2 className="text-xl md:text-3xl font-black italic group-hover:text-[#D4AF37] transition-colors duration-500 leading-tight tracking-tight">
-                      {post.title}
-                    </h2>
-                    <p className="text-white/40 text-sm line-clamp-2 leading-relaxed font-light">
-                      {(post.body_text || post.content || "").replace(/<[^>]*>?/gm, '')}
-                    </p>
-                  </div>
-                </Link>
-              );
-            }
-
             const isHero = idx === 0;
             const gridClass = isHero ? 'md:col-span-2 lg:col-span-3 mb-0' : '';
             const imageClass = isHero ? "aspect-[21/9] rounded-[60px]" : "aspect-video rounded-[30px]";
