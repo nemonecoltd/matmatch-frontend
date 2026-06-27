@@ -36,7 +36,7 @@ export default function HomeContent({ initialPosts, rankingData = [], mainSpecia
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12 md:gap-y-16">
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12 md:gap-y-16">
         {visiblePosts.length > 0 ? (
           visiblePosts.map((post, idx) => {
             const isHero = idx === 0;

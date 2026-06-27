@@ -65,10 +65,18 @@
 
   /* [추가] 에디터 콘텐츠(HTML) 가독성 최적화 */
   .prose-custom p {
-    margin-bottom: 0.75rem;
+    margin-bottom: 1.6em;
     color: #e5e7eb;
     font-style: normal;
     /* white-space: pre-wrap 제거 — Quill이 삽입하는 후행 공백을 그대로 렌더링하는 문제 방지 */
+  }
+
+  .prose-custom blockquote {
+    border-left: 3px solid #D4AF37;
+    margin: 1.8em 0;
+    padding-left: 1.2em;
+    opacity: 0.85;
+    font-style: italic;
   }
 
   .prose-custom h1 {

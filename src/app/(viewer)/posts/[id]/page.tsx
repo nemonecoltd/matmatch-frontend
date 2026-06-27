@@ -2,7 +2,7 @@ import React from 'react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Mail, ChevronLeft } from 'lucide-react';
+import { ChevronLeft } from 'lucide-react';
 import PostActions from './PostActions';
 import CommentsSection from './CommentsSection';
 import ViewAdSlot from './ViewAdSlot'; // 하단 광고
@@ -160,26 +160,22 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
         
         <article className="relative z-20 max-w-7xl w-full mx-auto px-6 mt-10">
           <header className="mb-12 text-left">
-            <div className="text-[#D4AF37] text-sm font-black tracking-[0.5em] uppercase mb-4 not-italic border-l-4 border-[#D4AF37] pl-6">
+            <div className="text-[#D4AF37] text-xs font-black tracking-[0.35em] uppercase mb-4 not-italic border-l-4 border-[#D4AF37] pl-5">
               {data.category || "네모네AIM Archive"}
             </div>
-            
+
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-[900] italic leading-[1.1] break-keep mb-8 tracking-tighter">
               {data.title}
             </h1>
 
-            {/* 글쓴이 및 날짜 메타 정보 섹션 */}
-            <div className="flex justify-between items-center py-8 border-y border-white/10 text-sm tracking-widest font-bold uppercase not-italic">
-              <div className="flex items-center gap-4">
-                <span className="text-white/40">by</span>
-                <span className="text-white">애들빙자여행러</span>
-                <a href="mailto:nemonecoltd@gmail.com" className="text-[#D4AF37] hover:text-white transition-colors ml-2">
-                  <Mail size={18} />
-                </a>
+            {/* 바이라인: 아바타 이니셜 + 필명 · 날짜 */}
+            <div className="flex items-center gap-3 py-5 border-y border-white/10 not-italic">
+              <div className="w-8 h-8 rounded-full bg-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] text-xs font-bold flex-shrink-0">
+                {(data.author || '애들빙자여행러').charAt(0)}
               </div>
-              <div className="text-white/30 font-light">
-                {new Date(data.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </div>
+              <span className="text-sm text-white/50 font-medium tracking-wide">
+                {data.author || '애들빙자여행러'} · {new Date(data.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </span>
             </div>
             
             {videoId && (
@@ -202,7 +198,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
           </header>
 
           {/* 본문 및 Drop Cap 스타일 보존 (이탤릭 제거로 가독성 강화) */}
-          <div className="text-gray-200 leading-[1.9] text-lg md:text-xl max-w-7xl mx-auto mb-12 prose-custom font-light tracking-wide not-italic">
+          <div className="text-gray-200 leading-[1.9] text-lg md:text-xl max-w-[720px] mx-auto mb-12 prose-custom font-light tracking-[-0.01em] not-italic">
             {(() => {
               if (!data.body_text) return null;
               const paragraphs = data.body_text.split('</p>');

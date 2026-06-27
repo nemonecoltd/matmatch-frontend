@@ -29,7 +29,7 @@ export default function SearchBar() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="relative group w-full max-w-[200px] md:max-w-[300px] mx-4">
+    <form onSubmit={handleSearch} className="relative group w-full">
       <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[#D4AF37]/40 group-focus-within:text-[#D4AF37] transition-colors">
         <Search size={14} />
       </div>
