@@ -5,8 +5,11 @@ import { ChevronRight } from 'lucide-react';
 
 export const revalidate = 60;
 
+const PAGE_SIZE = 10;
+
 interface CategoryPageProps {
   params: { slug: string };
+  searchParams: { page?: string };
 }
 
 const CATEGORY_META: Record<string, { title: string; description: string }> = {
@@ -53,12 +56,14 @@ const getThumbnail = (post: any) => {
   return "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200";
 };
 
-export default async function CategoryPage({ params }: CategoryPageProps) {
+export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { slug } = params;
-  
+  const page = Math.max(1, parseInt(searchParams?.page || '1', 10));
+  const skip = (page - 1) * PAGE_SIZE;
+
   let posts: any[] = [];
   try {
-    const res = await fetch(`http://127.0.0.1:8080/posts?category=${slug}`);
+    const res = await fetch(`http://127.0.0.1:8080/posts?category=${slug}&skip=${skip}&limit=${PAGE_SIZE + 1}`);
     if (res.ok) {
       const data = await res.json();
       posts = Array.isArray(data) ? data : (data.posts || []);
@@ -66,6 +71,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   } catch (error) {
     console.error("Category Fetch Error:", error);
   }
+
+  const hasNext = posts.length > PAGE_SIZE;
+  const paginated = posts.slice(0, PAGE_SIZE);
 
   return (
     <div className="min-h-screen bg-[#0c0c0c] text-white font-serif italic pb-32">
@@ -79,10 +87,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
         {/* 심플 리스트: 좌측 사진 + 우측 제목 */}
         <div className="flex flex-col gap-6">
-          {posts.length === 0 ? (
+          {paginated.length === 0 ? (
             <p className="text-white/30 text-xl italic py-20">No stories found in this category.</p>
           ) : (
-            posts.map((post) => (
+            paginated.map((post) => (
               <Link key={post.id} href={`/posts/${post.id}`} className="group flex flex-col md:flex-row gap-8 items-center border-b border-white/5 pb-6 no-underline">
                 
                 {/* 좌측: 썸네일 (심플하고 정갈한 사이즈) */}
@@ -121,6 +129,37 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             ))
           )}
         </div>
+
+        {/* 페이징 */}
+        {(page > 1 || hasNext) && (
+          <div className="flex items-center justify-center gap-6 mt-12">
+            {page > 1 ? (
+              <Link
+                href={`/category/${slug}?page=${page - 1}`}
+                className="px-6 py-2.5 border border-white/20 rounded-full text-sm font-black uppercase tracking-widest text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all not-italic"
+              >
+                ← Prev
+              </Link>
+            ) : (
+              <span className="px-6 py-2.5 w-24" />
+            )}
+
+            <span className="text-white/20 text-xs font-black uppercase tracking-widest not-italic">
+              {page}
+            </span>
+
+            {hasNext ? (
+              <Link
+                href={`/category/${slug}?page=${page + 1}`}
+                className="px-6 py-2.5 border border-white/20 rounded-full text-sm font-black uppercase tracking-widest text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all not-italic"
+              >
+                Next →
+              </Link>
+            ) : (
+              <span className="px-6 py-2.5 w-24" />
+            )}
+          </div>
+        )}
       </main>
     </div>
   );

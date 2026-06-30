@@ -164,7 +164,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
               {data.category || "네모네AIM Archive"}
             </div>
 
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-[900] italic leading-[1.1] break-keep mb-8 tracking-tighter">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-[900] italic leading-[1.1] break-keep mb-8 tracking-tighter">
               {data.title}
             </h1>
 
