@@ -2,6 +2,7 @@ import React from 'react';
 import { Metadata } from "next";
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
+import InFeedAd from '@/components/InFeedAd';
 
 export const revalidate = 60;
 
@@ -90,8 +91,9 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
           {paginated.length === 0 ? (
             <p className="text-white/30 text-xl italic py-20">No stories found in this category.</p>
           ) : (
-            paginated.map((post) => (
-              <Link key={post.id} href={`/posts/${post.id}`} className="group flex flex-col md:flex-row gap-8 items-center border-b border-white/5 pb-6 no-underline">
+            paginated.map((post, index) => (
+              <React.Fragment key={post.id}>
+              <Link href={`/posts/${post.id}`} className="group flex flex-col md:flex-row gap-8 items-center border-b border-white/5 pb-6 no-underline">
                 
                 {/* 좌측: 썸네일 (심플하고 정갈한 사이즈) */}
                 <div className="w-full md:w-72 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden bg-[#111] border border-white/5 flex-shrink-0">
@@ -126,6 +128,8 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                   </div>
                 </div>
               </Link>
+              {index === 1 && <InFeedAd />}
+              </React.Fragment>
             ))
           )}
         </div>

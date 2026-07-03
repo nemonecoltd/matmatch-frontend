@@ -13,7 +13,7 @@ export default function ViewAdSlot() {
         className="block w-full overflow-hidden rounded-3xl border border-white/5 hover:border-[#D4AF37]/50 transition-all shadow-2xl"
       >
         <img 
-          src="/banner_store.png" 
+          src="/nemone_banner2.jpg"
           alt="Nemone Store Banner" 
           className="w-full h-auto object-cover hover:scale-[1.02] transition-transform duration-700"
         />

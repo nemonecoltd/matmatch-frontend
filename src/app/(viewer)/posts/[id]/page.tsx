@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
 import PostActions from './PostActions';
 import CommentsSection from './CommentsSection';
-import ViewAdSlot from './ViewAdSlot'; // 하단 광고
-import AdSlot from '@/components/AdSlot'; // 공용 광고 컴포넌트
+import ViewAdSlot from './ViewAdSlot';
+import InArticleAd from './InArticleAd';
 import NavLinks from '@/components/NavLinks';
 import BottomTabBar from '@/components/BottomTabBar';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
@@ -211,7 +211,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
               return (
                 <>
                   <div dangerouslySetInnerHTML={{ __html: firstHalf }} />
-                  <AdSlot adSlot="6725352413" className="my-10" />
+                  <InArticleAd />
                   <div dangerouslySetInnerHTML={{ __html: secondHalf }} />
                 </>
               );
