@@ -90,19 +90,7 @@ export default function HomeContent({ initialPosts, rankingData = [], mainSpecia
 
                 {isHero && (
                   <div className="md:col-span-2 lg:col-span-3 w-full mt-2 md:mt-4 mb-4">
-                    {/* 자체 배너 슬롯: 네이버 스마트스토어 */}
-                    <Link 
-                      href="https://smartstore.naver.com/nemone24" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="block w-full mb-12 overflow-hidden rounded-3xl border border-white/5 hover:border-[#D4AF37]/50 transition-all shadow-2xl"
-                    >
-                      <img 
-                        src="/banner_store.png" 
-                        alt="Nemone Store Banner" 
-                        className="w-full h-auto object-cover hover:scale-[1.02] transition-transform duration-700"
-                      />
-                    </Link>
+                    <AdSlot adSlot="7051929128" className="mb-12" />
 
                     {mainSpecial && (
                       <Link href={`/special/${mainSpecial.id}`} className="group block w-full bg-gradient-to-r from-[#D4AF37]/20 to-transparent border border-[#D4AF37]/30 rounded-3xl p-6 mb-12 no-underline hover:border-[#D4AF37] transition-all">
