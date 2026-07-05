@@ -35,8 +35,22 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   try {
     const res = await fetch(`http://127.0.0.1:8080/posts/${id}`);
+    if (!res.ok) {
+      return {
+        title: `삭제된 게시물 #${id} | 네모네AIM`,
+        robots: { index: false, follow: false },
+        alternates: { canonical: `https://nemoneai.com/posts/${id}` },
+      };
+    }
     const post = await res.json();
     const data = Array.isArray(post) ? post[0] : post;
+    if (!data?.id) {
+      return {
+        title: `삭제된 게시물 #${id} | 네모네AIM`,
+        robots: { index: false, follow: false },
+        alternates: { canonical: `https://nemoneai.com/posts/${id}` },
+      };
+    }
 
     const imageUrl = data?.image_url || `https://nemoneai.com/api/og-image?title=${encodeURIComponent(data?.title || '네모네AIM.')}`; // OG 이미지 URL
     const pageTitle = data?.title || "네모네AIM";
@@ -99,14 +113,16 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
   let adjacent: any = null;
   try {
     const res = await fetch(`http://127.0.0.1:8080/posts/${id}`, { next: { revalidate: 3600 } });
-    const json = await res.json();
-    data = Array.isArray(json) ? json[0] : json;
+    if (res.ok) {
+      const json = await res.json();
+      data = Array.isArray(json) ? json[0] : json;
+    }
 
     const adjRes = await fetch(`http://127.0.0.1:8080/posts/${id}/adjacent`, { next: { revalidate: 3600 } });
     adjacent = await adjRes.json();
   } catch (e) { console.error(e); }
 
-  if (!data) notFound();
+  if (!data || !data.id) notFound();
 
   const getVid = (u: string) => {
     if(!u || u.includes('spotify.com') || u.includes('open.spotify')) return null;
