@@ -5,6 +5,7 @@ import { Sparkles, ChevronRight } from 'lucide-react';
 import NavLinks from '@/components/NavLinks';
 import BottomTabBar from '@/components/BottomTabBar';
 import BackButton from '@/components/BackButton';
+import AdSlot from '@/components/AdSlot';
 
 export const revalidate = 3600;
 
@@ -74,8 +75,9 @@ export default async function SpecialListPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {specials.length > 0 ? specials.map((special) => (
-            <Link key={special.id} href={`/special/${special.id}`} className="group block no-underline">
+          {specials.length > 0 ? specials.map((special, idx) => (
+            <React.Fragment key={special.id}>
+            <Link href={`/special/${special.id}`} className="group block no-underline">
               <div className="relative aspect-[16/9] rounded-[40px] overflow-hidden bg-[#111] border border-white/5 mb-8">
                 <img src={getThumbnail(special.bg_image_url)} alt={special.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-[1500ms]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c0c] via-transparent to-transparent opacity-80" />
@@ -98,6 +100,8 @@ export default async function SpecialListPage() {
                 </div>
               </div>
             </Link>
+            {idx === 3 && <AdSlot adSlot="7051929128" className="md:col-span-2" />}
+            </React.Fragment>
           )) : (
             <div className="col-span-full py-40 border border-white/5 rounded-[60px] bg-white/5 text-center">
               <p className="text-[#D4AF37] text-xl font-black italic tracking-widest uppercase opacity-30">No series found.</p>

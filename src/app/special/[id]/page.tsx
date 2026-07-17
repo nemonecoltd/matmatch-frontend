@@ -5,6 +5,7 @@ import { ChevronRight, Mail } from 'lucide-react';
 import NavLinks from '@/components/NavLinks';
 import BottomTabBar from '@/components/BottomTabBar';
 import BackButton from '@/components/BackButton';
+import InFeedAd from '@/components/InFeedAd';
 
 export const revalidate = 3600;
 
@@ -148,7 +149,8 @@ export default async function SpecialDetailPage({ params }: { params: Promise<{ 
           {/* POSTS LIST */}
           <div className="mt-16 space-y-6">
             {data.posts && data.posts.length > 0 ? data.posts.map((post: any, idx: number) => (
-              <Link key={post.id} href={`/posts/${post.id}`} className="group flex flex-col md:flex-row gap-10 items-center no-underline border-b border-white/5 pb-6 last:border-0">
+              <React.Fragment key={post.id}>
+              <Link href={`/posts/${post.id}`} className="group flex flex-col md:flex-row gap-10 items-center no-underline border-b border-white/5 pb-6 last:border-0">
                 <div className="relative w-full md:w-[400px] aspect-video rounded-[30px] overflow-hidden bg-[#111] border border-white/5 flex-shrink-0">
                   <img src={getThumbnail(post.image_url)} alt={post.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
                   <div className="absolute top-6 left-6 w-10 h-10 bg-black/60 backdrop-blur-xl rounded-full border border-white/10 flex items-center justify-center text-[#D4AF37] font-black text-sm italic">
@@ -170,6 +172,8 @@ export default async function SpecialDetailPage({ params }: { params: Promise<{ 
                   </div>
                 </div>
               </Link>
+              {idx === 1 && <InFeedAd />}
+              </React.Fragment>
             )) : (
               <div className="py-20 text-center text-white/20 italic">No stories linked to this series yet.</div>
             )}
