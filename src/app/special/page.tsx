@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     description: "네모네AIM이 큐레이션한 프리미엄 기사 묶음 시리즈",
     url: 'https://nemoneai.com/special',
     siteName: '네모네AIM',
-    images: [{ url: 'https://nemoneai.com/banner_store.png', width: 1200, height: 630, alt: '네모네AIM Special Series' }],
+    images: [{ url: 'https://nemoneai.com/banner_store.jpg', width: 1200, height: 630, alt: '네모네AIM Special Series' }],
     locale: 'ko_KR',
     type: 'website',
   },
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "SPECIAL SERIES | 네모네AIM",
     description: "네모네AIM이 큐레이션한 프리미엄 기사 묶음 시리즈",
-    images: ['https://nemoneai.com/banner_store.png'],
+    images: ['https://nemoneai.com/banner_store.jpg'],
   },
 };
 

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     description: "당신 시간의 알찬 소비, 네모네AIM - 사람·미식·문화·라이프·테크를 통해 당신 주변의 변화를 관찰합니다.",
     url: "https://nemoneai.com",
     siteName: "네모네AIM",
-    images: [{ url: "https://nemoneai.com/banner_store.png", width: 1200, height: 630, alt: "네모네AIM" }],
+    images: [{ url: "https://nemoneai.com/banner_store.jpg", width: 1200, height: 630, alt: "네모네AIM" }],
     locale: "ko_KR",
     type: "website",
   },
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "네모네AIM - 당신 시간의 알찬 소비, 당신 주변의 변화를 관찰합니다",
     description: "당신 시간의 알찬 소비, 네모네AIM - 사람·미식·문화·라이프·테크를 통해 당신 주변의 변화를 관찰합니다.",
-    images: ["https://nemoneai.com/banner_store.png"],
+    images: ["https://nemoneai.com/banner_store.jpg"],
   },
 };
 

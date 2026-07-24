@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     const data = await res.json();
     const title = `${data.title} | 네모네AIM Special`;
     const description = data.description || '네모네AIM이 큐레이션한 프리미엄 기사 묶음 시리즈';
-    const imageUrl = getThumbnail(data.bg_image_url) || 'https://nemoneai.com/banner_store.png';
+    const imageUrl = getThumbnail(data.bg_image_url) || 'https://nemoneai.com/banner_store.jpg';
     return {
       title,
       description,
@@ -79,7 +79,7 @@ export default async function SpecialDetailPage({ params }: { params: Promise<{ 
     name: data.title,
     description: data.description,
     url: `https://nemoneai.com/special/${id}`,
-    image: getThumbnail(data.bg_image_url) || 'https://nemoneai.com/banner_store.png',
+    image: getThumbnail(data.bg_image_url) || 'https://nemoneai.com/banner_store.jpg',
     publisher: { '@type': 'Organization', name: '네모네 주식회사', url: 'https://nemoneai.com' },
   };
 
