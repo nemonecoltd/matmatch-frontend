@@ -180,7 +180,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
               {data.category || "네모네AIM Archive"}
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-[900] italic leading-[1.1] break-keep mb-8 tracking-tighter">
+            <h1 className="text-[clamp(2rem,4.17vw+1.17rem,4.5rem)] font-[900] italic leading-[1.1] break-keep mb-8 tracking-tighter">
               {data.title}
             </h1>
 
