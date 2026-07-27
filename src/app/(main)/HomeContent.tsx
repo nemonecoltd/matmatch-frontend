@@ -78,7 +78,7 @@ export default function HomeContent({ initialPosts, rankingData = [], mainSpecia
                         </span>
                         {contentType === 'podcast' && <span className="text-[#D4AF37] text-[10px] font-bold tracking-widest not-italic border border-[#D4AF37]/30 px-2 py-0.5 rounded">PODCAST</span>}
                       </div>
-                      <h2 className={`${isHero ? 'text-4xl md:text-7xl lg:text-8xl' : 'text-xl md:text-3xl'} font-[900] italic leading-[1.1] tracking-tighter group-hover:text-[#D4AF37] transition-colors duration-500`}>
+                      <h2 className={`${isHero ? 'text-[clamp(1.75rem,7vw+0.3rem,6rem)]' : 'text-xl md:text-3xl'} font-[900] italic leading-[1.1] tracking-tighter group-hover:text-[#D4AF37] transition-colors duration-500`}>
                         {post.title}
                       </h2>
                       <p className={`${isHero ? 'text-base md:text-xl max-w-4xl' : 'text-sm md:text-base'} text-white/50 leading-relaxed line-clamp-2 font-light`}>
