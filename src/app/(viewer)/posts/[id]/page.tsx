@@ -165,10 +165,10 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
       <Header />
 
       {/* [단 1] Article Section: 헤더 + 미디어 + 본문 */}
-      <section className="relative pt-32 pb-20 flex-grow">
+      <section className="relative pt-16 md:pt-32 pb-20 flex-grow">
         {bgImage && (
           <div className="absolute top-0 left-0 w-full h-[75vh] z-0 overflow-hidden pointer-events-none">
-            <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-60" style={{ backgroundImage: `url(${bgImage})` }} />
+            <div className="absolute inset-0 bg-cover bg-center md:bg-fixed opacity-60" style={{ backgroundImage: `url(${bgImage})` }} />
             {/* 하단으로 갈수록 블랙과 섞이는 그라데이션 오버레이 */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-[#0c0c0c] backdrop-blur-[2px]" />
           </div>
@@ -201,13 +201,13 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
             )}
 
             {spotifyUrl && (
-              <div className="w-full my-20 rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-black">
-                <iframe src={spotifyUrl} width="100%" height="232" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />
+              <div className="w-full my-10 rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-black">
+                <iframe src={spotifyUrl} width="100%" height="175" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />
               </div>
             )}
 
             {applePodcastUrl && (
-              <div className="w-full my-20 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+              <div className="w-full my-10 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
                 <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameBorder="0" height="175" style={{width:'100%', maxWidth:'100%', overflow:'hidden', borderRadius:'10px'}} sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src={applePodcastUrl} />
               </div>
             )}
