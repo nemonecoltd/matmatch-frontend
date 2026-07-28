@@ -98,9 +98,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 }
 
+// 하이브리드 SSG: 최신 100개만 빌드 시점에 정적 생성, 나머지는 dynamicParams(기본값 true)로
+// 첫 방문 때 on-demand 렌더링 후 revalidate(1시간) 주기로 캐시 — 글이 계속 늘어도 빌드 시간이
+// 늘어나지 않고, 색인 대상에서 빠지는 것도 아님(모든 id가 여전히 접근/크롤링 가능).
 export async function generateStaticParams() {
   try {
-    const res = await fetch('http://127.0.0.1:8080/posts?limit=10000', { cache: 'no-store' });
+    const res = await fetch('http://127.0.0.1:8080/posts?limit=100', { cache: 'no-store' });
     const data = await res.json();
     const posts = Array.isArray(data) ? data : (data.posts || []);
     return posts.map((post: any) => ({ id: post.id.toString() }));
