@@ -24,27 +24,20 @@ const getThumbnail = (post: any) => {
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q } = await searchParams;
-  const query = (q || '').toLowerCase();
+  const query = (q || '').trim();
 
-  let posts: any[] = [];
-  try {
-    const res = await fetch('http://127.0.0.1:8080/posts', { cache: 'no-store' });
-    if (res.ok) {
-      const data = await res.json();
-      posts = Array.isArray(data) ? data : (data.posts || []);
+  let results: any[] = [];
+  if (query) {
+    try {
+      const res = await fetch(`http://127.0.0.1:8080/posts?q=${encodeURIComponent(query)}&limit=50`, { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        results = Array.isArray(data) ? data : (data.posts || []);
+      }
+    } catch (error) {
+      console.error("Search Fetch Error:", error);
     }
-  } catch (error) {
-    console.error("Search Fetch Error:", error);
   }
-
-  const results = query
-    ? posts.filter(post =>
-        post.title?.toLowerCase().includes(query) ||
-        post.body_text?.toLowerCase().includes(query) ||
-        post.category?.toLowerCase().includes(query) ||
-        post.tags?.toLowerCase().includes(query)
-      )
-    : [];
 
   return (
     <div className="min-h-screen bg-[#0c0c0c] text-white selection:bg-[#D4AF37] selection:text-black font-serif italic pb-32">
