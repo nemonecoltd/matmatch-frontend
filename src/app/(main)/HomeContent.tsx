@@ -41,7 +41,7 @@ export default function HomeContent({ initialPosts, rankingData = [], mainSpecia
           visiblePosts.map((post, idx) => {
             const isHero = idx === 0;
             const gridClass = isHero ? 'md:col-span-2 lg:col-span-3 mb-0' : '';
-            const imageClass = isHero ? "aspect-[21/9] rounded-[60px]" : "aspect-video rounded-[30px]";
+            const imageClass = isHero ? "aspect-[21/9] rounded-[40px] max-h-[220px] sm:max-h-[320px] lg:max-h-[420px]" : "aspect-video rounded-[30px]";
             
             const vUrl = post.video_url || post.youtube_url || "";
             let contentType = 'blog';
@@ -78,7 +78,7 @@ export default function HomeContent({ initialPosts, rankingData = [], mainSpecia
                         </span>
                         {contentType === 'podcast' && <span className="text-[#D4AF37] text-[10px] font-bold tracking-widest not-italic border border-[#D4AF37]/30 px-2 py-0.5 rounded">PODCAST</span>}
                       </div>
-                      <h2 className={`${isHero ? 'text-[clamp(1.75rem,7vw+0.3rem,6rem)]' : 'text-xl md:text-3xl'} font-[900] italic leading-[1.1] tracking-tighter group-hover:text-[#D4AF37] transition-colors duration-500`}>
+                      <h2 className={`${isHero ? 'text-[clamp(1.5rem,4vw+0.5rem,4rem)]' : 'text-xl md:text-3xl'} font-[900] italic leading-[1.1] tracking-tighter group-hover:text-[#D4AF37] transition-colors duration-500`}>
                         {post.title}
                       </h2>
                       <p className={`${isHero ? 'text-base md:text-xl max-w-4xl' : 'text-sm md:text-base'} text-white/50 leading-relaxed line-clamp-2 font-light`}>

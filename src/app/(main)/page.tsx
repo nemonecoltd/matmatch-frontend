@@ -59,7 +59,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#0c0c0c] text-white selection:bg-[#D4AF37] selection:text-black font-serif italic pb-32">
-      <main className="max-w-7xl mx-auto px-6 md:px-8 py-2.5 md:py-5">
+      <main className="max-w-6xl mx-auto px-6 md:px-8 py-2.5 md:py-5">
         <HomeContent initialPosts={posts} rankingData={rankingData} mainSpecial={mainSpecial} />
       </main>
     </div>
