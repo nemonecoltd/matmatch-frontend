@@ -7,6 +7,7 @@ import PostActions from './PostActions';
 import CommentsSection from './CommentsSection';
 import ViewAdSlot from './ViewAdSlot';
 import InArticleAd from './InArticleAd';
+import ArticleNavArrows from './ArticleNavArrows';
 import NavLinks from '@/components/NavLinks';
 import BottomTabBar from '@/components/BottomTabBar';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
@@ -166,6 +167,9 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
       
       {/* 헤더: 네모네AIM 디자인 원형 엄수 (900 두께, -0.07em 자간) */}
       <Header />
+
+      {/* 같은 섹션(카테고리) 기사로 순서대로 이동하는 좌우 화살표 */}
+      <ArticleNavArrows prev={adjacent?.prev ?? null} next={adjacent?.next ?? null} />
 
       {/* [단 1] Article Section: 헤더 + 미디어 + 본문 */}
       <section className="relative pt-16 md:pt-32 pb-20 flex-grow">
