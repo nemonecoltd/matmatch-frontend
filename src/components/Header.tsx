@@ -25,9 +25,10 @@ export default function Header() {
             href="https://now.nemoneai.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-2 py-0.5 bg-emerald-500 border border-emerald-400 text-white text-[10px] font-black italic rounded-md hover:bg-emerald-600 transition-all shadow-sm tracking-tighter"
+            className="flex items-center flex-shrink-0 hover:opacity-80 transition-opacity"
           >
-            Nowhere
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/pace-logo-horizontal-40-dark.svg" alt="PACE" className="h-4 md:h-5 w-auto" />
           </a>
         </div>
 
