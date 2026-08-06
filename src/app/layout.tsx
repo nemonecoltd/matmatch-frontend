@@ -45,6 +45,7 @@ export default function RootLayout({
     <html lang="ko">
       <head>
         <link rel="icon" href="/favicon.png?v=2" type="image/png" />
+        <link rel="alternate" type="application/rss+xml" title="네모네AIM RSS" href="https://nemoneai.com/rss.xml" />
         {/* adsbygoogle.js 스크립트: 표준 script 태그 사용하여 data-nscript 충돌 회피 */}
         <script
           async
