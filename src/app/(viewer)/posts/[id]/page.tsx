@@ -234,6 +234,17 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
               const paragraphs = quillOnly.split('</p>');
               const mid = Math.floor(paragraphs.length / 2);
               if (paragraphs.length < 5) {
+                // 본문(quill)이 짧아도 표 등 MD 블록이 크면 광고가 아예 안 뜨거나 맨 끝으로
+                // 밀려버림 — MD 블록이 있으면 본문 뒤·표 앞에 광고를 끼워 넣음
+                if (mdBlocks) {
+                  return (
+                    <>
+                      <div dangerouslySetInnerHTML={{ __html: quillOnly }} />
+                      <InArticleAd />
+                      <div dangerouslySetInnerHTML={{ __html: mdBlocks }} />
+                    </>
+                  );
+                }
                 return <div dangerouslySetInnerHTML={{ __html: data.body_text }} />;
               }
               const firstHalf = paragraphs.slice(0, mid).join('</p>') + '</p>';
