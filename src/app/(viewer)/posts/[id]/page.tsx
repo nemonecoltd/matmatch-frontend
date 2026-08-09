@@ -224,13 +224,20 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
           <div className="text-gray-200 leading-[1.9] text-lg md:text-xl max-w-[720px] mx-auto mb-12 prose-custom font-light tracking-[-0.01em] not-italic">
             {(() => {
               if (!data.body_text) return null;
-              const paragraphs = data.body_text.split('</p>');
+              // MD 업로드로 첨부된 블록(표 등 구조화 HTML)은 <!--md-import-->...<!--/md-import-->로
+              // 감싸져 있음. 이 안에는 </p>가 없거나 나눠지면 안 되는 태그(<table> 등)가 들어있어서,
+              // 아래 </p> 개수 기준 반씩 자르기 대상에서 반드시 제외해야 함 — 안 그러면 분할 지점이
+              // 표 태그 한가운데를 가로질러 잘라서 표가 깨지거나 사라지는 문제가 있었음(2026-08-09).
+              const MD_BLOCK_REGEX = /<!--md-import-->[\s\S]*?<!--\/md-import-->/g;
+              const mdBlocks = data.body_text.match(MD_BLOCK_REGEX)?.join('') || '';
+              const quillOnly = data.body_text.replace(MD_BLOCK_REGEX, '');
+              const paragraphs = quillOnly.split('</p>');
               const mid = Math.floor(paragraphs.length / 2);
               if (paragraphs.length < 5) {
                 return <div dangerouslySetInnerHTML={{ __html: data.body_text }} />;
               }
               const firstHalf = paragraphs.slice(0, mid).join('</p>') + '</p>';
-              const secondHalf = paragraphs.slice(mid).join('</p>');
+              const secondHalf = paragraphs.slice(mid).join('</p>') + mdBlocks;
               return (
                 <>
                   <div dangerouslySetInnerHTML={{ __html: firstHalf }} />
