@@ -59,6 +59,9 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#0c0c0c] text-white selection:bg-[#D4AF37] selection:text-black font-serif italic pb-32">
+      {/* 홈 전체에 h1이 없어(SEO 점검 중 2026-08-25 발견) 크롤러에 페이지 주제를 알려줄 시맨틱
+          h1이 없었음. 디자인은 그대로 두고 title과 동일한 문구로 숨김 h1만 추가 */}
+      <h1 className="sr-only">네모네AIM - 당신 시간의 알찬 소비, 당신 주변의 변화를 관찰합니다</h1>
       <main className="max-w-6xl mx-auto px-6 md:px-8 py-2.5 md:py-5">
         <HomeContent initialPosts={posts} rankingData={rankingData} mainSpecial={mainSpecial} />
       </main>
