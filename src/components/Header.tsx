@@ -46,7 +46,9 @@ export default function Header() {
           </div>
           {user ? (
             <>
-              <Link href="https://now.nemoneai.com/my" title="통합 마이페이지" className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden border-2 border-[#D4AF37]/30 hover:border-[#D4AF37] transition-all flex-shrink-0">
+              {/* 예전엔 PACE 마이페이지로 보냈지만, 맛매치도 자체 마이페이지(찜한 기사)가
+                  생겨서 자기 서비스 안에 머무르도록 변경(2026-08-28) */}
+              <Link href="/my" title="마이페이지" className="w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden border-2 border-[#D4AF37]/30 hover:border-[#D4AF37] transition-all flex-shrink-0">
                 <img
                   src={user.user_metadata?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.user_metadata?.full_name || user.email || 'U')}&background=random`}
                   alt="profile"
