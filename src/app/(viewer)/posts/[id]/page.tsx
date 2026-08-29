@@ -7,6 +7,7 @@ import PostActions from './PostActions';
 import CommentsSection from './CommentsSection';
 import ViewAdSlot from './ViewAdSlot';
 import InArticleAd from './InArticleAd';
+import ProductRecommendation, { pickProduct, type AffiliateProduct } from './ProductRecommendation';
 import ArticleNavArrows from './ArticleNavArrows';
 import NavLinks from '@/components/NavLinks';
 import BottomTabBar from '@/components/BottomTabBar';
@@ -128,6 +129,16 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
 
   if (!data || !data.id) notFound();
 
+  // 관리자가 직접 고른 상품이 있으면 우선, 없으면 태그로 자동매칭(전체 상품 목록은
+  // 자주 안 바뀌므로 1시간 캐시 — 게시글 fetch와 동일한 revalidate 주기)
+  let recommendedProduct: AffiliateProduct | null = null;
+  try {
+    const prodRes = await fetch('http://127.0.0.1:8080/affiliate-products', { next: { revalidate: 3600 } });
+    const prodJson = await prodRes.json();
+    const products: AffiliateProduct[] = Array.isArray(prodJson.items) ? prodJson.items : [];
+    recommendedProduct = pickProduct(products, data.affiliate_product_id ?? null, data.tags ?? null);
+  } catch (e) { /* 상품 추천은 부가 기능 — 실패해도 기사 렌더링에 영향 없게 조용히 무시 */ }
+
   const getVid = (u: string) => {
     if(!u || u.includes('spotify.com') || u.includes('open.spotify')) return null;
     const match = u.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]{11})/);
@@ -240,6 +251,8 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
               );
             })()}
           </div>
+
+          {recommendedProduct && <ProductRecommendation product={recommendedProduct} />}
 
           {adjacent && (adjacent.prev || adjacent.next) && (
             <div className="max-w-7xl mx-auto mb-10">
