@@ -2,10 +2,9 @@ import React from 'react';
 import { Metadata } from "next";
 import Link from 'next/link';
 import { ChevronRight, Mail } from 'lucide-react';
-import NavLinks from '@/components/NavLinks';
 import BottomTabBar from '@/components/BottomTabBar';
-import BackButton from '@/components/BackButton';
 import InFeedAd from '@/components/InFeedAd';
+import Header from '@/components/Header';
 
 export const revalidate = 3600;
 
@@ -87,15 +86,7 @@ export default async function SpecialDetailPage({ params }: { params: Promise<{ 
     <div className="bg-[#0c0c0c] text-white selection:bg-[#D4AF37] selection:text-black font-serif italic overflow-x-hidden min-h-screen flex flex-col pb-32">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* HEADER */}
-      <header className="fixed top-0 left-0 w-full z-[100] px-4 md:px-10 py-4 md:py-8 flex justify-between items-center bg-[#0c0c0c]/80 backdrop-blur-md border-b border-white/5">
-        <div className="flex items-center gap-2 md:gap-4 flex-shrink-0">
-          <BackButton />
-          <Link href="/" className="text-[#D4AF37] text-2xl md:text-4xl font-[900] italic tracking-[-0.07em] hover:opacity-80 transition-opacity flex-shrink-0">
-            네모네AIM
-          </Link>
-        </div>
-        <NavLinks activeCategory="SPECIAL" />
-      </header>
+      <Header />
 
       {/* HERO SECTION */}
       <section className="relative pt-32 pb-20">
