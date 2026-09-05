@@ -220,7 +220,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
         "publisher": {
           "@type": "Organization",
           "name": "네모네AIM",
-          "logo": { "@type": "ImageObject", "url": "https://nemoneai.com/matmatch_icon_512.svg" }
+          "logo": { "@type": "ImageObject", "url": "https://nemoneai.com/icon-512.png" }
         },
         "description": (data.body_text || "").replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim().substring(0, 150)
       })}} />

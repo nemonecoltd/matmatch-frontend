@@ -1,0 +1,24 @@
+{
+  "name": "네모네AIM",
+  "short_name": "네모네AIM",
+  "description": "당신 시간의 알찬 소비, 네모네AIM - 사람·미식·문화·라이프·테크를 통해 당신 주변의 변화를 관찰합니다.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c0c0c",
+  "theme_color": "#0c0c0c",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
