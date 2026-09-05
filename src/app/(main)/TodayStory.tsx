@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { Play, Zap, Mic, FileText } from 'lucide-react';
-import AdSlot from '@/components/AdSlot';
 
 const getThumbnail = (post: any) => {
   if (post.thumbnail_url) return post.thumbnail_url;
@@ -9,6 +8,13 @@ const getThumbnail = (post: any) => {
     return post.image_url;
   }
   return "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200";
+};
+
+const CONTENT_TYPE_LABEL: Record<string, string> = {
+  blog: 'ESSAY',
+  podcast: 'PODCAST',
+  youtube: 'VIDEO',
+  shorts: 'SHORTS',
 };
 
 // 오늘의 글을 고르는 "고정" 플래그는 아직 없음 — 지시서 6장이 허용한 대로
@@ -23,54 +29,53 @@ export default function TodayStory({ post }: { post: any }) {
   }
   const hasVideo = contentType === 'youtube' || contentType === 'shorts';
 
+  // 실제 예상 읽기시간 필드는 없어 본문 길이로 대략 추정(신규 컬럼 추가 없이 폴백)
+  const bodyText = (post.body_text || post.content || "").replace(/<[^>]*>?/gm, '');
+  const minutes = Math.max(3, Math.round(bodyText.length / 400));
+
   return (
     <section className="mb-16 md:mb-24">
-      <Link href={`/posts/${post.id}`} className="group block no-underline">
-        <article className="flex flex-col w-full text-left">
-          <div className="relative overflow-hidden bg-[#111] border border-white/5 shadow-2xl transition-all duration-1000 group-hover:border-[#D4AF37]/30 aspect-[21/9] rounded-[40px] max-h-[220px] sm:max-h-[320px] lg:max-h-[420px] mb-6">
-            <img
-              src={getThumbnail(post)}
-              className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition duration-[1500ms]"
-              alt={post.title}
-            />
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-700">
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-black/40 backdrop-blur-3xl rounded-full flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform shadow-[0_0_40px_rgba(212,175,55,0.2)]">
-                {contentType === 'shorts' && <Zap fill="#D4AF37" className="text-[#D4AF37]" size={28} />}
-                {contentType === 'youtube' && <Play fill="white" className="text-white ml-1" size={28} />}
-                {contentType === 'podcast' && <Mic className="text-[#D4AF37]" size={28} />}
-                {contentType === 'blog' && <FileText className="text-white" size={28} />}
-              </div>
-            </div>
-            {/* 클릭 불가능한 정적 배지 — 실제 영상은 상세 페이지 내부에 임베드(지시서 4-2장) */}
-            {hasVideo && (
-              <span className="absolute bottom-4 right-4 flex items-center gap-1.5 bg-black/60 backdrop-blur-md border border-white/10 rounded-full px-3 py-1.5 text-[10px] font-black tracking-widest uppercase not-italic text-white">
-                <Play size={10} fill="white" /> Watch Video
-              </span>
-            )}
-          </div>
+      {/* 시안(개편이미지.png)처럼 텍스트를 이미지 안쪽에 오버레이 — special/[id]/page.tsx
+          히어로와 동일한 패턴(전면 이미지 + 그라데이션 + absolute 텍스트) */}
+      <Link
+        href={`/posts/${post.id}`}
+        className="group relative flex items-end overflow-hidden bg-[#111] border border-white/5 shadow-2xl rounded-[40px] min-h-[460px] md:min-h-[560px] no-underline"
+      >
+        <img
+          src={getThumbnail(post)}
+          className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-[1500ms]"
+          alt={post.title}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/10 to-transparent" />
 
-          <div className="flex flex-col gap-4 px-2">
-            <span className="text-[#D4AF37] text-[10px] font-black tracking-[0.4em] uppercase not-italic">
-              Today&apos;s Story
+        {hasVideo && (
+          <span className="absolute top-6 right-6 md:top-8 md:right-8 flex items-center gap-1.5 bg-black/50 backdrop-blur-md border border-white/10 rounded-full pl-2 pr-3 py-1.5 text-[10px] font-black tracking-widest uppercase not-italic text-white z-10">
+            <span className="w-5 h-5 rounded-full bg-white/90 flex items-center justify-center">
+              <Play size={9} fill="black" className="text-black ml-px" />
             </span>
-            <div className="flex items-center gap-3">
-              <span className="text-[#D4AF37] text-xs font-black tracking-[0.3em] uppercase not-italic">
-                {post.category || "Journal"}
-              </span>
-            </div>
-            <h2 className="text-[clamp(1.5rem,4vw+0.5rem,4rem)] font-[900] italic leading-[1.1] tracking-tighter group-hover:text-[#D4AF37] transition-colors duration-500">
-              {post.title}
-            </h2>
-            <p className="text-base md:text-xl max-w-4xl text-white/50 leading-relaxed line-clamp-2 font-light">
-              {(post.body_text || post.content || "").replace(/<[^>]*>?/gm, '')}
-            </p>
-          </div>
-        </article>
-      </Link>
+            Watch Video
+          </span>
+        )}
 
-      <div className="mt-10">
-        <AdSlot adSlot="7051929128" />
-      </div>
+        <div className="relative z-10 flex flex-col gap-3 md:gap-4 px-6 py-8 md:px-14 md:py-12 max-w-2xl">
+          <span className="text-[#D4AF37] text-[10px] font-black tracking-[0.4em] uppercase not-italic">
+            Today&apos;s Story
+          </span>
+          <span className="text-[#D4AF37] text-xs font-black tracking-[0.3em] uppercase not-italic">
+            {post.category || "Journal"}
+          </span>
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-[900] italic leading-[1.15] tracking-tighter text-white group-hover:text-[#D4AF37] transition-colors duration-500">
+            {post.title}
+          </h2>
+          <p className="text-sm md:text-base text-white/60 leading-relaxed line-clamp-2 font-light">
+            {bodyText}
+          </p>
+          <div className="flex items-center gap-2 text-white/40 text-[10px] font-black tracking-[0.2em] uppercase not-italic mt-1">
+            {minutes} MIN READ · {CONTENT_TYPE_LABEL[contentType]}
+          </div>
+        </div>
+      </Link>
     </section>
   );
 }

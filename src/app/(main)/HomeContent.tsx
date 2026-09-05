@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Play, Zap, Mic, FileText, ChevronDown } from 'lucide-react';
+import AdSlot from '@/components/AdSlot';
 import TodayStory from './TodayStory';
 import NemoneOriginals from './NemoneOriginals';
 import FourWorlds from './FourWorlds';
@@ -65,6 +66,9 @@ export default function HomeContent({
     <>
       <TodayStory post={todayStory} />
       <NemoneOriginals specials={originals} />
+      <div className="mb-16 md:mb-24">
+        <AdSlot adSlot="7051929128" />
+      </div>
       <FourWorlds />
       <LatestAndRanking latest={latestStories} ranking={rankingData} />
 

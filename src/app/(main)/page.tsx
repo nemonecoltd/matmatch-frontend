@@ -32,13 +32,11 @@ export default async function HomePage() {
   let rankingData: any[] = [];
   let originals: any[] = [];
   try {
-    const [resPosts, resRanking, resSpecials] = await Promise.all([
+    const [resPosts, resRanking, resSpecials, resMainSpecial] = await Promise.all([
       fetch('http://127.0.0.1:8080/posts', { next: { revalidate: 60 } }),
       fetch('http://127.0.0.1:8080/posts/ranking', { next: { revalidate: 60 } }),
-      // 2026-09-05 메인 개편: 단일 고정 특집(/specials/main) 대신 NEMONE ORIGINALS
-      // 3카드로 최근 스페셜을 보여줌 — /specials가 이미 created_at desc 정렬이라
-      // 상위 3건만 잘라 쓰면 됨(지시서 4-3장)
-      fetch('http://127.0.0.1:8080/specials', { next: { revalidate: 60 } })
+      fetch('http://127.0.0.1:8080/specials', { next: { revalidate: 60 } }),
+      fetch('http://127.0.0.1:8080/specials/main', { next: { revalidate: 60 } })
     ]);
 
     if (resPosts.ok) {
@@ -51,10 +49,20 @@ export default async function HomePage() {
       rankingData = Array.isArray(rData) ? rData : (rData.posts || []);
     }
 
+    // NEMONE ORIGINALS 3장 — 관리자가 고정한 메인 특집이 있으면 항상 첫 장에 고정하고,
+    // 나머지 2장은 최근 스페셜로 채운다(고정 특집 제외, 사용자 확인: "메인 한개 고정 그대로")
+    let recentSpecials: any[] = [];
     if (resSpecials.ok) {
       const sData = await resSpecials.json();
-      originals = (Array.isArray(sData) ? sData : []).slice(0, 3);
+      recentSpecials = Array.isArray(sData) ? sData : [];
     }
+    let mainSpecial: any = null;
+    if (resMainSpecial.ok) {
+      const mData = await resMainSpecial.json();
+      mainSpecial = mData && mData.id ? mData : null;
+    }
+    const others = recentSpecials.filter((s) => s.id !== mainSpecial?.id);
+    originals = mainSpecial ? [mainSpecial, ...others].slice(0, 3) : others.slice(0, 3);
   } catch (error) {
     console.error("Main Fetch Error:", error);
   }
