@@ -34,7 +34,7 @@ export default function TodayStory({ post }: { post: any }) {
   const minutes = Math.max(3, Math.round(bodyText.length / 400));
 
   return (
-    <section className="mb-16 md:mb-24">
+    <section className="mb-8 md:mb-12">
       {/* 시안(개편이미지.png)처럼 텍스트를 이미지 안쪽에 오버레이 — special/[id]/page.tsx
           히어로와 동일한 패턴(전면 이미지 + 그라데이션 + absolute 텍스트) */}
       <Link

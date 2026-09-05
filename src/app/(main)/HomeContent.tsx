@@ -66,15 +66,15 @@ export default function HomeContent({
     <>
       <TodayStory post={todayStory} />
       <NemoneOriginals specials={originals} />
-      <div className="mb-16 md:mb-24">
+      <div className="mb-8 md:mb-12">
         <AdSlot adSlot="7051929128" />
       </div>
       <FourWorlds />
       <LatestAndRanking latest={latestStories} ranking={rankingData} />
 
       {restPosts.length > 0 && (
-        <section className="mb-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12 md:gap-y-16">
+        <section className="mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-6 md:gap-y-8">
             {visibleRest.map((post, idx) => {
               const vUrl = post.video_url || post.youtube_url || "";
               let contentType = 'blog';
@@ -124,7 +124,7 @@ export default function HomeContent({
           </div>
 
           {hasMore && (
-            <div className="mt-20 flex justify-center">
+            <div className="mt-10 flex justify-center">
               <button
                 onClick={() => setVisibleCount((prev) => prev + 9)}
                 className="group flex flex-col items-center gap-4 text-[#D4AF37] hover:text-white transition-colors duration-500"

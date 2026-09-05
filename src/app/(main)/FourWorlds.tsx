@@ -11,18 +11,18 @@ const WORLDS = [
 
 export default function FourWorlds() {
   return (
-    <section className="relative rounded-[40px] overflow-hidden border border-white/5 mb-16 md:mb-24">
+    <section className="relative rounded-[40px] overflow-hidden border border-white/5 mb-8 md:mb-12">
       <div
         className="absolute inset-0 bg-cover bg-center opacity-40"
         style={{ backgroundImage: "url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1600)" }}
       />
       <div className="absolute inset-0 bg-gradient-to-b from-[#0c0c0c]/60 via-[#0c0c0c]/70 to-[#0c0c0c]/90" />
 
-      <div className="relative z-10 px-8 py-14 md:px-14 md:py-20">
+      <div className="relative z-10 px-8 py-7 md:px-14 md:py-10">
         <p className="text-[#D4AF37] text-[10px] font-black tracking-[0.4em] uppercase not-italic mb-3">
           Four Ways To See The World
         </p>
-        <h2 className="text-2xl md:text-4xl font-black italic tracking-tight mb-10 max-w-2xl">
+        <h2 className="text-2xl md:text-4xl font-black italic tracking-tight mb-5 max-w-2xl">
           네모네는 세상을 네 가지 렌즈로 바라봅니다
         </h2>
 

@@ -13,14 +13,14 @@ export default function NemoneOriginals({ specials }: { specials: any[] }) {
   if (!specials.length) return null;
 
   return (
-    <section className="mb-16 md:mb-24">
-      <div className="flex items-end justify-between mb-8">
+    <section className="mb-8 md:mb-12">
+      <div className="flex items-end justify-between mb-4">
         <div>
           <p className="text-[#D4AF37] text-[10px] font-black tracking-[0.4em] uppercase not-italic mb-3">
             Nemone Originals
           </p>
           <h2 className="text-2xl md:text-4xl font-black italic tracking-tight mb-2">
-            당신의 다음 3시간을 설계합니다
+            당신의 시간은 가치있습니다
           </h2>
           <p className="text-white/40 text-sm font-light not-italic">
             바쁜 일상 속, 더 깊이 생각하고 더 나은 선택을 위한 네모네의 특별한 제안

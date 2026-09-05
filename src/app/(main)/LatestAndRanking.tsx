@@ -9,21 +9,22 @@ const getThumbnail = (post: any) => {
   return "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1200";
 };
 
-// 좌(2/3) LATEST STORIES + 우(1/3) WEEKLY RANKING 2단 컬럼. 조회수 기반 랭킹은
-// 편집 섹션(TODAY/ORIGINALS/FOUR WORLDS)보다 반드시 아래(지시서 4-5장, 7장)
+// 좌우 반반(50/50) LATEST STORIES + WEEKLY RANKING 2단 컬럼. 조회수 기반 랭킹은
+// 편집 섹션(TODAY/ORIGINALS/FOUR WORLDS)보다 반드시 아래(지시서 4-5장, 7장) —
+// 사용자 확인: 랭킹이 너무 작아 보여 2/3+1/3에서 반반으로 변경(2026-09-05)
 export default function LatestAndRanking({ latest, ranking }: { latest: any[]; ranking: any[] }) {
   return (
-    <section className="grid grid-cols-1 lg:grid-cols-3 gap-x-12 gap-y-10 mb-16 md:mb-24">
-      <div className="lg:col-span-2">
-        <p className="text-[#D4AF37] text-[10px] font-black tracking-[0.4em] uppercase not-italic mb-6">
+    <section className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-5 mb-8 md:mb-12">
+      <div>
+        <p className="text-[#D4AF37] text-[10px] font-black tracking-[0.4em] uppercase not-italic mb-4">
           Latest Stories
         </p>
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-4">
           {latest.map((post, idx) => (
             <Link
               key={post.id}
               href={`/posts/${post.id}`}
-              className="group flex gap-6 items-center no-underline border-b border-white/5 pb-8 last:border-0 last:pb-0"
+              className="group flex gap-6 items-center no-underline border-b border-white/5 pb-4 last:border-0 last:pb-0"
             >
               <span className="text-2xl md:text-3xl font-[900] italic text-white/15 flex-shrink-0 w-10">
                 {String(idx + 1).padStart(2, '0')}
@@ -52,24 +53,24 @@ export default function LatestAndRanking({ latest, ranking }: { latest: any[]; r
       </div>
 
       <div>
-        <p className="text-[#D4AF37] text-[10px] font-black tracking-[0.4em] uppercase not-italic mb-6">
+        <p className="text-[#D4AF37] text-[10px] font-black tracking-[0.4em] uppercase not-italic mb-4">
           Weekly Ranking
         </p>
-        <div className="bg-white/5 border border-white/10 rounded-3xl p-5 md:p-6">
+        <div className="bg-white/5 border border-white/10 rounded-3xl p-5 md:p-6 h-full">
           <div className="flex flex-col gap-4">
             {ranking.map((item, index) => (
               <Link
                 key={item.id}
                 href={`/posts/${item.id}`}
-                className="group flex items-center gap-4 no-underline border-b border-white/5 pb-3 last:border-0 last:pb-0"
+                className="group flex items-center gap-5 no-underline border-b border-white/5 pb-4 last:border-0 last:pb-0"
               >
-                <span className="text-xl md:text-2xl font-[900] italic text-[#D4AF37]/40 group-hover:text-[#D4AF37] transition-colors flex-shrink-0">
+                <span className="text-2xl md:text-3xl font-[900] italic text-[#D4AF37]/40 group-hover:text-[#D4AF37] transition-colors flex-shrink-0">
                   0{index + 1}
                 </span>
-                <div className="w-14 h-14 rounded-xl overflow-hidden bg-[#111] border border-white/5 flex-shrink-0">
+                <div className="w-20 h-20 rounded-xl overflow-hidden bg-[#111] border border-white/5 flex-shrink-0">
                   <img src={getThumbnail(item)} alt={item.title} className="w-full h-full object-cover opacity-80" />
                 </div>
-                <span className="text-sm font-bold italic text-white/80 group-hover:text-white transition-colors line-clamp-2">
+                <span className="text-base md:text-lg font-bold italic text-white/80 group-hover:text-white transition-colors line-clamp-2">
                   {item.title}
                 </span>
               </Link>
