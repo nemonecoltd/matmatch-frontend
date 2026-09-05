@@ -83,7 +83,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
         {/* 카테고리 헤더: 여백 및 라인 제거 */}
         <header className="mb-10">
           <p className="text-[#D4AF37] text-xs font-black tracking-[0.5em] uppercase mb-2 not-italic">Category</p>
-          <h1 className="text-6xl md:text-8xl font-black italic tracking-tighter">{slug}</h1>
+          <h1 className="text-3xl md:text-4xl font-black not-italic tracking-tight">{slug}</h1>
         </header>
 
         {/* 심플 리스트: 좌측 사진 + 우측 제목 */}

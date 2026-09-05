@@ -62,8 +62,18 @@ export async function generateStaticParams() {
   } catch (e) { return []; }
 }
 
-export default async function SpecialDetailPage({ params }: { params: Promise<{ id: string }> }) {
+const PAGE_SIZE = 10;
+
+export default async function SpecialDetailPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ page?: string }>;
+}) {
   const { id } = await params;
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam || '1', 10));
   let data: any = null;
   try {
     const res = await fetch(`http://127.0.0.1:8080/specials/${id}`);
@@ -71,6 +81,10 @@ export default async function SpecialDetailPage({ params }: { params: Promise<{ 
   } catch (e) { console.error(e); }
 
   if (!data) return <div className="min-h-screen bg-[#0c0c0c] flex items-center justify-center text-[#D4AF37] font-serif italic text-2xl">Loading...</div>;
+
+  const allPosts = data.posts || [];
+  const totalPages = Math.max(1, Math.ceil(allPosts.length / PAGE_SIZE));
+  const pagedPosts = allPosts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -92,7 +106,7 @@ export default async function SpecialDetailPage({ params }: { params: Promise<{ 
       <section className="relative pt-32 pb-20">
         {data.bg_image_url && (
           <div className="absolute top-0 left-0 w-full h-[75vh] z-0 overflow-hidden pointer-events-none">
-            <div className="absolute inset-0 bg-cover bg-center bg-fixed opacity-60" style={{ backgroundImage: `url(${getThumbnail(data.bg_image_url)})` }} />
+            <div className="absolute inset-0 bg-cover bg-center md:bg-fixed opacity-60" style={{ backgroundImage: `url(${getThumbnail(data.bg_image_url)})` }} />
             {/* 하단으로 갈수록 블랙과 섞이는 그라데이션 오버레이 */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-[#0c0c0c] backdrop-blur-[2px]" />
           </div>
@@ -139,13 +153,13 @@ export default async function SpecialDetailPage({ params }: { params: Promise<{ 
 
           {/* POSTS LIST */}
           <div className="mt-16 space-y-6">
-            {data.posts && data.posts.length > 0 ? data.posts.map((post: any, idx: number) => (
+            {pagedPosts.length > 0 ? pagedPosts.map((post: any, idx: number) => (
               <React.Fragment key={post.id}>
               <Link href={`/posts/${post.id}`} className="group flex flex-col md:flex-row gap-10 items-center no-underline border-b border-white/5 pb-6 last:border-0">
                 <div className="relative w-full md:w-[400px] aspect-video rounded-[30px] overflow-hidden bg-[#111] border border-white/5 flex-shrink-0">
                   <img src={getThumbnail(post.image_url)} alt={post.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700" />
                   <div className="absolute top-6 left-6 w-10 h-10 bg-black/60 backdrop-blur-xl rounded-full border border-white/10 flex items-center justify-center text-[#D4AF37] font-black text-sm italic">
-                    {idx + 1}
+                    {(page - 1) * PAGE_SIZE + idx + 1}
                   </div>
                 </div>
                 <div className="flex-1 text-left">
@@ -169,6 +183,37 @@ export default async function SpecialDetailPage({ params }: { params: Promise<{ 
               <div className="py-20 text-center text-white/20 italic">No stories linked to this series yet.</div>
             )}
           </div>
+
+          {/* 페이징 */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-center gap-6 mt-12">
+              {page > 1 ? (
+                <Link
+                  href={`/special/${id}?page=${page - 1}`}
+                  className="px-6 py-2.5 border border-white/20 rounded-full text-sm font-black uppercase tracking-widest text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all not-italic"
+                >
+                  ← Prev
+                </Link>
+              ) : (
+                <span className="px-6 py-2.5 w-24" />
+              )}
+
+              <span className="text-white/20 text-xs font-black uppercase tracking-widest not-italic">
+                {page} / {totalPages}
+              </span>
+
+              {page < totalPages ? (
+                <Link
+                  href={`/special/${id}?page=${page + 1}`}
+                  className="px-6 py-2.5 border border-white/20 rounded-full text-sm font-black uppercase tracking-widest text-white/60 hover:text-[#D4AF37] hover:border-[#D4AF37]/50 transition-all not-italic"
+                >
+                  Next →
+                </Link>
+              ) : (
+                <span className="px-6 py-2.5 w-24" />
+              )}
+            </div>
+          )}
         </div>
       </section>
 

@@ -57,12 +57,9 @@ export default async function SpecialListPage() {
           <div className="text-[#D4AF37] text-sm font-black tracking-[0.5em] uppercase mb-4 not-italic border-l-4 border-[#D4AF37] pl-6">
             ARCHIVE
           </div>
-          <h1 className="text-6xl md:text-8xl font-[900] italic leading-[1.1] tracking-tighter mb-4">
+          <h1 className="text-3xl md:text-4xl font-[900] italic leading-[1.15] tracking-tight">
             Special Series.
           </h1>
-          <p className="text-white/40 text-lg md:text-xl max-w-2xl font-light leading-relaxed">
-            깊이 있는 통찰과 미학적인 관점으로 엮어낸 특별한 콘텐츠 컬렉션을 만나보세요.
-          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
