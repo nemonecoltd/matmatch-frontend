@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Play, Zap, Mic, FileText } from 'lucide-react';
+import { Play, Mic } from 'lucide-react';
 
 const getThumbnail = (post: any) => {
   if (post.thumbnail_url) return post.thumbnail_url;
@@ -28,6 +28,7 @@ export default function TodayStory({ post }: { post: any }) {
     contentType = 'podcast';
   }
   const hasVideo = contentType === 'youtube' || contentType === 'shorts';
+  const hasAudio = contentType === 'podcast';
 
   // 실제 예상 읽기시간 필드는 없어 본문 길이로 대략 추정(신규 컬럼 추가 없이 폴백)
   const bodyText = (post.body_text || post.content || "").replace(/<[^>]*>?/gm, '');
@@ -55,12 +56,18 @@ export default function TodayStory({ post }: { post: any }) {
           Today&apos;s Story
         </span>
 
-        {hasVideo && (
-          <span className="absolute top-6 right-6 md:top-8 md:right-8 flex items-center gap-1.5 bg-black/50 backdrop-blur-md border border-white/10 rounded-full pl-2 pr-3 py-1.5 text-[10px] font-black tracking-widest uppercase not-italic text-white z-10">
+        {/* 우하단 미디어 배지 — 영상/오디오 둘 다 같은 자리에서 타입만 바뀜
+            (2026-09-06 사용자 요청: 팟캐스트에도 유튜브와 동일한 표기 필요) */}
+        {(hasVideo || hasAudio) && (
+          <span className="absolute bottom-6 right-6 md:bottom-8 md:right-8 flex items-center gap-1.5 bg-black/50 backdrop-blur-md border border-white/10 rounded-full pl-2 pr-3 py-1.5 text-[10px] font-black tracking-widest uppercase not-italic text-white z-10">
             <span className="w-5 h-5 rounded-full bg-white/90 flex items-center justify-center">
-              <Play size={9} fill="black" className="text-black ml-px" />
+              {hasVideo ? (
+                <Play size={9} fill="black" className="text-black ml-px" />
+              ) : (
+                <Mic size={10} className="text-black" />
+              )}
             </span>
-            Watch Video
+            {hasVideo ? 'Watch Video' : 'Listen Audio'}
           </span>
         )}
 
