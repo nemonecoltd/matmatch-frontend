@@ -9,7 +9,7 @@ import Header from '@/components/Header';
 export const revalidate = 3600;
 
 export const metadata: Metadata = {
-  title: "SPECIAL SERIES | 네모네AIM",
+  title: "NEMONE ORIGINALS | 네모네AIM",
   description: "네모네AIM이 큐레이션한 프리미엄 기사 묶음 시리즈",
   alternates: { canonical: 'https://nemoneai.com/special' },
   openGraph: {
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     description: "네모네AIM이 큐레이션한 프리미엄 기사 묶음 시리즈",
     url: 'https://nemoneai.com/special',
     siteName: '네모네AIM',
-    images: [{ url: 'https://nemoneai.com/banner_store.jpg', width: 1024, height: 500, alt: '네모네AIM Special Series' }],
+    images: [{ url: 'https://nemoneai.com/banner_store.jpg', width: 1024, height: 500, alt: 'NEMONE ORIGINALS' }],
     locale: 'ko_KR',
     type: 'website',
   },
