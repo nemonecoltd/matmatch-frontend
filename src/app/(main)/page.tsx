@@ -30,29 +30,33 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   let posts: any[] = [];
   let rankingData: any[] = [];
-  let mainSpecial: any = null;
+  let originals: any[] = [];
   try {
-    const [resPosts, resRanking, resSpecial] = await Promise.all([
+    const [resPosts, resRanking, resSpecials] = await Promise.all([
       fetch('http://127.0.0.1:8080/posts', { next: { revalidate: 60 } }),
       fetch('http://127.0.0.1:8080/posts/ranking', { next: { revalidate: 60 } }),
-      fetch('http://127.0.0.1:8080/specials/main', { next: { revalidate: 60 } })
+      // 2026-09-05 메인 개편: 단일 고정 특집(/specials/main) 대신 NEMONE ORIGINALS
+      // 3카드로 최근 스페셜을 보여줌 — /specials가 이미 created_at desc 정렬이라
+      // 상위 3건만 잘라 쓰면 됨(지시서 4-3장)
+      fetch('http://127.0.0.1:8080/specials', { next: { revalidate: 60 } })
     ]);
-    
+
     if (resPosts.ok) {
       const data = await resPosts.json();
       posts = Array.isArray(data) ? data : (data.posts || []);
     }
-    
+
     if (resRanking.ok) {
       const rData = await resRanking.json();
       rankingData = Array.isArray(rData) ? rData : (rData.posts || []);
     }
 
-    if (resSpecial.ok) {
-      mainSpecial = await resSpecial.json();
+    if (resSpecials.ok) {
+      const sData = await resSpecials.json();
+      originals = (Array.isArray(sData) ? sData : []).slice(0, 3);
     }
-  } catch (error) { 
-    console.error("Main Fetch Error:", error); 
+  } catch (error) {
+    console.error("Main Fetch Error:", error);
   }
 
   if (!posts.length) return <div className="min-h-screen bg-[#0c0c0c] flex items-center justify-center text-[#D4AF37] font-serif italic text-2xl">네모네AIM.</div>;
@@ -63,7 +67,7 @@ export default async function HomePage() {
           h1이 없었음. 디자인은 그대로 두고 title과 동일한 문구로 숨김 h1만 추가 */}
       <h1 className="sr-only">네모네AIM - 당신 시간의 알찬 소비, 당신 주변의 변화를 관찰합니다</h1>
       <main className="max-w-6xl mx-auto px-6 md:px-8 py-2.5 md:py-5">
-        <HomeContent initialPosts={posts} rankingData={rankingData} mainSpecial={mainSpecial} />
+        <HomeContent initialPosts={posts} rankingData={rankingData} originals={originals} />
       </main>
     </div>
   );
