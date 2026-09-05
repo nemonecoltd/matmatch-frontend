@@ -58,7 +58,7 @@ export default async function SpecialListPage() {
             ARCHIVE
           </div>
           <h1 className="text-3xl md:text-4xl font-[900] italic leading-[1.15] tracking-tight">
-            Special Series.
+            Nemone Originals
           </h1>
         </div>
 

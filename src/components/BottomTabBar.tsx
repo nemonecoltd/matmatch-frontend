@@ -13,13 +13,15 @@ const BottomTabBar = ({ activeCategory }: BottomTabBarProps) => {
   const GOLD = "#D4AF37";
   const BLACK = "#0c0c0c";
 
+  // name은 다른 페이지들이 넘기는 activeCategory="SPECIAL"과 매칭되는 식별자라 유지,
+  // label만 화면 표시 문구(2026-09-05: Special -> Origin)
   const menuItems = [
-    { name: 'Home', href: '/', icon: Home },
-    { name: 'Taste', href: '/category/Taste', icon: Coffee },
-    { name: 'Culture', href: '/category/Culture', icon: BookOpen },
-    { name: 'Life', href: '/category/Life', icon: Heart },
-    { name: 'Tech', href: '/category/Tech', icon: Laptop },
-    { name: 'Special', href: '/special', icon: Sparkles },
+    { name: 'Home', label: 'Home', href: '/', icon: Home },
+    { name: 'Taste', label: 'Taste', href: '/category/Taste', icon: Coffee },
+    { name: 'Culture', label: 'Culture', href: '/category/Culture', icon: BookOpen },
+    { name: 'Life', label: 'Life', href: '/category/Life', icon: Heart },
+    { name: 'Tech', label: 'Tech', href: '/category/Tech', icon: Laptop },
+    { name: 'Special', label: 'Origin', href: '/special', icon: Sparkles },
   ];
 
   return (
@@ -41,7 +43,7 @@ const BottomTabBar = ({ activeCategory }: BottomTabBarProps) => {
           return (
             <Link href={item.href} key={item.name} className="flex flex-col items-center justify-center text-white/50 hover:text-[#D4AF37] transition-colors duration-200 no-underline" style={{ flex: 1 }}>
               <item.icon size={20} style={{ color: isActive ? GOLD : undefined }} />
-              <span className="text-[10px] font-bold mt-1" style={{ color: isActive ? GOLD : undefined }}>{item.name}</span>
+              <span className="text-[10px] font-bold mt-1" style={{ color: isActive ? GOLD : undefined }}>{item.label}</span>
             </Link>
           );
         })}

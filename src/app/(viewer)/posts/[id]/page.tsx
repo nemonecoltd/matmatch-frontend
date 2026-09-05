@@ -1,14 +1,14 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import Link from 'next/link';
-import { ChevronLeft } from 'lucide-react';
 import PostActions from './PostActions';
 import CommentsSection from './CommentsSection';
 import ViewAdSlot from './ViewAdSlot';
 import InArticleAd from './InArticleAd';
 import ProductRecommendation, { pickProduct, type AffiliateProduct } from './ProductRecommendation';
 import ArticleNavArrows from './ArticleNavArrows';
+import MediaUnit from './MediaUnit';
+import RelatedAndNext from './RelatedAndNext';
 import NavLinks from '@/components/NavLinks';
 import BottomTabBar from '@/components/BottomTabBar';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
@@ -32,6 +32,40 @@ const getApplePodcastEmbedUrl = (url: string | null) => {
   return url.replace('https://podcasts.apple.com', 'https://embed.podcasts.apple.com')
             .replace('https://embed.embed.podcasts.apple.com', 'https://embed.podcasts.apple.com');
 };
+
+// 부제(subtitle) 필드가 DB/어드민에 없음 — 실제 제목 다수가 이미 "대제목: 부제" 형태라
+// 콜론 기준으로만 분리(기사페이지개편_지시서 3-1장). 콜론 없으면 원래 제목 그대로.
+const splitTitle = (title: string): { main: string; subtitle: string | null } => {
+  const idx = title.indexOf(':');
+  if (idx === -1) return { main: title, subtitle: null };
+  return { main: title.slice(0, idx).trim(), subtitle: title.slice(idx + 1).trim() };
+};
+
+// 소제목은 이미 관리자가 "1. 제목" 형태로 본문에 직접 써넣는 관례라(실제 글로 확인됨),
+// 별도 필드 없이 정규식으로 넘버만 큼직하게 분리해 2단 레이아웃으로 승격(지시서 3-3장).
+const SECTION_HEADING_HTML = (num: string, title: string) =>
+  `<div class="section-heading"><span class="section-num">${String(num).padStart(2, '0')}</span><span class="section-title">${title.trim()}</span></div>`;
+
+const promoteSectionHeadings = (bodyHtml: string): string =>
+  bodyHtml
+    // 실제 <h1~3> 태그로 쓴 글(예: id 219)
+    .replace(
+      /<h([1-3])>\s*(\d+)\.\s*([^<]*)<\/h\1>/g,
+      (_match, _level, num, title) => SECTION_HEADING_HTML(num, title)
+    )
+    // Quill이 굵은 글씨 문단으로만 쓴 글(예: id 217) — 관리자마다 작성 방식이 달라
+    // 실제 두 가지 패턴이 섞여 있음(2026-09-05 확인)
+    .replace(
+      /<p>\s*<strong>\s*(\d+)\.\s*([^<]*)<\/strong>\s*<\/p>/g,
+      (_match, num, title) => SECTION_HEADING_HTML(num, title)
+    );
+
+// 본문 이미지가 나중에(예: 다른 서비스 스토리지 정리로) 깨지면 부서진 아이콘이
+// 그대로 노출되던 문제(2026-09-05 사용자 리포트, id 218 확인) — 어떤 이유로든
+// 로드 실패 시 그 이미지만 조용히 숨김. 원인 자체(외부 스토리지 URL을 직접 박아
+// 넣는 관행)는 어드민 콘텐츠 작성 습관 문제라 여기서 고칠 수 없어 방어만 추가.
+const guardBrokenImages = (bodyHtml: string): string =>
+  bodyHtml.replace(/<img /g, `<img onerror="this.style.display='none'" `);
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -129,6 +163,21 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
 
   if (!data || !data.id) notFound();
 
+  // RELATED STORIES — 같은 카테고리 글(카테고리 페이지가 이미 쓰는 패턴 재사용,
+  // 신규 API 불필요). 넉넉히 4개 받아 현재 글 제외 후 앞에서 3개만 씀(지시서 3-5장)
+  let relatedPosts: any[] = [];
+  try {
+    const relRes = await fetch(
+      `http://127.0.0.1:8080/posts?category=${encodeURIComponent(data.category || '')}&limit=6`,
+      { next: { revalidate: 3600 } }
+    );
+    if (relRes.ok) {
+      const relJson = await relRes.json();
+      const list = Array.isArray(relJson) ? relJson : (relJson.posts || []);
+      relatedPosts = list.filter((p: any) => p.id !== data.id);
+    }
+  } catch (e) { /* 관련기사는 부가 기능 — 실패해도 기사 렌더링에 영향 없게 조용히 무시 */ }
+
   // 관리자가 직접 고른 상품이 있으면 우선, 없으면 태그로 자동매칭(전체 상품 목록은
   // 자주 안 바뀌므로 1시간 캐시 — 게시글 fetch와 동일한 revalidate 주기)
   let recommendedProduct: AffiliateProduct | null = null;
@@ -182,25 +231,38 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
       {/* 같은 섹션(카테고리) 기사로 순서대로 이동하는 좌우 화살표 */}
       <ArticleNavArrows prev={adjacent?.prev ?? null} next={adjacent?.next ?? null} />
 
-      {/* [단 1] Article Section: 헤더 + 미디어 + 본문 */}
+      {/* [단 1] Article Section: 히어로 + LISTEN/WATCH + 본문 */}
       <section className="relative pt-16 md:pt-32 pb-20 flex-grow">
+        {/* 히어로는 여기서 완전히 끝난다 — 고정 660px(스펙 620~700px) 이후로는
+            이미지가 아예 없는 순수 검정 배경(기사페이지개편_지시서 3-1장 핵심 변경점) */}
         {bgImage && (
-          <div className="absolute top-0 left-0 w-full h-[75vh] z-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-0 left-0 w-full h-[660px] z-0 overflow-hidden pointer-events-none">
             <div className="absolute inset-0 bg-cover bg-center md:bg-fixed opacity-60" style={{ backgroundImage: `url(${bgImage})` }} />
             {/* 하단으로 갈수록 블랙과 섞이는 그라데이션 오버레이 */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/40 to-[#0c0c0c] backdrop-blur-[2px]" />
           </div>
         )}
-        
+
         <article className="relative z-20 max-w-7xl w-full mx-auto px-6 mt-10">
           <header className="mb-12 text-left">
             <div className="text-[#D4AF37] text-xs font-black tracking-[0.35em] uppercase mb-4 not-italic border-l-4 border-[#D4AF37] pl-5">
               {data.category || "네모네AIM Archive"}
             </div>
 
-            <h1 className="text-[clamp(2rem,4.17vw+1.17rem,4.5rem)] font-[900] italic leading-[1.1] break-keep mb-8 tracking-tighter">
-              {data.title}
-            </h1>
+            {/* 제목 10~15% 축소 + 콜론 있으면 대제목/부제 분리(지시서 3-1장) */}
+            {(() => {
+              const { main, subtitle } = splitTitle(data.title);
+              return (
+                <h1 className="text-[clamp(1.75rem,3.6vw+1rem,3.9rem)] font-[900] italic leading-[1.15] break-keep mb-8 tracking-tighter">
+                  {main}
+                  {subtitle && (
+                    <span className="block text-[clamp(1.1rem,1.6vw+0.6rem,1.75rem)] text-white/60 font-medium not-italic mt-3 tracking-normal leading-snug">
+                      {subtitle}
+                    </span>
+                  )}
+                </h1>
+              );
+            })()}
 
             {/* 바이라인: 아바타 이니셜 + 필명 · 날짜 */}
             <div className="flex items-center gap-3 py-5 border-y border-white/10 not-italic">
@@ -211,31 +273,17 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
                 {data.author || '애들빙자여행러'} · {new Date(data.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
               </span>
             </div>
-            
-            {videoId && (
-              <div className="w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border border-white/10 my-20 bg-black">
-                <iframe className="w-full h-full" src={`https://www.youtube.com/embed/${videoId}?rel=0`} allowFullScreen />
-              </div>
-            )}
-
-            {spotifyUrl && (
-              <div className="w-full my-10 rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-black">
-                <iframe src={spotifyUrl} width="100%" height="175" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />
-              </div>
-            )}
-
-            {applePodcastUrl && (
-              <div className="w-full my-10 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
-                <iframe allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write" frameBorder="0" height="175" style={{width:'100%', maxWidth:'100%', overflow:'hidden', borderRadius:'10px'}} sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation" src={applePodcastUrl} />
-              </div>
-            )}
           </header>
 
+          {/* READ·LISTEN·WATCH 유닛 — 히어로 밖(검정 배경)으로 승격(지시서 3-2장) */}
+          <MediaUnit videoId={videoId} spotifyUrl={spotifyUrl} applePodcastUrl={applePodcastUrl} />
+
           {/* 본문 및 Drop Cap 스타일 보존 (이탤릭 제거로 가독성 강화) */}
-          <div className="text-gray-200 leading-[1.9] text-lg md:text-xl max-w-[720px] mx-auto mb-12 prose-custom font-light tracking-[-0.01em] not-italic">
+          <div className="text-gray-200 leading-[2] text-lg max-w-[720px] mx-auto mb-12 prose-custom font-light tracking-[-0.01em] not-italic">
             {(() => {
               if (!data.body_text) return null;
-              const paragraphs = data.body_text.split('</p>');
+              const bodyHtml = guardBrokenImages(promoteSectionHeadings(data.body_text));
+              const paragraphs = bodyHtml.split('</p>');
               const mid = Math.floor(paragraphs.length / 2);
               if (paragraphs.length < 5) {
                 return <div dangerouslySetInnerHTML={{ __html: data.body_text }} />;
@@ -254,40 +302,9 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
 
           {recommendedProduct && <ProductRecommendation product={recommendedProduct} />}
 
-          {adjacent && (adjacent.prev || adjacent.next) && (
-            <div className="max-w-7xl mx-auto mb-10">
-              <div className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl">
-                <div className="flex items-center gap-4 mb-6">
-                  <span className="text-[#D4AF37] text-[10px] md:text-xs font-black tracking-[0.4em] uppercase italic">Explore More</span>
-                  <div className="h-[1px] flex-grow bg-[#D4AF37]/20"></div>
-                </div>
-                <div className="flex flex-col gap-4">
-                  {adjacent.next && (
-                    <Link href={`/posts/${adjacent.next.id}`} className="group flex items-center gap-6 no-underline border-b border-white/5 pb-4 last:border-0 last:pb-0">
-                      <span className="text-xl md:text-2xl font-[900] italic text-[#D4AF37]/40 group-hover:text-[#D4AF37] transition-colors w-16">NEXT</span>
-                      <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 flex-grow overflow-hidden">
-                        <span className="text-[9px] font-black tracking-widest uppercase bg-[#D4AF37]/10 text-[#D4AF37] px-2 py-0.5 rounded w-fit flex-shrink-0">{adjacent.next.category}</span>
-                        <span className="text-base md:text-lg font-bold italic text-white/80 group-hover:text-white transition-colors truncate">
-                          {adjacent.next.title}
-                        </span>
-                      </div>
-                    </Link>
-                  )}
-                  {adjacent.prev && (
-                    <Link href={`/posts/${adjacent.prev.id}`} className="group flex items-center gap-6 no-underline border-b border-white/5 pb-4 last:border-0 last:pb-0">
-                      <span className="text-xl md:text-2xl font-[900] italic text-[#D4AF37]/40 group-hover:text-[#D4AF37] transition-colors w-16">PREV</span>
-                      <div className="flex flex-col md:flex-row md:items-center gap-2 md:gap-4 flex-grow overflow-hidden">
-                        <span className="text-[9px] font-black tracking-widest uppercase bg-[#D4AF37]/10 text-[#D4AF37] px-2 py-0.5 rounded w-fit flex-shrink-0">{adjacent.prev.category}</span>
-                        <span className="text-base md:text-lg font-bold italic text-white/80 group-hover:text-white transition-colors truncate">
-                          {adjacent.prev.title}
-                        </span>
-                      </div>
-                    </Link>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
+          {/* RELATED STORIES + NEXT STORY — prev 이동은 ArticleNavArrows(좌우 고정
+              화살표)가 계속 담당하므로 여기서는 관련기사/다음글만(지시서 3-5, 3-6장) */}
+          <RelatedAndNext related={relatedPosts} next={adjacent?.next ?? null} />
 
           <div className="flex flex-wrap gap-3 mb-20 max-w-7xl mx-auto">
             {data.tags?.split(',').map((tag: string) => (
