@@ -46,7 +46,7 @@ export default function HomeContent({
   rankingData?: any[];
   originals?: any[];
 }) {
-  const [visibleCount, setVisibleCount] = useState(9);
+  const [visibleCount, setVisibleCount] = useState(6);
 
   const todayStory = initialPosts[0];
   const latestStories = initialPosts.slice(1, 4);
@@ -126,7 +126,7 @@ export default function HomeContent({
           {hasMore && (
             <div className="mt-10 flex justify-center">
               <button
-                onClick={() => setVisibleCount((prev) => prev + 9)}
+                onClick={() => setVisibleCount((prev) => prev + 6)}
                 className="group flex flex-col items-center gap-4 text-[#D4AF37] hover:text-white transition-colors duration-500"
               >
                 <span className="text-xs font-black tracking-[0.5em] uppercase italic">More Stories</span>

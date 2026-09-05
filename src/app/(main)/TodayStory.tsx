@@ -49,6 +49,12 @@ export default function TodayStory({ post }: { post: any }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/10 to-transparent" />
 
+        {/* 좌상단에 크고 굵게 고정 배치 — 기존엔 하단 텍스트 블록 안에 작게 섞여 있어
+            눈에 잘 안 띄었음(2026-09-05 사용자 피드백) */}
+        <span className="absolute top-6 left-6 md:top-8 md:left-8 z-10 text-[#D4AF37] text-sm md:text-base font-black tracking-[0.3em] uppercase not-italic">
+          Today&apos;s Story
+        </span>
+
         {hasVideo && (
           <span className="absolute top-6 right-6 md:top-8 md:right-8 flex items-center gap-1.5 bg-black/50 backdrop-blur-md border border-white/10 rounded-full pl-2 pr-3 py-1.5 text-[10px] font-black tracking-widest uppercase not-italic text-white z-10">
             <span className="w-5 h-5 rounded-full bg-white/90 flex items-center justify-center">
@@ -59,9 +65,6 @@ export default function TodayStory({ post }: { post: any }) {
         )}
 
         <div className="relative z-10 flex flex-col gap-3 md:gap-4 px-6 py-8 md:px-14 md:py-12 max-w-2xl">
-          <span className="text-[#D4AF37] text-[10px] font-black tracking-[0.4em] uppercase not-italic">
-            Today&apos;s Story
-          </span>
           <span className="text-[#D4AF37] text-xs font-black tracking-[0.3em] uppercase not-italic">
             {post.category || "Journal"}
           </span>
