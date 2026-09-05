@@ -56,7 +56,7 @@ export default function RelatedAndNext({
                 <span className="text-[#D4AF37] text-[10px] font-black tracking-widest uppercase not-italic block mb-1.5">
                   {post.category || "Journal"}
                 </span>
-                <h3 className="text-base md:text-lg font-black italic leading-snug tracking-tight group-hover:text-[#D4AF37] transition-colors">
+                <h3 className="text-base md:text-lg font-black italic leading-snug tracking-tight break-keep group-hover:text-[#D4AF37] transition-colors">
                   {post.title}
                 </h3>
               </Link>
@@ -74,7 +74,7 @@ export default function RelatedAndNext({
           <span className="text-[9px] font-black tracking-widest uppercase bg-[#D4AF37]/10 text-[#D4AF37] px-2 py-0.5 rounded w-fit inline-block mb-4">
             {nextStory.category || "Journal"}
           </span>
-          <h3 className="text-base md:text-lg font-bold italic leading-snug text-white/80 group-hover:text-white transition-colors mb-6">
+          <h3 className="text-base md:text-lg font-bold italic leading-snug break-keep text-white/80 group-hover:text-white transition-colors mb-6">
             {nextStory.title}
           </h3>
           <div className="flex items-center gap-2 text-[#D4AF37] text-xs font-black uppercase tracking-widest not-italic">

@@ -68,7 +68,7 @@ export default function TodayStory({ post }: { post: any }) {
           <span className="text-[#D4AF37] text-xs font-black tracking-[0.3em] uppercase not-italic">
             {post.category || "Journal"}
           </span>
-          <h2 className="text-2xl md:text-4xl lg:text-5xl font-[900] italic leading-[1.15] tracking-tighter text-white group-hover:text-[#D4AF37] transition-colors duration-500">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-[900] italic leading-[1.15] tracking-tighter break-keep text-white group-hover:text-[#D4AF37] transition-colors duration-500">
             {post.title}
           </h2>
           <p className="text-sm md:text-base text-white/60 leading-relaxed line-clamp-2 font-light">

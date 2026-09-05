@@ -110,7 +110,7 @@ export default function HomeContent({
                         </span>
                         {contentType === 'podcast' && <span className="text-[#D4AF37] text-[10px] font-bold tracking-widest not-italic border border-[#D4AF37]/30 px-2 py-0.5 rounded">PODCAST</span>}
                       </div>
-                      <h2 className="text-xl md:text-3xl font-[900] italic leading-[1.1] tracking-tighter group-hover:text-[#D4AF37] transition-colors duration-500">
+                      <h2 className="text-xl md:text-3xl font-[900] italic leading-[1.1] tracking-tighter break-keep group-hover:text-[#D4AF37] transition-colors duration-500">
                         {post.title}
                       </h2>
                       <p className="text-sm md:text-base text-white/50 leading-relaxed line-clamp-2 font-light">

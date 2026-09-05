@@ -70,7 +70,7 @@ export default function LatestAndRanking({ latest, ranking }: { latest: any[]; r
                 <div className="w-20 h-20 rounded-xl overflow-hidden bg-[#111] border border-white/5 flex-shrink-0">
                   <img src={getThumbnail(item)} alt={item.title} className="w-full h-full object-cover opacity-80" />
                 </div>
-                <span className="text-base md:text-lg font-bold italic text-white/80 group-hover:text-white transition-colors line-clamp-2">
+                <span className="text-base md:text-lg font-bold italic text-white/80 group-hover:text-white transition-colors line-clamp-2 break-keep">
                   {item.title}
                 </span>
               </Link>

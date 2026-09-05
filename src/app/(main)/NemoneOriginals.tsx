@@ -48,7 +48,7 @@ export default function NemoneOriginals({ specials }: { specials: any[] }) {
                 <span className="text-[#D4AF37] text-[9px] font-black tracking-widest uppercase not-italic">Series</span>
               </div>
             </div>
-            <h3 className="text-lg md:text-xl font-black italic leading-snug tracking-tight group-hover:text-[#D4AF37] transition-colors">
+            <h3 className="text-lg md:text-xl font-black italic leading-snug tracking-tight break-keep group-hover:text-[#D4AF37] transition-colors">
               {special.title}
             </h3>
             <p className="text-white/40 text-xs mt-1 line-clamp-1 font-light not-italic">{special.description}</p>
