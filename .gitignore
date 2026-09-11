@@ -12,3 +12,4 @@ app_backup/
 *.bak
 src/app/_admin_backup/
 index.nginx-debian.html
+*.tsbuildinfo
