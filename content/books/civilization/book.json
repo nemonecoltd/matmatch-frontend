@@ -1,0 +1,262 @@
+{
+  "slug": "civilization",
+  "title": "맛의 문명사",
+  "subtitle": "",
+  "editorNote": "",
+  "audio": {
+    "sampleUrl": "",
+    "totalRuntime": ""
+  },
+  "parts": [
+    {
+      "kind": "prologue",
+      "chapters": [
+        {
+          "slug": "prologue",
+          "no": null,
+          "title": "오늘 저녁, 당신의 식탁 위에 놓인 5천 년",
+          "subtitle": "",
+          "free": true,
+          "audioUrl": ""
+        }
+      ]
+    },
+    {
+      "kind": "part",
+      "partNo": 1,
+      "title": "땅이 묻다",
+      "introFile": "p1intro.md",
+      "chapters": [
+        {
+          "slug": "p1c01",
+          "no": 1,
+          "title": "방콕의 오전, 폴란드의 11월",
+          "subtitle": "더위와 추위가 만든 두 개의 시간감각",
+          "free": true,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p1c02",
+          "no": 2,
+          "title": "강이 차려준 식탁, 물을 찾아 차린 식탁",
+          "subtitle": "이집트와 이란, 물이 결정한 두 개의 부엌",
+          "free": true,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p1c03",
+          "no": 3,
+          "title": "문명은 어떤 곡물 위에 섰나",
+          "subtitle": "밀, 옥수수, 수수가 사람에게 요구한 것들",
+          "free": true,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p1c04",
+          "no": 4,
+          "title": "기름의 땅, 버터의 땅",
+          "subtitle": "지방이 그린 유럽의 지도",
+          "free": true,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p1c05",
+          "no": 5,
+          "title": "최고의 재료는 태어나지 않는다",
+          "subtitle": "제주의 흑돼지와 이베리아의 검은 돼지",
+          "free": true,
+          "audioUrl": ""
+        }
+      ]
+    },
+    {
+      "kind": "part",
+      "partNo": 2,
+      "title": "손이 답하다",
+      "introFile": "p2intro.md",
+      "chapters": [
+        {
+          "slug": "p2c06",
+          "no": 6,
+          "title": "불을 다루는 두 개의 철학",
+          "subtitle": "마이야르 반응과 웍의 숨",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p2c07",
+          "no": 7,
+          "title": "무엇을 어디서 자르는가",
+          "subtitle": "칼이 부엌에 머문 곳과 식탁에 오른 곳",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p2c08",
+          "no": 8,
+          "title": "부패와의 전쟁",
+          "subtitle": "소금, 산, 연기, 그리고 날것을 먹는 용기",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p2c09",
+          "no": 9,
+          "title": "보이지 않는 요리사",
+          "subtitle": "김치, 사우어크라우트, 피시소스는 같은 이야기다",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p2c10",
+          "no": 10,
+          "title": "다섯 번째 맛이 이름을 얻기까지",
+          "subtitle": "감칠맛과 MSG의 백 년",
+          "free": false,
+          "audioUrl": ""
+        }
+      ]
+    },
+    {
+      "kind": "part",
+      "partNo": 3,
+      "title": "길이 섞다",
+      "introFile": "p3intro.md",
+      "chapters": [
+        {
+          "slug": "p3c11",
+          "no": 11,
+          "title": "말 위의 부엌",
+          "subtitle": "몽골이 연 길, 만두가 걸은 길",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p3c12",
+          "no": 12,
+          "title": "한 냄비에서 끓은 제국들",
+          "subtitle": "동유럽, 맛의 지층을 파 내려가다",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p3c13",
+          "no": 13,
+          "title": "향신료를 찾아 떠난 배",
+          "subtitle": "대항해시대가 뒤바꾼 세계의 입맛",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p3c14",
+          "no": 14,
+          "title": "짐가방 속의 레시피",
+          "subtitle": "이민자는 고향의 맛을 어떻게 번역했나",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p3c15",
+          "no": 15,
+          "title": "굴 껍데기 위에 세운 도시",
+          "subtitle": "뉴욕이 먹어치운 바다",
+          "free": false,
+          "audioUrl": ""
+        }
+      ]
+    },
+    {
+      "kind": "part",
+      "partNo": 4,
+      "title": "식탁이 나누다",
+      "introFile": "p4intro.md",
+      "chapters": [
+        {
+          "slug": "p4c16",
+          "no": 16,
+          "title": "공간을 펼치는 식탁, 시간을 펼치는 식탁",
+          "subtitle": "한 상과 코스, 그리고 접시의 주인",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p4c17",
+          "no": 17,
+          "title": "왕의 식탁에서 미식가의 펜으로",
+          "subtitle": "맛을 소유하던 사람들, 맛을 기록한 사람들",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p4c18",
+          "no": 18,
+          "title": "전쟁이 남긴 음식들",
+          "subtitle": "통조림에서 부대찌개까지",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p4c19",
+          "no": 19,
+          "title": "얼음 한 조각의 산업혁명",
+          "subtitle": "칵테일과 냉장고가 계절을 지우기까지",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p4c20",
+          "no": 20,
+          "title": "당신이 먹은 음식의 주인은 누구인가",
+          "subtitle": "부엌에서 공장으로, 공장에서 브랜드로",
+          "free": false,
+          "audioUrl": ""
+        }
+      ]
+    },
+    {
+      "kind": "part",
+      "partNo": 5,
+      "title": "혀가 기억하다",
+      "introFile": "p5intro.md",
+      "chapters": [
+        {
+          "slug": "p5c21",
+          "no": 21,
+          "title": "멈출 수 없는 맛은 설계된다",
+          "subtitle": "감자튀김과 치킨의 과학",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p5c22",
+          "no": 22,
+          "title": "세종의 비빔밥, 우리의 비빔밥",
+          "subtitle": "시간여행 맛대결",
+          "free": false,
+          "audioUrl": ""
+        },
+        {
+          "slug": "p5c23",
+          "no": 23,
+          "title": "항아리에서 세계의 식탁으로",
+          "subtitle": "지역의 맛이 세계의 맛이 될 때",
+          "free": false,
+          "audioUrl": ""
+        }
+      ]
+    },
+    {
+      "kind": "epilogue",
+      "chapters": [
+        {
+          "slug": "epilogue",
+          "no": null,
+          "title": "다시, 오늘 저녁의 식탁",
+          "subtitle": "",
+          "free": false,
+          "audioUrl": ""
+        }
+      ]
+    }
+  ]
+}
