@@ -24,33 +24,58 @@ interface Props {
   isFree: boolean;
 }
 
+/**
+ * 보유 상품 조회는 배지마다 하지 않고 책 단위로 한 번만 한다.
+ * 목차에 배지가 19개(유료 장 수)라 각자 fetch하면 같은 요청이 19번 나간다 — 같은
+ * (책, 토큰) 조합의 요청 하나를 모듈 스코프에서 공유한다.
+ */
+const productsCache = new Map<string, Promise<Set<string>>>();
+
+async function fetchOwnedProducts(bookSlug: string, token: string): Promise<Set<string>> {
+  const key = `${bookSlug}:${token}`;
+  const cached = productsCache.get(key);
+  if (cached) return cached;
+
+  const p = (async () => {
+    const res = await fetch(`/api/entitlements/chapters?book=${encodeURIComponent(bookSlug)}`, {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: 'no-store',
+    });
+    if (!res.ok) return new Set<string>();
+    const data = await res.json();
+    return new Set<string>(Array.isArray(data?.products) ? data.products : []);
+  })().catch(() => new Set<string>());
+
+  productsCache.set(key, p);
+  return p;
+}
+
+/** 권한 판정은 서버(books_api.can_read)가 원본이고, 여기선 배지 표시용으로만 같은 규칙을 쓴다. */
+function canRead(chapterSlug: string, bookSlug: string, products: Set<string>): boolean {
+  if (products.has(`${bookSlug}:full`)) return true;
+  const m = /^p(\d+)c\d+$/.exec(chapterSlug);
+  return m !== null && products.has(`${bookSlug}:p${m[1]}`);
+}
+
 export default function EntitlementBadge({ bookSlug, chapterSlug, isFree }: Props) {
-  const { user } = useAuth();
+  const { session } = useAuth();
   const [owned, setOwned] = useState(false);
+  const token = session?.access_token;
 
   useEffect(() => {
     // 무료 장은 권한 조회 자체가 불필요. 비로그인도 마찬가지.
-    if (isFree || !user) {
+    if (isFree || !token) {
       setOwned(false);
       return;
     }
     let alive = true;
-    // Phase 1: /entitlements/* API는 아직 없다(작업 순서 5번). API가 붙기 전까지는
-    // 조회 실패를 '미보유'로 간주해 기본 배지를 그대로 둔다 — 화면이 깨지지 않는 게 우선.
-    (async () => {
-      try {
-        const res = await fetch(`/api/entitlements/check?book=${bookSlug}`, { cache: 'no-store' });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (alive) setOwned(Boolean(data?.owned));
-      } catch {
-        /* 권한 확인 실패 = 미보유로 취급 */
-      }
-    })();
+    fetchOwnedProducts(bookSlug, token).then((products) => {
+      if (alive) setOwned(canRead(chapterSlug, bookSlug, products));
+    });
     return () => {
       alive = false;
     };
-  }, [bookSlug, isFree, user]);
+  }, [bookSlug, chapterSlug, isFree, token]);
 
   if (isFree) {
     return (
