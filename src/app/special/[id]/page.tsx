@@ -6,7 +6,16 @@ import BottomTabBar from '@/components/BottomTabBar';
 import InFeedAd from '@/components/InFeedAd';
 import Header from '@/components/Header';
 
-export const revalidate = 3600;
+// 2026-09-06 페이징 추가(6c17baa) 이후 이 페이지가 전부 500 에러였음(2026-09-21 발견,
+// Search Console에서 5xx 보고로 확인 — 6개 스페셜 전체가 대상, 특정 id 문제가 아니었음).
+// 원인: searchParams(페이지네이션, 요청마다 달라짐)를 읽는데 generateStaticParams가 있어
+// Next.js가 이 라우트를 "정적으로 생성 가능한 경로"로 보고 빌드 시점/요청 시점에 정적
+// 생성을 시도한다 — 그 시도 도중 searchParams(요청별 값, 빌드 시점엔 존재 자체가 불가능)를
+// 읽는 순간 DYNAMIC_SERVER_USAGE로 크래시한다. revalidate=3600만 지우는 걸로는 안 고쳐졌음
+// (2026-09-21 1차 시도 — 재배포 후에도 동일 에러로 실패 확인) — generateStaticParams가
+// 있는 한 Next가 계속 정적 생성을 시도하기 때문. force-dynamic으로 이 라우트를 정적 생성
+// 후보에서 아예 제외해야 한다(요청마다 서버에서 새로 렌더 — ISR 캐싱 이득은 포기).
+export const dynamic = 'force-dynamic';
 
 const getThumbnail = (url: string) => {
   if (!url) return "";
