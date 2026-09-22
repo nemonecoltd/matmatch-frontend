@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Coffee, BookOpen, Heart, Laptop, Sparkles } from 'lucide-react';
+import { Home, Coffee, BookOpen, Heart, Laptop, Sparkles, Library } from 'lucide-react';
 
 interface BottomTabBarProps {
   activeCategory?: string; // 수동으로 활성화할 카테고리 (뷰어 페이지용)
@@ -22,6 +22,7 @@ const BottomTabBar = ({ activeCategory }: BottomTabBarProps) => {
     { name: 'Life', label: 'Life', href: '/category/Life', icon: Heart },
     { name: 'Tech', label: 'Tech', href: '/category/Tech', icon: Laptop },
     { name: 'Special', label: 'Origin', href: '/special', icon: Sparkles },
+    { name: 'Books', label: 'Books', href: '/books', icon: Library },
   ];
 
   return (
