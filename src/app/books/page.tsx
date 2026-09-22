@@ -155,9 +155,7 @@ export default function BooksPage() {
               <img
                 src={book.coverImage}
                 alt={`${book.title} 표지`}
-                width={480}
-                height={720}
-                className="mt-8 aspect-[2/3] w-[220px] rounded object-cover shadow-2xl shadow-black/50 md:w-[260px]"
+                className="mt-8 h-auto w-full max-w-[480px] rounded object-contain shadow-2xl shadow-black/50"
               />
             )}
             {book.subtitle && (
