@@ -17,6 +17,11 @@ import Link from 'next/link';
  *
  * 플래그가 없을 때(=일반 웹)가 기본값이다. 다만 hydration 불일치를 피하려고 첫 렌더에서는
  * 서버와 같은 결과를 그린 뒤, 마운트 이후에 앱이면 감춘다.
+ *
+ * 2026-09-22: 앱이 실제로 이 플래그를 주입하는지 확인되지 않아(WebView 래퍼 빌더 툴 사용,
+ * 주입 설정 미확인) 구매 버튼이 앱에서도 노출되는 사고 발생. 근본 수정(앱 쪽 플래그 주입
+ * 확인) 전까지 임시로 `md:` 브레이크포인트 이상에서만 노출 — 앱은 항상 모바일 폭이므로
+ * 뷰포트 기준으로도 동일하게 가려진다. 데스크톱 웹 구매 노출은 그대로 유지.
  */
 interface Props {
   bookSlug: string;
@@ -52,7 +57,7 @@ export default function PurchaseSection({ bookSlug, variant }: Props) {
         {!isApp && (
           <Link
             href={`/checkout/${bookSlug}`}
-            className="inline-flex items-center justify-center rounded-sm bg-[#D4AF37] px-7 py-3.5 text-[13px] font-bold tracking-[0.1em] text-[#0c0c0c] no-underline transition-opacity hover:opacity-85"
+            className="hidden items-center justify-center rounded-sm bg-[#D4AF37] px-7 py-3.5 text-[13px] font-bold tracking-[0.1em] text-[#0c0c0c] no-underline transition-opacity hover:opacity-85 md:inline-flex"
           >
             전권 구매하기
           </Link>
@@ -73,7 +78,7 @@ export default function PurchaseSection({ bookSlug, variant }: Props) {
   ];
 
   return (
-    <section id="pricing" className="scroll-mt-28">
+    <section id="pricing" className="hidden scroll-mt-28 md:block">
       <h2 className="mb-10 text-[10px] font-black uppercase tracking-[0.35em] text-white/40">Price</h2>
       <div className="grid gap-4 md:grid-cols-3">
         {plans.map((plan) => (
