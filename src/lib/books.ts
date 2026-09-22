@@ -33,6 +33,7 @@ export interface Book {
   slug: string;
   title: string;
   subtitle: string;
+  coverImage?: string;
   editorNote: string;
   audio: { sampleUrl: string; totalRuntime: string };
   parts: BookPart[];

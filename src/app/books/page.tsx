@@ -33,8 +33,14 @@ export function generateMetadata(): Metadata {
       siteName: '네모네AIM',
       locale: 'ko_KR',
       type: 'book',
+      ...(book.coverImage && { images: [{ url: book.coverImage }] }),
     },
-    twitter: { card: 'summary_large_image', title, description },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      ...(book.coverImage && { images: [book.coverImage] }),
+    },
   };
 }
 
@@ -117,6 +123,7 @@ export default function BooksPage() {
     bookFormat: 'https://schema.org/EBook',
     numberOfPages: totalChapters,
     publisher: { '@type': 'Organization', name: '네모네주식회사' },
+    ...(book.coverImage && { image: book.coverImage }),
     hasPart: book.parts
       .flatMap((p) => p.chapters)
       .filter((c) => c.free)
@@ -134,7 +141,7 @@ export default function BooksPage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <main className="mx-auto max-w-[900px] px-5 pb-28 pt-28 md:px-10 md:pt-36">
-        {/* HERO — 표지 이미지가 아직 없어 타이포 블록으로 구성(지시서 6-1장). 나중에 이미지로 교체 */}
+        {/* HERO */}
         <section className="mb-16 md:mb-24">
           <p className="mb-6 text-[10px] font-black uppercase tracking-[0.35em] text-[#D4AF37]">
             NEMONE BOOKS
@@ -143,6 +150,16 @@ export default function BooksPage() {
             <h1 className="break-keep font-classic text-4xl italic leading-[1.15] text-white md:text-6xl">
               {book.title}
             </h1>
+            {book.coverImage && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={book.coverImage}
+                alt={`${book.title} 표지`}
+                width={480}
+                height={720}
+                className="mt-8 aspect-[2/3] w-[220px] rounded object-cover shadow-2xl shadow-black/50 md:w-[260px]"
+              />
+            )}
             {book.subtitle && (
               <p className="mt-5 max-w-[620px] break-keep text-base font-light leading-relaxed text-white/60 md:text-lg">
                 {book.subtitle}
