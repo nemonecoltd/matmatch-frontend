@@ -42,7 +42,7 @@ export default function ProductRecommendation({ product }: { product: AffiliateP
       >
         {product.image_url && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={product.image_url} alt="" className="w-14 h-14 rounded-lg object-cover shrink-0" />
+          <img src={product.image_url} alt={product.label} className="w-14 h-14 rounded-lg object-cover shrink-0" />
         )}
         <div className="flex-1 min-w-0">
           <span className="text-[9px] font-black tracking-widest uppercase text-[#D4AF37]/70">추천 아이템</span>

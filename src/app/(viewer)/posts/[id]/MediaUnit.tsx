@@ -6,12 +6,15 @@ export default function MediaUnit({
   videoId,
   spotifyUrl,
   applePodcastUrl,
+  audioUrl = null,
 }: {
   videoId: string | null;
   spotifyUrl: string | null;
   applePodcastUrl: string | null;
+  // 자체 호스팅 오디오(우리 GCS의 m4a 등) — 외부 플랫폼 임베드가 없어 <audio>로 직접 재생한다.
+  audioUrl?: string | null;
 }) {
-  if (!videoId && !spotifyUrl && !applePodcastUrl) return null;
+  if (!videoId && !spotifyUrl && !applePodcastUrl && !audioUrl) return null;
 
   return (
     <div className="max-w-[720px] mx-auto mb-16 flex flex-col gap-6 not-italic">
@@ -29,6 +32,20 @@ export default function MediaUnit({
           <p className="text-[#D4AF37] text-[11px] font-black tracking-[0.35em] uppercase mb-3">🎧 LISTEN</p>
           <div className="w-full rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-black">
             <iframe src={spotifyUrl} width="100%" height="152" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" />
+          </div>
+        </div>
+      )}
+
+      {audioUrl && (
+        <div>
+          <p className="text-[#D4AF37] text-[11px] font-black tracking-[0.35em] uppercase mb-3">🎧 LISTEN</p>
+          <div className="w-full rounded-3xl overflow-hidden shadow-2xl border border-white/10 bg-black px-5 py-5">
+            {/* preload="none": 35MB급 파일이라 재생 버튼을 누르기 전까지 내려받지 않게 한다
+                (기사 첫 로딩 속도·GCS 전송량 모두에 영향). GCS가 Range 요청을 지원해
+                재생 시작 시점부터 필요한 만큼만 받아온다. */}
+            <audio controls preload="none" src={audioUrl} className="w-full">
+              오디오 재생을 지원하지 않는 브라우저입니다.
+            </audio>
           </div>
         </div>
       )}
