@@ -5,6 +5,7 @@ import PostActions from './PostActions';
 import CommentsSection from './CommentsSection';
 import ViewAdSlot from './ViewAdSlot';
 import InArticleAd from './InArticleAd';
+import AdSlot from '@/components/AdSlot';
 import ProductRecommendation, { pickProduct, type AffiliateProduct } from './ProductRecommendation';
 import ArticleNavArrows from './ArticleNavArrows';
 import MediaUnit from './MediaUnit';
@@ -31,6 +32,14 @@ const getApplePodcastEmbedUrl = (url: string | null) => {
   if (!url || !url.includes('podcasts.apple.com')) return null;
   return url.replace('https://podcasts.apple.com', 'https://embed.podcasts.apple.com')
             .replace('https://embed.embed.podcasts.apple.com', 'https://embed.podcasts.apple.com');
+};
+
+// 자체 호스팅 오디오 — 주제상 스포티파이에 올릴 수 없는 에피소드를 우리 GCS에 직접 두는 경우
+// (2026-09-24 도입). 외부 플랫폼처럼 iframe 임베드가 없으므로 MediaUnit이 <audio>로 렌더한다.
+// video_url 한 필드로 유튜브/스포티파이/애플/자체오디오를 모두 받는 기존 구조를 그대로 따른다.
+const getSelfHostedAudioUrl = (url: string | null) => {
+  if (!url) return null;
+  return /^https:\/\/storage\.googleapis\.com\/nemoneai-thumbnails\/.+\.(m4a|mp3|aac)$/i.test(url) ? url : null;
 };
 
 // 부제(subtitle) 필드가 DB/어드민에 없음 — 실제 제목 다수가 이미 "대제목: 부제" 형태라
@@ -178,6 +187,32 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
     }
   } catch (e) { /* 관련기사는 부가 기능 — 실패해도 기사 렌더링에 영향 없게 조용히 무시 */ }
 
+  // RELATED STORIES 3번째 칸 수동 지정(2026-10-03) — 어드민이 related3_url(내부 글 URL)을
+  // 넣어두면 그 글의 썸네일/카테고리는 자동으로 가져오고, 표시 제목만 related3_title로
+  // 덮어쓸 수 있게(비우면 원래 제목 그대로). URL이 비어있으면 null → RelatedAndNext가
+  // 기존처럼 자동(같은 카테고리 3번째 글)으로 채움.
+  let related3Override: any = null;
+  if (data.related3_url) {
+    const idMatch = String(data.related3_url).match(/(\d+)\s*\/?\s*$/);
+    if (idMatch) {
+      try {
+        const ovRes = await fetch(`http://127.0.0.1:8080/posts/${idMatch[1]}`, { next: { revalidate: 3600 } });
+        if (ovRes.ok) {
+          const ovPost = await ovRes.json();
+          if (ovPost?.id) {
+            related3Override = {
+              id: ovPost.id,
+              title: data.related3_title || ovPost.title,
+              category: ovPost.category,
+              thumbnail_url: ovPost.thumbnail_url,
+              image_url: ovPost.image_url,
+            };
+          }
+        }
+      } catch (e) { /* 수동 지정 실패 시 자동 채움으로 폴백 — 기사 렌더링엔 영향 없음 */ }
+    }
+  }
+
   // 관리자가 직접 고른 상품이 있으면 우선, 없으면 태그로 자동매칭(전체 상품 목록은
   // 자주 안 바뀌므로 1시간 캐시 — 게시글 fetch와 동일한 revalidate 주기)
   let recommendedProduct: AffiliateProduct | null = null;
@@ -197,6 +232,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
   const videoId = getVid(data.youtube_url || data.video_url);
   const spotifyUrl = getSpotifyEmbedUrl(data.video_url || data.youtube_url);
   const applePodcastUrl = getApplePodcastEmbedUrl(data.video_url || data.youtube_url);
+  const selfAudioUrl = getSelfHostedAudioUrl(data.video_url || data.youtube_url);
   
   // [수정] 클로드 명령 1순위: API 필드명 4중 방어막 구축
   const bgImage = data.thumbnail_url 
@@ -222,7 +258,19 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
           "name": "네모네AIM",
           "logo": { "@type": "ImageObject", "url": "https://nemoneai.com/icon-512.png" }
         },
-        "description": (data.body_text || "").replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim().substring(0, 150)
+        "description": (data.body_text || "").replace(/<[^>]*>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"').replace(/\s+/g, ' ').trim().substring(0, 150),
+        // 자체 호스팅 오디오는 스포티파이·애플처럼 플랫폼 쪽 색인에 기대지 못하므로,
+        // 검색엔진이 이 기사를 오디오 콘텐츠로 인식하도록 AudioObject를 직접 선언한다.
+        ...(selfAudioUrl ? {
+          "audio": {
+            "@type": "AudioObject",
+            "contentUrl": selfAudioUrl,
+            "encodingFormat": "audio/mp4",
+            "name": data.title,
+            ...(bgImage ? { "thumbnailUrl": bgImage } : {}),
+            "uploadDate": data.created_at
+          }
+        } : {})
       })}} />
       
       {/* 헤더: 네모네AIM 디자인 원형 엄수 (900 두께, -0.07em 자간) */}
@@ -264,19 +312,15 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
               );
             })()}
 
-            {/* 바이라인: 아바타 이니셜 + 필명 · 날짜 */}
-            <div className="flex items-center gap-3 py-5 border-y border-white/10 not-italic">
-              <div className="w-8 h-8 rounded-full bg-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] text-xs font-bold flex-shrink-0">
-                {(data.author || '애들빙자여행러').charAt(0)}
-              </div>
-              <span className="text-sm text-white/50 font-medium tracking-wide">
-                {data.author || '애들빙자여행러'} · {new Date(data.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
-              </span>
+            {/* 2026-10-03 매출개선 — 바이라인(글쓴이·날짜)을 기사 맨 밑으로 내리고, 그
+                자리엔 메인페이지와 동일한 슬롯의 세로고정(슬림) 배너를 넣음 */}
+            <div className="py-5 border-y border-white/10">
+              <AdSlot adSlot="7051929128" slim />
             </div>
           </header>
 
           {/* READ·LISTEN·WATCH 유닛 — 히어로 밖(검정 배경)으로 승격(지시서 3-2장) */}
-          <MediaUnit videoId={videoId} spotifyUrl={spotifyUrl} applePodcastUrl={applePodcastUrl} />
+          <MediaUnit videoId={videoId} spotifyUrl={spotifyUrl} applePodcastUrl={applePodcastUrl} audioUrl={selfAudioUrl} />
 
           {/* 본문 및 Drop Cap 스타일 보존 (이탤릭 제거로 가독성 강화) */}
           <div className="text-gray-200 leading-[2] text-lg max-w-[720px] mx-auto mb-12 prose-custom font-light tracking-[-0.01em] not-italic">
@@ -302,16 +346,28 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
 
           {recommendedProduct && <ProductRecommendation product={recommendedProduct} />}
 
-          {/* RELATED STORIES + NEXT STORY — prev 이동은 ArticleNavArrows(좌우 고정
-              화살표)가 계속 담당하므로 여기서는 관련기사/다음글만(지시서 3-5, 3-6장) */}
-          <RelatedAndNext related={relatedPosts} next={adjacent?.next ?? null} />
+          {/* RELATED STORIES — NEXT STORY 박스는 삭제(2026-10-03 매출개선, prev/next 이동은
+              ArticleNavArrows 좌우 고정 화살표가 계속 담당). 3번째 칸은 related3Override가
+              있으면 그걸, 없으면 기존처럼 자동(같은 카테고리)으로 채움 */}
+          <RelatedAndNext related={relatedPosts} override3={related3Override} />
 
-          <div className="flex flex-wrap gap-3 mb-20 max-w-7xl mx-auto">
+          <div className="flex flex-wrap gap-3 mb-10 max-w-7xl mx-auto">
             {data.tags?.split(',').map((tag: string) => (
               <span key={tag} className="px-5 py-2 rounded-full border border-[#D4AF37]/20 bg-[#D4AF37]/5 text-[#D4AF37] text-[11px] font-black uppercase tracking-wider italic hover:bg-[#D4AF37]/20 transition-all cursor-pointer select-none">
                 # {tag.trim()}
               </span>
             ))}
+          </div>
+
+          {/* 바이라인(글쓴이·날짜) — 기사 맨 밑으로 이동(2026-10-03, 원래 상단 자리엔
+              배너가 들어감) */}
+          <div className="flex items-center gap-3 py-5 mb-20 border-t border-white/10 not-italic max-w-7xl mx-auto">
+            <div className="w-8 h-8 rounded-full bg-[#D4AF37]/20 flex items-center justify-center text-[#D4AF37] text-xs font-bold flex-shrink-0">
+              {(data.author || '애들빙자여행러').charAt(0)}
+            </div>
+            <span className="text-sm text-white/50 font-medium tracking-wide">
+              {data.author || '애들빙자여행러'} · {new Date(data.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </span>
           </div>
 
           <div className="max-w-7xl mx-auto">

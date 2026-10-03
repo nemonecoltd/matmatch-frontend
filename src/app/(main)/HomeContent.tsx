@@ -65,10 +65,12 @@ export default function HomeContent({
   return (
     <>
       <TodayStory post={todayStory} />
-      <NemoneOriginals specials={originals} />
+      {/* 2026-10-03 매출개선 — 히어로(TodayStory) 바로 밑으로 위치 상향 + 세로 고정(슬림)
+          배너로 전환(구글이 반응형으로 세로를 길게 키우던 걸 방지, plants 패턴과 동일) */}
       <div className="mb-8 md:mb-12">
-        <AdSlot adSlot="7051929128" />
+        <AdSlot adSlot="7051929128" slim />
       </div>
+      <NemoneOriginals specials={originals} />
       <FourWorlds />
       <LatestAndRanking latest={latestStories} ranking={rankingData} />
 

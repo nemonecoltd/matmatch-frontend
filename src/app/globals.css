@@ -255,3 +255,15 @@
     overflow-x: auto;
   }
 }
+
+/* 반응형 광고를 구글이 자동으로 세로로 키우지 못하게 미디어쿼리로 높이를 직접 고정
+   (data-ad-format="horizontal" + data-full-width-responsive="false"와 함께 사용 —
+   plants/frontend의 .ad-banner-slim과 동일한 패턴, 2026-10-03 매출개선 작업) */
+.ad-banner-slim {
+  height: 100px; /* 모바일: 320x100 안팎의 얇은 띠형 */
+}
+@media (min-width: 640px) {
+  .ad-banner-slim {
+    height: 90px; /* 태블릿 이상: 리더보드(728x90) 높이 */
+  }
+}
