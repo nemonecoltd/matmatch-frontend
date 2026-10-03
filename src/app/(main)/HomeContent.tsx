@@ -141,6 +141,12 @@ export default function HomeContent({
         </section>
       )}
 
+      {/* 2026-10-03 — 메인 2번째 배너(mat_main2), "더 많은 이야기" 섹션 바로 위.
+          위쪽 히어로 밑 배너(slim)와 달리 기존처럼 세로 고정 없이(auto) */}
+      <div className="mb-8 md:mb-12">
+        <AdSlot adSlot="3371700491" />
+      </div>
+
       <ArchiveSection />
     </>
   );
