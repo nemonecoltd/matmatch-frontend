@@ -106,7 +106,7 @@ export function DiscoverSection({ today }: { today: PortalToday }) {
   const q = SANTA_QUOTES[seed % SANTA_QUOTES.length]
   return (
     <section className="mx-auto max-w-[1200px] px-4 pt-10 md:px-10">
-      <SectionHeader id="today" title="오늘의 발견" desc="지금 뜨는 곳, 이번 주 인기 글, 새로 올라온 식물 매거진" />
+      <SectionHeader id="today" title="오늘의 발견" desc="지금 뜨는 곳, 이번 주 인기 글, 새로 올라온 플랜트 매거진" />
       <div className="grid gap-6 lg:grid-cols-[3fr_1fr]">
         {panels.length > 0 ? (
           <div className="grid gap-4 md:grid-cols-3 md:gap-5">{panels.map((p) => <DiscoverPanelCard key={p.key} panel={p} />)}</div>

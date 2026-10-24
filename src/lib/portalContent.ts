@@ -22,7 +22,7 @@ export const PORTAL_LAB = {
   title: '와랑스튜디오 LAB',
   lines: ['판교 직장인의 제주 집짓기 이야기', '집을 짓는 일에서 배우는 삶의 방식'],
   button: '이야기 보기',
-  url: '/special/1',
+  url: 'https://map.naver.com/p/entry/place/2065456826',
   image: '/portal/lab.jpg',
 }
 
