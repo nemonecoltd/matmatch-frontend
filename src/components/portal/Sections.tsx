@@ -1,7 +1,7 @@
 import OutLink from './OutLink'
 import { fmtDate, type DiscoverPanel, type PortalItem, type PortalToday } from './types'
 import { PORTAL_LAB, PORTAL_SERVICES, PORTAL_SNS, SANTA_QUOTES } from '@/lib/portalContent'
-import { SantaWidget, FortuneWidget } from './Widgets'
+import { SantaWidget } from './Widgets'
 import ObservationTabs from './ObservationTabs'
 
 function SectionHeader({ title, desc, href, link, id }: { title: string; desc: string; href?: string; link?: string; id?: string }) {
@@ -73,15 +73,29 @@ export function Hero({ date }: { date: string }) {
   const d = date ? date.replace(/-/g, '.') : ''
   return (
     <section className="relative isolate min-h-[320px] overflow-hidden bg-[#16212e] md:h-[360px]" aria-label="오늘의 네모네">
-      {/* 회사 홈(home.nemoneai.com)의 대표(OG) 이미지 — 데스크톱은 오른쪽에 원본 비율로 놓고 왼쪽은 남색으로 녹인다 */}
-      <div className="absolute inset-0 -z-10 bg-cover bg-[position:70%_center] md:inset-y-0 md:left-auto md:right-0 md:aspect-[1024/500] md:h-full md:w-auto" style={{ backgroundImage: "url('/portal/og-home.jpg')" }} />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#16212e]/80 to-[#16212e]/92 md:bg-gradient-to-r md:from-[#16212e] md:via-[#16212e] md:via-[44%] md:to-[#16212e]/0 md:to-[66%]" />
+      {/* 히어로: 제주 정원의 클린 이미지(텍스트 없음). 왼쪽은 어둡게 눌러 글자를 읽히게 한다 */}
+      <div className="absolute inset-0 -z-10 bg-cover bg-[position:62%_center] md:bg-center" style={{ backgroundImage: "url('/portal/hero.webp')" }} />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0f1a26]/70 via-[#0f1a26]/45 to-[#0f1a26]/80 md:bg-gradient-to-r md:from-[#0f1a26]/78 md:via-[#0f1a26]/35 md:via-[42%] md:to-[#0f1a26]/0 md:to-[70%]" />
       <div className="mx-auto flex h-full min-h-[320px] max-w-[1200px] flex-col justify-end px-4 pb-8 pt-32 md:min-h-0 md:px-10 md:pt-20">
         <p className="text-[11px] uppercase tracking-[0.12em] text-white/80">The world, observed by Nemone</p>
         <h1 className="not-italic mt-3 text-[30px] font-semibold leading-[1.25] text-white md:text-[40px]">오늘, 세상은<br />어떻게 달라지고 있을까?</h1>
         <p className="mt-3 max-w-[560px] text-[14px] leading-relaxed text-white/85 md:text-[15px]">도시의 새로운 취향부터 한 접시의 변화,<br className="hidden md:block" /> 자라는 식물과 마음, 기업의 긴 흐름까지.</p>
         <p className="mt-5 text-[11px] uppercase tracking-[0.12em] text-white/70">Nemone Observatory · {d}</p>
       </div>
+    </section>
+  )
+}
+
+function NewsBox({ news }: { news: PortalToday['news'] }) {
+  return (
+    <section aria-label="주요 소식" className="rounded-2xl border border-[#E3E8EE] bg-white p-5">
+      <div className="mb-1 flex items-center justify-between"><h3 className="not-italic text-[15px] font-bold text-[#1A2430]">주요 소식</h3><a href="https://home.nemoneai.com/notice/" className="text-[12px] text-[#6B7785] no-underline hover:text-[#35577A]">전체보기 →</a></div>
+      {news.length === 0 ? <p className="py-4 text-[13px] text-[#6B7785]">새 소식이 없어요.</p> : news.map((n) => (
+        <OutLink key={n.id} href={n.url} service="home" slot="news" className="block border-b border-[#E3E8EE] py-3 no-underline last:border-b-0">
+          <p className="text-[13px] font-medium leading-snug text-[#1A2430] line-clamp-2">{n.title}</p>
+          <p className="mt-1 text-[11px] text-[#8A95A3]">{n.date}</p>
+        </OutLink>
+      ))}
     </section>
   )
 }
@@ -101,7 +115,7 @@ export function DiscoverSection({ today }: { today: PortalToday }) {
         )}
         <div className="flex flex-col gap-5">
           <SantaWidget quote={q.quote} sub={q.sub} />
-          <FortuneWidget />
+          <NewsBox news={today.news} />
         </div>
       </div>
     </section>
@@ -190,15 +204,6 @@ export function ObserveSection({ today }: { today: PortalToday }) {
       <div className="grid gap-8 lg:grid-cols-[3fr_1fr]">
         {hasAny ? <ObservationTabs observe={today.observe} /> : <p className="rounded-2xl border border-dashed border-[#D5DCE5] p-8 text-center text-[14px] text-[#6B7785]">오늘의 관찰을 준비하고 있어요.</p>}
         <aside className="space-y-8 lg:border-l lg:border-[#E3E8EE] lg:pl-6">
-          <div>
-            <div className="mb-2 flex items-center justify-between"><h3 className="not-italic text-[15px] font-bold text-[#1A2430]">주요 소식</h3><a href="https://home.nemoneai.com/notice/" className="text-[12px] text-[#6B7785] no-underline">전체보기 →</a></div>
-            {today.news.length === 0 ? <p className="py-4 text-[13px] text-[#6B7785]">새 소식이 없어요.</p> : today.news.map((n) => (
-              <OutLink key={n.id} href={n.url} service="home" slot="news" className="block border-b border-[#E3E8EE] py-3 no-underline last:border-b-0">
-                <p className="text-[13px] font-medium leading-snug text-[#1A2430] line-clamp-2">{n.title}</p>
-                <p className="mt-1 text-[11px] text-[#8A95A3]">{n.date}</p>
-              </OutLink>
-            ))}
-          </div>
           {today.aim_latest.length > 0 && (
             <div>
               <div className="mb-2 flex items-center justify-between"><h3 className="not-italic text-[15px] font-bold text-[#1A2430]">네모네 AIM 최신 글</h3><a href="/aim" className="text-[12px] text-[#6B7785] no-underline">AIM 홈 →</a></div>
@@ -232,23 +237,21 @@ export function StoryBand() {
 }
 
 export function PortalFooter() {
+  const link = 'text-[#4A5666] no-underline hover:text-[#35577A]'
   return (
     <footer className="mx-auto mt-14 max-w-[1200px] px-4 md:px-10">
-      <div className="flex flex-col border-t border-[#E3E8EE] py-8 items-start justify-between gap-5 md:flex-row md:items-center">
-        <div>
-          <p className="not-italic text-[18px] font-medium tracking-[0.28em] text-[#35577A]">NEMONE</p>
-          <p className="mt-1 text-[11px] text-[#8A95A3]">세상을 관찰하고, 변화를 당신의 것으로. © NEMONE INC.</p>
-        </div>
-        <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-[12px]" aria-label="푸터 메뉴">
-          <a href="#services" className="text-[#4A5666] no-underline hover:text-[#35577A]">서비스</a>
-          <a href="https://home.nemoneai.com" className="text-[#4A5666] no-underline hover:text-[#35577A]">회사소개</a>
-          <a href="https://auth.nemoneai.com/terms" className="text-[#4A5666] no-underline hover:text-[#35577A]">이용약관</a>
-          <a href="https://auth.nemoneai.com/privacy" className="text-[#4A5666] no-underline hover:text-[#35577A]">개인정보처리방침</a>
-          <a href="mailto:contact@nemoneai.com" className="text-[#4A5666] no-underline hover:text-[#35577A]">고객센터</a>
+      <div className="flex flex-col items-center gap-4 border-t border-[#E3E8EE] py-9 text-center">
+        <p className="not-italic text-[18px] font-medium tracking-[0.28em] text-[#35577A]">NEMONE</p>
+        <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[12px]" aria-label="푸터 메뉴">
+          <a href="https://home.nemoneai.com" className={link}>회사소개</a>
+          <a href="https://auth.nemoneai.com/terms" className={link}>이용약관</a>
+          <a href="https://auth.nemoneai.com/privacy" className={link}>개인정보처리방침</a>
+          <a href="mailto:contact@nemoneai.com" className={link}>고객센터</a>
         </nav>
-        <div className="flex flex-wrap items-center gap-4">
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           {PORTAL_SNS.map((s) => <a key={s.name} href={s.href} target="_blank" rel="noopener noreferrer" className="text-[12px] text-[#6B7785] no-underline hover:text-[#35577A]">{s.name}</a>)}
         </div>
+        <p className="text-[11px] text-[#8A95A3]">세상을 관찰하고, 변화를 당신의 것으로. © NEMONE INC.</p>
       </div>
     </footer>
   )

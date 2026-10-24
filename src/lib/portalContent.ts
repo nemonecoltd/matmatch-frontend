@@ -37,29 +37,13 @@ export const SANTA_QUOTES: { quote: string; sub: string }[] = [
   { quote: '잘 해내지 못한 날에도 당신의 가치는 그대로예요.', sub: '오늘은 스스로에게 다정해져요.' },
 ]
 
-// 오늘의 운세 — 1차는 정적 샘플(띠 12개). 실제 생성(하루 12회 LLM + 캐시)은 2차에서 연결한다.
-export const ZODIACS = ['쥐', '소', '호랑이', '토끼', '용', '뱀', '말', '양', '원숭이', '닭', '개', '돼지'] as const
-export const FORTUNE_SAMPLES: string[] = [
-  '오래 미뤄 둔 연락을 먼저 건네기 좋은 날이에요. 짧은 안부 한 줄이 분위기를 풀어 줍니다.',
-  '서두르기보다 한 번 더 확인하는 쪽이 이득인 날. 작은 정리가 마음의 여유를 만들어요.',
-  '새로운 사람보다 익숙한 사람에게서 힌트를 얻는 하루. 가볍게 이야기를 나눠 보세요.',
-  '오늘은 컨디션 관리가 먼저예요. 따뜻한 음료 한 잔과 가벼운 산책이 흐름을 바꿔 줍니다.',
-  '하고 싶던 일을 아주 작게 시작해 보세요. 첫 10분이 하루의 방향을 정해 줘요.',
-  '비교보다 기록이 힘이 되는 날. 오늘 해낸 일을 한 줄로 적어 두면 든든해집니다.',
-  '약속과 일정이 겹치기 쉬운 날이니 우선순위를 먼저 정하세요. 여유가 오히려 성과를 키웁니다.',
-  '작은 칭찬이 큰 힘이 되는 날. 주변에 먼저 고마움을 표현하면 그 마음이 돌아와요.',
-  '예상 밖의 변화가 있어도 크게 흔들리지 않아도 돼요. 한 걸음 물러서 보면 길이 보입니다.',
-  '집중이 잘 되는 시간대를 놓치지 마세요. 중요한 일은 오전에, 정리는 오후에 두는 편이 좋아요.',
-  '새로운 정보를 접하기 좋은 날. 평소 가지 않던 곳이나 글을 하나 골라 보세요.',
-  '오늘은 나를 위한 작은 보상이 필요한 날. 좋아하는 한 끼가 에너지를 채워 줍니다.',
-]
-
 // 하단 SNS·링크
 export const PORTAL_SNS = [
   { name: 'Instagram', href: 'https://www.instagram.com/nemone_pace/' },
   { name: 'YouTube', href: 'https://www.youtube.com/@nemoneaim' },
   { name: 'Podcast', href: 'https://podcasts.apple.com/kr/channel/%EB%84%A4%EB%AA%A8%EB%84%A4aim/id6753140870' },
-  { name: 'Blog', href: 'https://brunch.co.kr/@you1' },
+  { name: 'Blog', href: 'https://blog.naver.com/nemoneaim' },
+  { name: 'Facebook', href: 'https://www.facebook.com/profile.php?id=61572151718459' },
 ]
 
 export const CATEGORY_LABEL: Record<string, string> = {
