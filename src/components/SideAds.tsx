@@ -27,6 +27,11 @@ export default function SideAds() {
     return null;
   }
 
+  // 포털 메인("/")은 사이드 광고 없이 깔끔하게 (AIM 홈은 /aim으로 이동)
+  if (pathname === '/') {
+    return null;
+  }
+
   const hidden = isArticle && pastHero;
 
   return (

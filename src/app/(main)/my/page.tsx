@@ -120,7 +120,7 @@ export default function MyPage() {
         {posts.length === 0 ? (
           <p className="text-sm text-white/30 py-6">
             아직 찜한 기사가 없어요.{' '}
-            <Link href="/" className="text-[#D4AF37] underline">
+            <Link href="/aim" className="text-[#D4AF37] underline">
               기사 둘러보기
             </Link>
           </p>

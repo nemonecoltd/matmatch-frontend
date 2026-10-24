@@ -16,7 +16,7 @@ const BottomTabBar = ({ activeCategory }: BottomTabBarProps) => {
   // name은 다른 페이지들이 넘기는 activeCategory="SPECIAL"과 매칭되는 식별자라 유지,
   // label만 화면 표시 문구(2026-09-05: Special -> Origin)
   const menuItems = [
-    { name: 'Home', label: 'Home', href: '/', icon: Home },
+    { name: 'Home', label: 'Home', href: '/aim', icon: Home },
     { name: 'Taste', label: 'Taste', href: '/category/Taste', icon: Coffee },
     { name: 'Culture', label: 'Culture', href: '/category/Culture', icon: BookOpen },
     { name: 'Life', label: 'Life', href: '/category/Life', icon: Heart },

@@ -18,7 +18,7 @@ export default function Header() {
         {/* 좌측 */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <BackButton />
-          <Link href="/" className="text-[#D4AF37] text-base md:text-xl font-black tracking-[0.15em] uppercase not-italic hover:opacity-80 transition-opacity select-none">
+          <Link href="/aim" className="text-[#D4AF37] text-base md:text-xl font-black tracking-[0.15em] uppercase not-italic hover:opacity-80 transition-opacity select-none">
             네모네AIM
           </Link>
           <a

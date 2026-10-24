@@ -22,7 +22,7 @@ const websiteJsonLd = {
   description: '당신의 시간을 알차게 채워줄 프리미엄 콘텐츠',
   potentialAction: {
     '@type': 'SearchAction',
-    target: { '@type': 'EntryPoint', urlTemplate: 'https://nemoneai.com/?q={search_term_string}' },
+    target: { '@type': 'EntryPoint', urlTemplate: 'https://nemoneai.com/search?q={search_term_string}' },
     'query-input': 'required name=search_term_string',
   },
 };

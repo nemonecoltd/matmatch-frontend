@@ -7,8 +7,8 @@ export default function BackButton() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // 메인 홈("/")에서는 뒤로가기 버튼을 표시하지 않음
-  if (pathname === '/') return null;
+  // AIM 홈("/aim")에서는 뒤로가기 버튼을 표시하지 않음 (포털 "/"은 이 헤더를 쓰지 않는다)
+  if (pathname === '/aim' || pathname === '/') return null;
 
   return (
     <button 

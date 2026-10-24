@@ -19,13 +19,13 @@ export default function SearchBar() {
     if (query.trim()) {
       router.push(`/search?q=${encodeURIComponent(query.trim())}`);
     } else {
-      router.push('/');
+      router.push('/aim');
     }
   };
 
   const clearSearch = () => {
     setQuery('');
-    router.push('/');
+    router.push('/aim');
   };
 
   return (
