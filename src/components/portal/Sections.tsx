@@ -25,7 +25,7 @@ function Arrow() {
 
 function DiscoverCard({ it }: { it: PortalItem }) {
   return (
-    <OutLink href={it.url} service={it.service} slot={it.slot} className="group flex w-[78%] flex-shrink-0 snap-start flex-col overflow-hidden md:w-auto rounded-2xl border border-[#E3E8EE] bg-white no-underline shadow-[0_2px_12px_rgba(20,40,60,.06)] transition-shadow hover:shadow-[0_6px_20px_rgba(20,40,60,.12)]">
+    <OutLink href={it.url} service={it.service} slot={it.slot} className="group flex flex-col overflow-hidden rounded-2xl border border-[#E3E8EE] bg-white no-underline shadow-[0_2px_12px_rgba(20,40,60,.06)] transition-shadow hover:shadow-[0_6px_20px_rgba(20,40,60,.12)]">
       <div className="relative aspect-[16/10] overflow-hidden bg-[#F5F8FB]">
         {it.image && /* eslint-disable-next-line @next/next/no-img-element */ <img src={it.image} alt={it.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />}
         <span className="absolute left-3 top-3 rounded-full bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#1A2430]">{it.category}</span>
@@ -48,11 +48,11 @@ function DiscoverCard({ it }: { it: PortalItem }) {
 export function Hero({ date }: { date: string }) {
   const d = date ? date.replace(/-/g, '.') : ''
   return (
-    <section className="relative isolate h-[300px] overflow-hidden bg-[#16212e] md:h-[360px]" aria-label="오늘의 네모네">
+    <section className="relative isolate min-h-[320px] overflow-hidden bg-[#16212e] md:h-[360px]" aria-label="오늘의 네모네">
       {/* 회사 홈(home.nemoneai.com)의 대표(OG) 이미지 — 데스크톱은 오른쪽에 원본 비율로 놓고 왼쪽은 남색으로 녹인다 */}
       <div className="absolute inset-0 -z-10 bg-cover bg-[position:70%_center] md:inset-y-0 md:left-auto md:right-0 md:aspect-[1024/500] md:h-full md:w-auto" style={{ backgroundImage: "url('/portal/og-home.jpg')" }} />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#16212e] via-[#16212e]/80 via-[45%] to-[#16212e]/0 md:via-[#16212e] md:via-[44%] md:to-[#16212e]/0 md:to-[66%]" />
-      <div className="mx-auto flex h-full max-w-[1200px] flex-col justify-end px-4 pb-8 pt-20 md:px-10">
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#16212e]/80 to-[#16212e]/92 md:bg-gradient-to-r md:from-[#16212e] md:via-[#16212e] md:via-[44%] md:to-[#16212e]/0 md:to-[66%]" />
+      <div className="mx-auto flex h-full min-h-[320px] max-w-[1200px] flex-col justify-end px-4 pb-8 pt-32 md:min-h-0 md:px-10 md:pt-20">
         <p className="text-[11px] uppercase tracking-[0.12em] text-white/80">The world, observed by Nemone</p>
         <h1 className="not-italic mt-3 text-[30px] font-semibold leading-[1.25] text-white md:text-[40px]">오늘, 세상은<br />어떻게 달라지고 있을까?</h1>
         <p className="mt-3 max-w-[560px] text-[14px] leading-relaxed text-white/85 md:text-[15px]">도시의 새로운 취향부터 한 접시의 변화,<br className="hidden md:block" /> 자라는 식물과 마음, 기업의 긴 흐름까지.</p>
@@ -70,7 +70,7 @@ export function DiscoverSection({ today }: { today: PortalToday }) {
       <SectionHeader id="today" title="오늘의 발견" desc="네모네가 엄선한 지금 가장 흥미로운 세 가지" />
       <div className="grid gap-6 lg:grid-cols-[3fr_1fr]">
         {today.discover.length > 0 ? (
-          <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:gap-5 md:overflow-visible md:px-0 md:pb-0">{today.discover.map((it) => <DiscoverCard key={`${it.service}-${it.id}`} it={it} />)}</div>
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-5">{today.discover.map((it) => <DiscoverCard key={`${it.service}-${it.id}`} it={it} />)}</div>
         ) : (
           <p className="rounded-2xl border border-dashed border-[#D5DCE5] p-8 text-center text-[14px] text-[#6B7785]">오늘의 발견을 준비하고 있어요.</p>
         )}
@@ -122,19 +122,19 @@ export function ServicesSection() {
   return (
     <section className="mx-auto max-w-[1200px] px-4 pt-[72px] md:px-10">
       <SectionHeader id="services" title="네모네의 5가지 서비스" desc="각기 다른 관점이 모여, 더 넓은 세상을 봅니다" href="https://home.nemoneai.com" link="회사 소개" />
-      <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 lg:grid-cols-5">
+      <div className="grid gap-3 md:grid-cols-3 md:gap-4 lg:grid-cols-5">
         {PORTAL_SERVICES.map((s) => (
-          <OutLink key={s.key} href={s.url} service={s.key} slot="service_card" className="group flex w-[230px] flex-shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-[#E3E8EE] bg-white no-underline shadow-[0_2px_12px_rgba(20,40,60,.06)] md:w-auto">
-            {/* 썸네일은 각 서비스의 OG(대표) 이미지 — 원본 비율(약 2:1) 그대로 */}
-            <div className="aspect-[1024/500] overflow-hidden bg-[#F5F8FB]">
+          <OutLink key={s.key} href={s.url} service={s.key} slot="service_card" className="group flex overflow-hidden rounded-2xl border border-[#E3E8EE] bg-white no-underline shadow-[0_2px_12px_rgba(20,40,60,.06)] md:flex-col">
+            {/* 썸네일은 각 서비스의 OG(대표) 이미지 — 모바일은 왼쪽 작은 이미지, 데스크톱은 위쪽 원본 비율 */}
+            <div className="w-[124px] flex-shrink-0 overflow-hidden bg-[#F5F8FB] sm:w-[160px] md:aspect-[1024/500] md:w-auto">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={s.image} alt={`${s.name} 대표 이미지`} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
             </div>
-            <div className="flex flex-1 flex-col p-4">
+            <div className="flex min-w-0 flex-1 flex-col p-3.5 md:p-4">
               <p className="text-[11px] font-semibold text-[#35577A]">{s.no} · {s.name}</p>
-              <h3 className="not-italic mt-1.5 text-[15px] font-bold leading-snug text-[#1A2430]">{s.title}</h3>
-              <p className="mt-2 text-[12px] leading-relaxed text-[#6B7785] line-clamp-3">{s.desc}</p>
-              <div className="mt-auto pt-3"><Arrow /></div>
+              <h3 className="not-italic mt-1 text-[14px] font-bold leading-snug text-[#1A2430] md:mt-1.5 md:text-[15px]">{s.title}</h3>
+              <p className="mt-1.5 text-[12px] leading-relaxed text-[#6B7785] line-clamp-2 md:mt-2 md:line-clamp-3">{s.desc}</p>
+              <div className="mt-auto hidden pt-3 md:block"><Arrow /></div>
             </div>
           </OutLink>
         ))}
