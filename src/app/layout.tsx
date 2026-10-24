@@ -17,7 +17,8 @@ export const metadata: Metadata = {
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: '네모네AIM',
+  name: '네모네',
+  alternateName: ['네모네AIM', 'NEMONE'],
   url: 'https://nemoneai.com',
   description: '당신의 시간을 알차게 채워줄 프리미엄 콘텐츠',
   potentialAction: {
