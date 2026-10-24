@@ -6,21 +6,21 @@ export type PortalService = {
   title: string
   desc: string
   url: string
-  image?: string // 지정하지 않으면 해당 서비스 피드의 대표 이미지(service_images)를 쓴다
+  image: string // 각 서비스의 OG(대표) 이미지 — /public/portal/og-*.jpg
 }
 
 export const PORTAL_SERVICES: PortalService[] = [
-  { key: 'pace', no: '01', name: 'PACE', title: '지금 뜨는 곳', desc: '핫플레이스, 팝업, 전시, 지역의 새로운 움직임', url: 'https://now.nemoneai.com' },
-  { key: 'aim', no: '02', name: 'AIM', title: '지금 변하는 맛의 세계', desc: '미식 트렌드, 식재료, 외식문화의 변화', url: '/aim' },
-  { key: 'plants', no: '03', name: 'Plants', title: '살아가는 것들의 변화', desc: '식물의 성장, 계절별 관리, 초보 집사 기록', url: 'https://plants.nemoneai.com' },
-  { key: 'santa', no: '04', name: '산타', title: '나를 이야기하고, 마음을 돌보는 시간', desc: '칭찬 카드, 자기이해 콘텐츠, 따뜻한 응원', url: 'https://santa.nemoneai.com', image: '/portal/santa-card.jpg' },
-  { key: 'lii', no: '05', name: 'LII', title: '기업의 과거를 분석하고 미래를 봅니다', desc: '5년 재무 기반 AI 기업분석, 매일 업데이트', url: 'https://msm.nemoneai.com' },
+  { key: 'pace', no: '01', name: 'PACE', title: '지금 뜨는 곳', desc: '핫플레이스, 팝업, 전시, 지역의 새로운 움직임', url: 'https://now.nemoneai.com', image: '/portal/og-pace.jpg' },
+  { key: 'aim', no: '02', name: 'AIM', title: '지금 변하는 맛의 세계', desc: '미식 트렌드, 식재료, 외식문화의 변화', url: '/aim', image: '/portal/og-aim.jpg' },
+  { key: 'plants', no: '03', name: 'Plants', title: '살아가는 것들의 변화', desc: '식물의 성장, 계절별 관리, 초보 집사 기록', url: 'https://plants.nemoneai.com', image: '/portal/og-plants.jpg' },
+  { key: 'santa', no: '04', name: '산타', title: '나를 이야기하고, 마음을 돌보는 시간', desc: '칭찬 카드, 자기이해 콘텐츠, 따뜻한 응원', url: 'https://santa.nemoneai.com', image: '/portal/og-santa.jpg' },
+  { key: 'lii', no: '05', name: 'LII', title: '기업의 과거를 분석하고 미래를 봅니다', desc: '5년 재무 기반 AI 기업분석, 매일 업데이트', url: 'https://msm.nemoneai.com', image: '/portal/og-lii.jpg' },
 ]
 
-// 와랑스튜디오 LAB — 포털에 항상 노출
+// 와랑스튜디오 LAB — 포털에 항상 노출(서비스 5칸과 별개로 아래 가로 띠로)
 export const PORTAL_LAB = {
   title: '와랑스튜디오 LAB',
-  lines: ['판교 직장인의', '제주 집짓기 이야기'],
+  lines: ['판교 직장인의 제주 집짓기 이야기', '집을 짓는 일에서 배우는 삶의 방식'],
   button: '이야기 보기',
   url: '/special/1',
   image: '/portal/lab.jpg',

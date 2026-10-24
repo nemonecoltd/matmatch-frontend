@@ -14,9 +14,9 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   openGraph: {
     title: TITLE, description: DESC, url: 'https://nemoneai.com', siteName: '네모네', locale: 'ko_KR', type: 'website',
-    images: [{ url: 'https://nemoneai.com/banner_store.jpg', width: 1024, height: 500, alt: '네모네' }],
+    images: [{ url: 'https://nemoneai.com/portal/og-home.jpg', width: 1024, height: 500, alt: '네모네' }],
   },
-  twitter: { card: 'summary_large_image', title: TITLE, description: DESC, images: ['https://nemoneai.com/banner_store.jpg'] },
+  twitter: { card: 'summary_large_image', title: TITLE, description: DESC, images: ['https://nemoneai.com/portal/og-home.jpg'] },
 }
 
 async function getToday(): Promise<PortalToday> {
@@ -39,7 +39,7 @@ export default async function PortalPage() {
       <main>
         <DiscoverSection today={today} />
         <LiiSection items={today.lii} />
-        <ServicesSection images={today.service_images} />
+        <ServicesSection />
         <ObserveSection today={today} />
         <StoryBand />
       </main>

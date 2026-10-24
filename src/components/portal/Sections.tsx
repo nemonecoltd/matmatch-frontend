@@ -48,10 +48,10 @@ function DiscoverCard({ it }: { it: PortalItem }) {
 export function Hero({ date }: { date: string }) {
   const d = date ? date.replace(/-/g, '.') : ''
   return (
-    <section className="relative isolate h-[300px] overflow-hidden md:h-[360px]" aria-label="오늘의 네모네">
-      {/* 현재 홈페이지의 대표(OG) 이미지 — 이미지에 박혀 있는 문구(왼쪽~가운데)는 짙은 그라데이션으로 덮고 오른쪽 사진만 드러낸다 */}
-      <div className="absolute inset-0 -z-10 bg-[#0f1519] bg-[length:auto_150%] bg-[position:right_center] bg-no-repeat md:bg-[length:1500px_auto]" style={{ backgroundImage: "url('/banner_store.jpg')" }} />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#0f1519] via-[#0f1519] via-[60%] to-[#0f1519]/0 to-[88%]" />
+    <section className="relative isolate h-[300px] overflow-hidden bg-[#16212e] md:h-[360px]" aria-label="오늘의 네모네">
+      {/* 회사 홈(home.nemoneai.com)의 대표(OG) 이미지 — 데스크톱은 오른쪽에 원본 비율로 놓고 왼쪽은 남색으로 녹인다 */}
+      <div className="absolute inset-0 -z-10 bg-cover bg-[position:70%_center] md:inset-y-0 md:left-auto md:right-0 md:aspect-[1024/500] md:h-full md:w-auto" style={{ backgroundImage: "url('/portal/og-home.jpg')" }} />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#16212e] via-[#16212e]/80 via-[45%] to-[#16212e]/0 md:via-[#16212e] md:via-[44%] md:to-[#16212e]/0 md:to-[66%]" />
       <div className="mx-auto flex h-full max-w-[1200px] flex-col justify-end px-4 pb-8 pt-20 md:px-10">
         <p className="text-[11px] uppercase tracking-[0.12em] text-white/80">The world, observed by Nemone</p>
         <h1 className="not-italic mt-3 text-[30px] font-semibold leading-[1.25] text-white md:text-[40px]">오늘, 세상은<br />어떻게 달라지고 있을까?</h1>
@@ -118,50 +118,41 @@ export function LiiSection({ items }: { items: PortalItem[] }) {
   )
 }
 
-export function ServicesSection({ images }: { images: Record<string, string | null> }) {
+export function ServicesSection() {
   return (
     <section className="mx-auto max-w-[1200px] px-4 pt-[72px] md:px-10">
       <SectionHeader id="services" title="네모네의 5가지 서비스" desc="각기 다른 관점이 모여, 더 넓은 세상을 봅니다" href="https://home.nemoneai.com" link="회사 소개" />
-      <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 lg:grid-cols-6">
-        {PORTAL_SERVICES.map((s) => {
-          const img = s.image || images[s.key] || '/banner_store.jpg'
-          return (
-            <OutLink key={s.key} href={s.url} service={s.key} slot="service_card" className="group flex w-[220px] flex-shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-[#E3E8EE] bg-white no-underline shadow-[0_2px_12px_rgba(20,40,60,.06)] md:w-auto">
-              <div className="aspect-[16/10] overflow-hidden bg-[#F5F8FB]">
-                {s.key === 'lii' ? (
-                  // LII는 사진이 없어서 5년 성장 막대 모티프로 표현
-                  <div aria-hidden className="relative h-full w-full bg-gradient-to-br from-[#1f3a57] to-[#35577A] transition-transform duration-500 group-hover:scale-[1.04]">
-                    <div className="absolute inset-x-6 bottom-0 flex h-[70%] items-end gap-2.5">
-                      {[32, 46, 41, 62, 88].map((h, i) => <span key={i} className="flex-1 rounded-t-[3px] bg-white/35" style={{ height: `${h}%` }} />)}
-                    </div>
-                    <span className="absolute left-5 top-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/80">5-Year Insight</span>
-                  </div>
-                ) : (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={img} alt="" loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
-                )}
-              </div>
-              <div className="flex flex-1 flex-col p-4">
-                <p className="text-[11px] font-semibold text-[#35577A]">{s.no} · {s.name}</p>
-                <h3 className="not-italic mt-1.5 text-[15px] font-bold leading-snug text-[#1A2430]">{s.title}</h3>
-                <p className="mt-2 text-[12px] leading-relaxed text-[#6B7785] line-clamp-3">{s.desc}</p>
-                <div className="mt-auto pt-3"><Arrow /></div>
-              </div>
-            </OutLink>
-          )
-        })}
-        <OutLink href={PORTAL_LAB.url} service="lab" slot="service_lab" className="group relative flex min-h-[260px] w-[220px] flex-shrink-0 snap-start flex-col justify-end overflow-hidden rounded-2xl no-underline md:w-auto">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={PORTAL_LAB.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-black/5" />
-          <div className="relative p-4 text-white">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-white/80">LAB</p>
-            <h3 className="not-italic mt-1 text-[16px] font-bold leading-snug">{PORTAL_LAB.title}</h3>
-            <p className="mt-1 text-[12px] leading-relaxed text-white/90">{PORTAL_LAB.lines.join(' ')}</p>
-            <span className="mt-3 inline-block rounded-full bg-white px-3.5 py-1.5 text-[12px] font-medium text-[#1A2430]">{PORTAL_LAB.button} →</span>
-          </div>
-        </OutLink>
+      <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 lg:grid-cols-5">
+        {PORTAL_SERVICES.map((s) => (
+          <OutLink key={s.key} href={s.url} service={s.key} slot="service_card" className="group flex w-[230px] flex-shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-[#E3E8EE] bg-white no-underline shadow-[0_2px_12px_rgba(20,40,60,.06)] md:w-auto">
+            {/* 썸네일은 각 서비스의 OG(대표) 이미지 — 원본 비율(약 2:1) 그대로 */}
+            <div className="aspect-[1024/500] overflow-hidden bg-[#F5F8FB]">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={s.image} alt={`${s.name} 대표 이미지`} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+            </div>
+            <div className="flex flex-1 flex-col p-4">
+              <p className="text-[11px] font-semibold text-[#35577A]">{s.no} · {s.name}</p>
+              <h3 className="not-italic mt-1.5 text-[15px] font-bold leading-snug text-[#1A2430]">{s.title}</h3>
+              <p className="mt-2 text-[12px] leading-relaxed text-[#6B7785] line-clamp-3">{s.desc}</p>
+              <div className="mt-auto pt-3"><Arrow /></div>
+            </div>
+          </OutLink>
+        ))}
       </div>
+      {/* 와랑스튜디오 LAB — 서비스 5칸과 별개로 아래에 가로 띠 */}
+      <OutLink href={PORTAL_LAB.url} service="lab" slot="service_lab" className="group relative mt-5 flex min-h-[132px] items-center overflow-hidden rounded-2xl no-underline">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={PORTAL_LAB.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover object-[center_72%] transition-transform duration-500 group-hover:scale-[1.03]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#16212e]/90 via-[#16212e]/60 to-[#16212e]/10" />
+        <div className="relative flex w-full flex-col gap-3 p-5 text-white md:flex-row md:items-center md:justify-between md:px-10">
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/80">LAB</p>
+            <h3 className="not-italic mt-1 text-[18px] font-bold leading-snug">{PORTAL_LAB.title}</h3>
+            <p className="mt-1 text-[13px] leading-relaxed text-white/90">{PORTAL_LAB.lines.join(' · ')}</p>
+          </div>
+          <span className="inline-block self-start whitespace-nowrap rounded-full bg-white px-4 py-2 text-[13px] font-medium text-[#1A2430] md:self-auto">{PORTAL_LAB.button} →</span>
+        </div>
+      </OutLink>
     </section>
   )
 }
