@@ -2,6 +2,7 @@
 // 네이버는 콘텐츠 사이트 신규 글 자동 발견에 sitemap보다 RSS를 우선 폴링하므로,
 // 기사를 발행할 때마다 수동 색인요청하던 것을 이 피드로 대체하기 위해 신설.
 import { NextResponse } from 'next/server'
+import { getServicePostMap } from '@/lib/serviceHome'
 
 export const revalidate = 1800 // 30분마다 재생성 — 발행 후 네이버가 빠르게 발견하도록
 
@@ -41,6 +42,10 @@ export async function GET() {
   } catch (e) {
     console.error('RSS fetch error:', e)
   }
+
+  // 계열 서비스(PACE·PLANTS) 소속 기사는 정본이 서비스 쪽 — 맛매치 RSS(네이버 수집용)에서 뺀다
+  const serviceMap = await getServicePostMap()
+  posts = posts.filter((p) => !serviceMap.has(Number(p.id)))
 
   // 최신순 정렬 후 상위 50개
   posts.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())

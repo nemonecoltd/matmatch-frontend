@@ -9,6 +9,7 @@ import AdSlot from '@/components/AdSlot';
 import ProductRecommendation, { pickProduct, type AffiliateProduct } from './ProductRecommendation';
 import ArticleNavArrows from './ArticleNavArrows';
 import MediaUnit from './MediaUnit';
+import { getServicePostMap } from '@/lib/serviceHome';
 import RelatedAndNext from './RelatedAndNext';
 import NavLinks from '@/components/NavLinks';
 import BottomTabBar from '@/components/BottomTabBar';
@@ -97,6 +98,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       };
     }
 
+    // 계열 서비스(PACE·PLANTS) 소속 기사면 정본을 그 서비스 쪽으로(트래픽을 서비스로 보내기 위해, 2026-10-24)
+    const serviceHome = (await getServicePostMap()).get(Number(data.id));
+    const canonicalUrl = serviceHome?.url ?? `https://nemoneai.com/posts/${id}`;
+
     const imageUrl = data?.image_url || `https://nemoneai.com/api/og-image?title=${encodeURIComponent(data?.title || '네모네AIM.')}`; // OG 이미지 URL
     const pageTitle = data?.title || "네모네AIM";
     const pageDescription = (data?.body_text || "")
@@ -109,12 +114,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       description: pageDescription,
       keywords: data?.tags,
       alternates: {
-        canonical: `https://nemoneai.com/posts/${id}`,
+        canonical: canonicalUrl,
       },
       openGraph: {
         title: pageTitle,
         description: pageDescription,
-        url: `https://nemoneai.com/posts/${id}`,
+        url: canonicalUrl,
         siteName: '네모네AIM',
         images: [{
           url: imageUrl,
@@ -241,13 +246,17 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
       || data.cover_image
       || (videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '');
 
+  // 계열 서비스(PACE·PLANTS) 소속 기사면 구조화 데이터의 대표 URL도 서비스 쪽(정본과 일치)
+  const serviceHome = (await getServicePostMap()).get(Number(data.id));
+  const articleUrl = serviceHome?.url ?? `https://nemoneai.com/posts/${id}`;
+
   return (
     <div className="bg-[#0c0c0c] text-white selection:bg-[#D4AF37] selection:text-black font-serif italic overflow-x-hidden min-h-screen flex flex-col">
       <AnalyticsTracker postId={id} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
         "@context": "https://schema.org",
         "@type": "Article",
-        "mainEntityOfPage": { "@type": "WebPage", "@id": `https://nemoneai.com/posts/${id}` },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": articleUrl },
         "headline": data.title,
         ...(bgImage ? { "image": [bgImage] } : {}),
         "datePublished": data.created_at,

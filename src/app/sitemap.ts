@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next'
+import { getServicePostMap } from '@/lib/serviceHome'
 
 export const revalidate = 3600 // 1시간마다 사이트맵 재생성
 
@@ -26,7 +27,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   // 2. 게시물 상세 페이지 URL 생성
-  const postUrls = posts.map((post) => ({
+  // 계열 서비스(PACE·PLANTS) 소속 기사는 정본이 서비스 쪽이라 맛매치 사이트맵에서 뺀다(해당 서비스 사이트맵에 실림)
+  const serviceMap = await getServicePostMap()
+  const postUrls = posts.filter((post) => !serviceMap.has(Number(post.id))).map((post) => ({
     url: `${baseUrl}/posts/${post.id}`,
     lastModified: new Date(post.created_at || new Date()),
     changeFrequency: 'weekly' as const,
