@@ -45,6 +45,9 @@ export default async function PortalPage() {
         </div>
         <ServicesSection />
         <ObserveSection today={today} />
+        <div className="mx-auto mt-10 max-w-[1200px] px-4 md:px-10">
+          <AdSlot adSlot="3371700491" />
+        </div>
         <LiiSection items={today.lii} />
         <StoryBand />
       </main>
