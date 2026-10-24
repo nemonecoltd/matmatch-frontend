@@ -1,5 +1,5 @@
 import OutLink from './OutLink'
-import { fmtDate, type PortalItem, type PortalToday } from './types'
+import { fmtDate, type DiscoverPanel, type PortalItem, type PortalToday } from './types'
 import { PORTAL_LAB, PORTAL_SERVICES, PORTAL_SNS, SANTA_QUOTES } from '@/lib/portalContent'
 import { SantaWidget, FortuneWidget } from './Widgets'
 import ObservationTabs from './ObservationTabs'
@@ -23,25 +23,49 @@ function Arrow() {
   return <span aria-hidden className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-[#C9D3E0] text-[13px] text-[#35577A] transition-colors group-hover:bg-[#35577A] group-hover:text-white">→</span>
 }
 
-function DiscoverCard({ it }: { it: PortalItem }) {
+const FALLBACK_IMG: Record<string, string> = { pace: '/portal/og-pace.jpg', aim: '/portal/og-aim.jpg', plants: '/portal/og-plants.jpg' }
+
+function RankMark({ n, className = '' }: { n: number; className?: string }) {
+  return <span className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md text-[12px] font-bold ${n === 1 ? 'bg-[#35577A] text-white' : 'bg-[#EEF2F6] text-[#35577A]'} ${className}`}>{n}</span>
+}
+
+// 1번(리드)은 썸네일 카드, 2~5번은 텍스트 줄. 이미지가 없으면(외부 원본 등) 서비스 대표 이미지로 대체한다.
+function DiscoverPanelCard({ panel }: { panel: DiscoverPanel }) {
+  const [lead, ...rest] = panel.items
+  const img = lead.image || FALLBACK_IMG[lead.service]
   return (
-    <OutLink href={it.url} service={it.service} slot={it.slot} className="group flex flex-col overflow-hidden rounded-2xl border border-[#E3E8EE] bg-white no-underline shadow-[0_2px_12px_rgba(20,40,60,.06)] transition-shadow hover:shadow-[0_6px_20px_rgba(20,40,60,.12)]">
-      <div className="relative aspect-[16/10] overflow-hidden bg-[#F5F8FB]">
-        {it.image && /* eslint-disable-next-line @next/next/no-img-element */ <img src={it.image} alt={it.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />}
-        <span className="absolute left-3 top-3 rounded-full bg-white px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[#1A2430]">{it.category}</span>
-        {it.badge && <span className="absolute right-3 top-3 rounded-full bg-[#35577A] px-2.5 py-1 text-[10px] font-semibold text-white">{it.badge}</span>}
-      </div>
-      <div className="flex flex-1 flex-col p-4">
-        <h3 className="not-italic text-[15px] font-semibold leading-snug text-[#1A2430] line-clamp-2">{it.title}</h3>
-        <p className="mt-1.5 text-[13px] leading-relaxed text-[#6B7785] line-clamp-2">{it.summary}</p>
-        <div className="mt-auto flex items-end justify-between gap-2 pt-3">
-          <div className="flex flex-wrap gap-1.5">
-            {(it.tags || []).filter((t) => t.length <= 9).slice(0, 2).map((t) => <span key={t} className="rounded-md bg-[#EEF2F6] px-2 py-0.5 text-[11px] text-[#6B7785]">#{t}</span>)}
-          </div>
-          <Arrow />
+    <div className="flex flex-col overflow-hidden rounded-2xl border border-[#E3E8EE] bg-white shadow-[0_2px_12px_rgba(20,40,60,.06)]">
+      <div className="flex items-baseline justify-between gap-2 px-4 pb-3 pt-4">
+        <div>
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-[#35577A]">{panel.category}</span>
+          <h3 className="not-italic text-[16px] font-bold leading-tight text-[#1A2430]">{panel.title}</h3>
         </div>
+        <a href={panel.link} {...(panel.link.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})} className="whitespace-nowrap text-[11px] text-[#6B7785] no-underline hover:text-[#35577A]">더 보기 →</a>
       </div>
-    </OutLink>
+      <OutLink href={lead.url} service={lead.service} slot={lead.slot} className="group block no-underline">
+        <div className="relative aspect-[16/9] overflow-hidden bg-[#F5F8FB]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={img} alt={lead.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+          {panel.ranked && <RankMark n={1} className="absolute left-3 top-3 h-7 w-7 text-[14px]" />}
+          {lead.badge && <span className="absolute right-3 top-3 rounded-full bg-[#35577A] px-2.5 py-1 text-[10px] font-semibold text-white">{lead.badge}</span>}
+        </div>
+        <div className="px-4 pb-3 pt-3">
+          <h4 className="not-italic text-[15px] font-semibold leading-snug text-[#1A2430] line-clamp-2">{lead.title}</h4>
+          {lead.summary && <p className="mt-1 text-[12px] leading-relaxed text-[#6B7785] line-clamp-1">{lead.summary}</p>}
+        </div>
+      </OutLink>
+      <ul className="mt-auto divide-y divide-[#EEF2F6] border-t border-[#EEF2F6]">
+        {rest.map((it, i) => (
+          <li key={`${it.service}-${it.id}`}>
+            <OutLink href={it.url} service={it.service} slot={it.slot} className="flex items-center gap-3 px-4 py-2.5 no-underline hover:bg-[#F7F9FC]">
+              {panel.ranked ? <RankMark n={it.rank ?? i + 2} /> : <span aria-hidden className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-[#C9D3E0]" />}
+              <span className="min-w-0 flex-1 truncate text-[13px] text-[#1A2430]">{it.title}</span>
+              {!panel.ranked && it.published_at && <span className="flex-shrink-0 text-[11px] text-[#9AA5B1]">{fmtDate(it.published_at).slice(5)}</span>}
+            </OutLink>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
@@ -63,14 +87,15 @@ export function Hero({ date }: { date: string }) {
 }
 
 export function DiscoverSection({ today }: { today: PortalToday }) {
+  const panels = (today.discover || []).filter((p) => Array.isArray(p?.items) && p.items.length > 0) // 구버전 응답 형태가 섞여도 깨지지 않게
   const seed = Math.floor((Date.now() + 9 * 3600 * 1000) / 86400000)
   const q = SANTA_QUOTES[seed % SANTA_QUOTES.length]
   return (
     <section className="mx-auto max-w-[1200px] px-4 pt-10 md:px-10">
-      <SectionHeader id="today" title="오늘의 발견" desc="네모네가 엄선한 지금 가장 흥미로운 세 가지" />
+      <SectionHeader id="today" title="오늘의 발견" desc="지금 뜨는 곳, 이번 주 인기 글, 새로 올라온 식물 매거진" />
       <div className="grid gap-6 lg:grid-cols-[3fr_1fr]">
-        {today.discover.length > 0 ? (
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-5">{today.discover.map((it) => <DiscoverCard key={`${it.service}-${it.id}`} it={it} />)}</div>
+        {panels.length > 0 ? (
+          <div className="grid gap-4 md:grid-cols-3 md:gap-5">{panels.map((p) => <DiscoverPanelCard key={p.key} panel={p} />)}</div>
         ) : (
           <p className="rounded-2xl border border-dashed border-[#D5DCE5] p-8 text-center text-[14px] text-[#6B7785]">오늘의 발견을 준비하고 있어요.</p>
         )}

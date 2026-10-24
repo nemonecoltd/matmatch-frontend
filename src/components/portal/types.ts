@@ -12,12 +12,23 @@ export type PortalItem = {
   service_label: string
   slot: string
   scores?: Record<string, number | null>
+  rank?: number
+}
+
+export type DiscoverPanel = {
+  key: string
+  category: string
+  title: string
+  sub: string
+  link: string
+  ranked: boolean
+  items: PortalItem[]
 }
 
 export type PortalToday = {
   date: string
   generated_at: string | null
-  discover: PortalItem[]
+  discover: DiscoverPanel[]
   lii: PortalItem[]
   observe: { all: PortalItem[]; place: PortalItem[]; taste: PortalItem[]; plant: PortalItem[]; mind: PortalItem[]; future: PortalItem[] }
   aim_latest: PortalItem[]
