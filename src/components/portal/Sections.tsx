@@ -3,6 +3,7 @@ import { fmtDate, type DiscoverPanel, type PortalItem, type PortalToday } from '
 import { PORTAL_LAB, PORTAL_SERVICES, PORTAL_SNS, SANTA_QUOTES } from '@/lib/portalContent'
 import { SantaWidget } from './Widgets'
 import ObservationTabs from './ObservationTabs'
+import AdSlot from '@/components/AdSlot'
 
 function SectionHeader({ title, desc, href, link, id }: { title: string; desc: string; href?: string; link?: string; id?: string }) {
   return (
@@ -86,6 +87,16 @@ export function Hero({ date }: { date: string }) {
   )
 }
 
+// 오늘의 발견 오른쪽 열 — 산타 위젯 아래 광고(AdSense 슬롯 portal_main). '광고' 표기로 콘텐츠와 구분한다.
+function AdBox() {
+  return (
+    <aside aria-label="광고" className="overflow-hidden rounded-2xl border border-[#E3E8EE] bg-white p-3 has-[ins[data-ad-status=unfilled]]:hidden">
+      <p className="mb-1.5 text-[10px] tracking-wider text-[#9AA5B1]">광고</p>
+      <div className="min-h-[100px]"><AdSlot adSlot="3545007575" /></div>
+    </aside>
+  )
+}
+
 function NewsBox({ news }: { news: PortalToday['news'] }) {
   return (
     <section aria-label="주요 소식" className="rounded-2xl border border-[#E3E8EE] bg-white p-5">
@@ -115,7 +126,7 @@ export function DiscoverSection({ today }: { today: PortalToday }) {
         )}
         <div className="flex flex-col gap-5">
           <SantaWidget quote={q.quote} sub={q.sub} />
-          <NewsBox news={today.news} />
+          <AdBox />
         </div>
       </div>
     </section>
@@ -203,18 +214,8 @@ export function ObserveSection({ today }: { today: PortalToday }) {
       <SectionHeader title="오늘의 관찰" desc="서비스를 가로지르는 오늘의 이야기" />
       <div className="grid gap-8 lg:grid-cols-[3fr_1fr]">
         {hasAny ? <ObservationTabs observe={today.observe} /> : <p className="rounded-2xl border border-dashed border-[#D5DCE5] p-8 text-center text-[14px] text-[#6B7785]">오늘의 관찰을 준비하고 있어요.</p>}
-        <aside className="space-y-8 lg:border-l lg:border-[#E3E8EE] lg:pl-6">
-          {today.aim_latest.length > 0 && (
-            <div>
-              <div className="mb-2 flex items-center justify-between"><h3 className="not-italic text-[15px] font-bold text-[#1A2430]">네모네 AIM 최신 글</h3><a href="/aim" className="text-[12px] text-[#6B7785] no-underline">AIM 홈 →</a></div>
-              {today.aim_latest.map((it) => (
-                <OutLink key={it.id} href={it.url} service="aim" slot={it.slot} className="block border-b border-[#E3E8EE] py-3 no-underline last:border-b-0">
-                  <p className="text-[13px] font-medium leading-snug text-[#1A2430] line-clamp-2">{it.title}</p>
-                  <p className="mt-1 text-[11px] text-[#8A95A3]">{fmtDate(it.published_at)}</p>
-                </OutLink>
-              ))}
-            </div>
-          )}
+        <aside className="lg:border-l lg:border-[#E3E8EE] lg:pl-6">
+          <NewsBox news={today.news} />
         </aside>
       </div>
     </section>
