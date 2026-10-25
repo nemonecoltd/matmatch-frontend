@@ -32,8 +32,8 @@ function Featured({ it }: { it: PortalItem }) {
 function Row({ it }: { it: PortalItem }) {
   return (
     <OutLink href={it.url} service={it.service} slot={it.slot} className="group flex gap-4 border-b border-[#E3E8EE] py-4 no-underline last:border-b-0">
-      <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-[10px] bg-[#F5F8FB]">
-        {it.image && /* eslint-disable-next-line @next/next/no-img-element */ <img src={it.image} alt={it.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />}
+      <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-[10px] border border-[#E3E8EE] bg-[#F5F8FB]">
+        {(it.image_square || it.image) && /* eslint-disable-next-line @next/next/no-img-element */ <img src={(it.image_square || it.image) as string} alt={it.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />}
       </div>
       <div className="min-w-0">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-[#35577A]">{it.category}</p>

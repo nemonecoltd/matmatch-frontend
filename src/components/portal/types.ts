@@ -13,6 +13,7 @@ export type PortalItem = {
   slot: string
   scores?: Record<string, number | null>
   rank?: number
+  image_square?: string | null // 작은 정사각 썸네일용(없으면 image를 쓴다)
 }
 
 export type DiscoverPanel = {
