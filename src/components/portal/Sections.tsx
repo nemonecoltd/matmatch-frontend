@@ -115,6 +115,7 @@ export function DiscoverSection({ today }: { today: PortalToday }) {
         )}
         <div className="flex flex-col gap-5">
           <SantaWidget quote={q.quote} sub={q.sub} />
+          <NewsBox news={today.news} />
         </div>
       </div>
     </section>
@@ -202,8 +203,18 @@ export function ObserveSection({ today }: { today: PortalToday }) {
       <SectionHeader title="오늘의 관찰" desc="서비스를 가로지르는 오늘의 이야기" />
       <div className="grid gap-8 lg:grid-cols-[3fr_1fr]">
         {hasAny ? <ObservationTabs observe={today.observe} /> : <p className="rounded-2xl border border-dashed border-[#D5DCE5] p-8 text-center text-[14px] text-[#6B7785]">오늘의 관찰을 준비하고 있어요.</p>}
-        <aside className="lg:border-l lg:border-[#E3E8EE] lg:pl-6">
-          <NewsBox news={today.news} />
+        <aside className="space-y-8 lg:border-l lg:border-[#E3E8EE] lg:pl-6">
+          {today.aim_latest.length > 0 && (
+            <div>
+              <div className="mb-2 flex items-center justify-between"><h3 className="not-italic text-[15px] font-bold text-[#1A2430]">네모네 AIM 최신 글</h3><a href="/aim" className="text-[12px] text-[#6B7785] no-underline">AIM 홈 →</a></div>
+              {today.aim_latest.map((it) => (
+                <OutLink key={it.id} href={it.url} service="aim" slot={it.slot} className="block border-b border-[#E3E8EE] py-3 no-underline last:border-b-0">
+                  <p className="text-[13px] font-medium leading-snug text-[#1A2430] line-clamp-2">{it.title}</p>
+                  <p className="mt-1 text-[11px] text-[#8A95A3]">{fmtDate(it.published_at)}</p>
+                </OutLink>
+              ))}
+            </div>
+          )}
         </aside>
       </div>
     </section>
