@@ -29,6 +29,7 @@ export type PortalToday = {
   date: string
   generated_at: string | null
   discover: DiscoverPanel[]
+  channels?: DiscoverPanel[]
   lii: PortalItem[]
   observe: { all: PortalItem[]; place: PortalItem[]; taste: PortalItem[]; plant: PortalItem[]; mind: PortalItem[]; future: PortalItem[] }
   aim_latest: PortalItem[]

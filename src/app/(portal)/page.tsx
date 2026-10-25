@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { EMPTY_TODAY, type PortalToday } from '@/components/portal/types'
-import { Hero, DiscoverSection, LiiSection, ServicesSection, ObserveSection, StoryBand, PortalFooter } from '@/components/portal/Sections'
+import { Hero, DiscoverSection, ChannelsSection, LiiSection, ServicesSection, ObserveSection, StoryBand, PortalFooter } from '@/components/portal/Sections'
 import AdSlot from '@/components/AdSlot'
 
 export const revalidate = 600 // 10분마다 재생성 — 서비스 피드는 백엔드가 30분 주기로 수집해 둔 스냅샷
@@ -45,6 +45,7 @@ export default async function PortalPage() {
         </div>
         <ServicesSection />
         <ObserveSection today={today} />
+        <ChannelsSection panels={today.channels ?? []} />
         <div className="mx-auto mt-10 max-w-[1200px] px-4 md:px-10">
           <AdSlot adSlot="3371700491" />
         </div>

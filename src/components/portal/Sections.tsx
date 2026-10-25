@@ -23,7 +23,7 @@ function Arrow() {
   return <span aria-hidden className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-[#C9D3E0] text-[13px] text-[#35577A] transition-colors group-hover:bg-[#35577A] group-hover:text-white">→</span>
 }
 
-const FALLBACK_IMG: Record<string, string> = { pace: '/portal/og-pace.jpg', aim: '/portal/og-aim.jpg', plants: '/portal/og-plants.jpg' }
+const FALLBACK_IMG: Record<string, string> = { pace: '/portal/og-pace.jpg', aim: '/portal/og-aim.jpg', plants: '/portal/og-plants.jpg', youtube: '/portal/og-home.jpg', podcast: '/portal/og-home.jpg', blog: '/portal/og-home.jpg' }
 
 function RankMark({ n, className = '' }: { n: number; className?: string }) {
   return <span className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md text-[12px] font-bold ${n === 1 ? 'bg-[#35577A] text-white' : 'bg-[#EEF2F6] text-[#35577A]'} ${className}`}>{n}</span>
@@ -45,13 +45,13 @@ function DiscoverPanelCard({ panel }: { panel: DiscoverPanel }) {
       <OutLink href={lead.url} service={lead.service} slot={lead.slot} className="group block no-underline">
         <div className="relative aspect-[16/9] overflow-hidden bg-[#F5F8FB]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={img} alt={lead.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+          <img src={img} alt={lead.title} loading="lazy" referrerPolicy="no-referrer" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
           {panel.ranked && <RankMark n={1} className="absolute left-3 top-3 h-7 w-7 text-[14px]" />}
           {lead.badge && <span className="absolute right-3 top-3 rounded-full bg-[#35577A] px-2.5 py-1 text-[10px] font-semibold text-white">{lead.badge}</span>}
         </div>
         <div className="px-4 pb-3 pt-3">
           <h4 className="not-italic text-[15px] font-semibold leading-snug text-[#1A2430] line-clamp-2">{lead.title}</h4>
-          {lead.summary && <p className="mt-1 text-[12px] leading-relaxed text-[#6B7785] line-clamp-1">{lead.summary}</p>}
+          {(() => { const meta = [!panel.ranked && lead.published_at ? fmtDate(lead.published_at).slice(5) : '', lead.summary].filter(Boolean).join(' · '); return meta ? <p className="mt-1 text-[12px] leading-relaxed text-[#6B7785] line-clamp-1">{meta}</p> : null })()}
         </div>
       </OutLink>
       <ul className="mt-auto divide-y divide-[#EEF2F6] border-t border-[#EEF2F6]">
@@ -217,6 +217,18 @@ export function ObserveSection({ today }: { today: PortalToday }) {
           )}
         </aside>
       </div>
+    </section>
+  )
+}
+
+// 오늘의 채널 — 유튜브·팟캐스트·네이버 블로그 최신 3단. 각 칸은 최신 1개(썸네일) + 이어지는 글 4개.
+export function ChannelsSection({ panels }: { panels: DiscoverPanel[] }) {
+  const list = (panels || []).filter((p) => Array.isArray(p?.items) && p.items.length > 0)
+  if (list.length === 0) return null // 채널 피드를 못 가져오면 섹션 전체를 숨긴다
+  return (
+    <section className="mx-auto max-w-[1200px] px-4 pt-[72px] md:px-10">
+      <SectionHeader title="오늘의 채널" desc="영상, 소리, 글로 만나는 네모네AIM의 최신 이야기" />
+      <div className="grid gap-4 md:grid-cols-3 md:gap-5">{list.map((p) => <DiscoverPanelCard key={p.key} panel={p} />)}</div>
     </section>
   )
 }
