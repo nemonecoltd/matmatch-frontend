@@ -23,7 +23,7 @@ function Arrow() {
   return <span aria-hidden className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border border-[#C9D3E0] text-[13px] text-[#35577A] transition-colors group-hover:bg-[#35577A] group-hover:text-white">→</span>
 }
 
-const FALLBACK_IMG: Record<string, string> = { pace: '/portal/og-pace.jpg', aim: '/portal/og-aim.jpg', plants: '/portal/og-plants.jpg', youtube: '/portal/og-home.jpg', podcast: '/portal/og-home.jpg', blog: '/portal/og-home.jpg' }
+const FALLBACK_IMG: Record<string, string> = { pace: '/portal/og-pace.jpg', aim: '/portal/og-aim.jpg', plants: '/portal/og-plants.jpg', youtube: '/portal/og-home.jpg', podcast: '/portal/podcast-cover.jpg', blog: '/portal/blog-placeholder.jpg' }
 
 function RankMark({ n, className = '' }: { n: number; className?: string }) {
   return <span className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-md text-[12px] font-bold ${n === 1 ? 'bg-[#35577A] text-white' : 'bg-[#EEF2F6] text-[#35577A]'} ${className}`}>{n}</span>
