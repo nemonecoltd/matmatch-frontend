@@ -39,6 +39,10 @@ export default async function PortalPage() {
       <Hero date={date} />
       <main>
         <DiscoverSection today={today} />
+        {/* 광고 배너 — 오늘의 발견 바로 아래 (AdSense 슬롯 portal_main). 오른쪽 열 배치는 세로형 광고가 나와 철회(2026-10-25) */}
+        <div className="mx-auto mt-10 max-w-[1200px] px-4 md:px-10" aria-label="광고">
+          <AdSlot adSlot="3545007575" />
+        </div>
         <ServicesSection />
         <ObserveSection today={today} />
         <ChannelsSection panels={today.channels ?? []} />

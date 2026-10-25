@@ -3,7 +3,6 @@ import { fmtDate, type DiscoverPanel, type PortalItem, type PortalToday } from '
 import { PORTAL_LAB, PORTAL_SERVICES, PORTAL_SNS, SANTA_QUOTES } from '@/lib/portalContent'
 import { SantaWidget } from './Widgets'
 import ObservationTabs from './ObservationTabs'
-import AdSlot from '@/components/AdSlot'
 
 function SectionHeader({ title, desc, href, link, id }: { title: string; desc: string; href?: string; link?: string; id?: string }) {
   return (
@@ -87,16 +86,6 @@ export function Hero({ date }: { date: string }) {
   )
 }
 
-// 오늘의 발견 오른쪽 열 — 산타 위젯 아래 광고(AdSense 슬롯 portal_main). '광고' 표기로 콘텐츠와 구분한다.
-function AdBox() {
-  return (
-    <aside aria-label="광고" className="overflow-hidden rounded-2xl border border-[#E3E8EE] bg-white p-3 has-[ins[data-ad-status=unfilled]]:hidden">
-      <p className="mb-1.5 text-[10px] tracking-wider text-[#9AA5B1]">광고</p>
-      <div className="min-h-[100px]"><AdSlot adSlot="3545007575" /></div>
-    </aside>
-  )
-}
-
 function NewsBox({ news }: { news: PortalToday['news'] }) {
   return (
     <section aria-label="주요 소식" className="rounded-2xl border border-[#E3E8EE] bg-white p-5">
@@ -126,7 +115,6 @@ export function DiscoverSection({ today }: { today: PortalToday }) {
         )}
         <div className="flex flex-col gap-5">
           <SantaWidget quote={q.quote} sub={q.sub} />
-          <AdBox />
         </div>
       </div>
     </section>
