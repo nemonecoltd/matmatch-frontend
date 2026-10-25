@@ -43,9 +43,9 @@ function DiscoverPanelCard({ panel }: { panel: DiscoverPanel }) {
         <a href={panel.link} {...(panel.link.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {})} className="whitespace-nowrap text-[11px] text-[#6B7785] no-underline hover:text-[#35577A]">더 보기 →</a>
       </div>
       <OutLink href={lead.url} service={lead.service} slot={lead.slot} className="group block no-underline">
-        <div className="relative aspect-[16/9] overflow-hidden bg-[#F5F8FB]">
+        <div className="relative aspect-[2/1] overflow-hidden bg-[#F5F8FB]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={img} alt={lead.title} loading="lazy" referrerPolicy="no-referrer" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
+          <img src={img} alt={lead.title} loading="lazy" referrerPolicy="no-referrer" className={`h-full w-full object-cover ${lead.service === 'plants' ? 'object-left' : 'object-center'} transition-transform duration-500 group-hover:scale-[1.03]`} />
           {panel.ranked && <RankMark n={1} className="absolute left-3 top-3 h-7 w-7 text-[14px]" />}
           {lead.badge && <span className="absolute right-3 top-3 rounded-full bg-[#35577A] px-2.5 py-1 text-[10px] font-semibold text-white">{lead.badge}</span>}
         </div>
