@@ -100,19 +100,34 @@ function NewsBox({ news }: { news: PortalToday['news'] }) {
   )
 }
 
-export function DiscoverSection({ today }: { today: PortalToday }) {
+// 오늘의 발견 / 오늘의 관찰 — 2026-10-29 위치 맞교환: 왼쪽 본문(제목 포함)만 서로 바꾸고 오른쪽 사이드는 각 섹션에 그대로 둔다.
+//   첫 섹션 = 오늘의 관찰(왼쪽) + 산타 한마디·주요 소식(오른쪽), 둘째 섹션 = 오늘의 발견(왼쪽) + 네모네 AIM 최신 글(오른쪽)
+function DiscoverMain({ today }: { today: PortalToday }) {
   const panels = (today.discover || []).filter((p) => Array.isArray(p?.items) && p.items.length > 0) // 구버전 응답 형태가 섞여도 깨지지 않게
+  return panels.length > 0 ? (
+    <div className="grid gap-4 md:grid-cols-3 md:gap-5">{panels.map((p) => <DiscoverPanelCard key={p.key} panel={p} />)}</div>
+  ) : (
+    <p className="rounded-2xl border border-dashed border-[#D5DCE5] p-8 text-center text-[14px] text-[#6B7785]">오늘의 발견을 준비하고 있어요.</p>
+  )
+}
+
+function ObserveMain({ today }: { today: PortalToday }) {
+  return today.observe.all.length > 0 ? (
+    <ObservationTabs observe={today.observe} />
+  ) : (
+    <p className="rounded-2xl border border-dashed border-[#D5DCE5] p-8 text-center text-[14px] text-[#6B7785]">오늘의 관찰을 준비하고 있어요.</p>
+  )
+}
+
+// 첫 섹션(page.tsx의 DiscoverSection 자리): 오늘의 관찰 + 오른쪽 사이드(산타 한마디·주요 소식)
+export function DiscoverSection({ today }: { today: PortalToday }) {
   const seed = Math.floor((Date.now() + 9 * 3600 * 1000) / 86400000)
   const q = SANTA_QUOTES[seed % SANTA_QUOTES.length]
   return (
     <section className="mx-auto max-w-[1200px] px-4 pt-10 md:px-10">
-      <SectionHeader id="today" title="오늘의 발견" desc="지금 뜨는 곳, 이번 주 인기 글, 새로 올라온 플랜트 매거진" />
+      <SectionHeader title="오늘의 관찰" desc="서비스를 가로지르는 오늘의 이야기" />
       <div className="grid gap-6 lg:grid-cols-[3fr_1fr]">
-        {panels.length > 0 ? (
-          <div className="grid gap-4 md:grid-cols-3 md:gap-5">{panels.map((p) => <DiscoverPanelCard key={p.key} panel={p} />)}</div>
-        ) : (
-          <p className="rounded-2xl border border-dashed border-[#D5DCE5] p-8 text-center text-[14px] text-[#6B7785]">오늘의 발견을 준비하고 있어요.</p>
-        )}
+        <ObserveMain today={today} />
         <div className="flex flex-col gap-5">
           <SantaWidget quote={q.quote} sub={q.sub} />
           <NewsBox news={today.news} />
@@ -197,12 +212,11 @@ export function ServicesSection() {
 }
 
 export function ObserveSection({ today }: { today: PortalToday }) {
-  const hasAny = today.observe.all.length > 0
   return (
     <section className="mx-auto max-w-[1200px] border-t border-[#E3E8EE] px-4 pt-14 md:px-10 mt-[72px]">
-      <SectionHeader title="오늘의 관찰" desc="서비스를 가로지르는 오늘의 이야기" />
+      <SectionHeader id="today" title="오늘의 발견" desc="지금 뜨는 곳, 이번 주 인기 글, 새로 올라온 플랜트 매거진" />
       <div className="grid gap-8 lg:grid-cols-[3fr_1fr]">
-        {hasAny ? <ObservationTabs observe={today.observe} /> : <p className="rounded-2xl border border-dashed border-[#D5DCE5] p-8 text-center text-[14px] text-[#6B7785]">오늘의 관찰을 준비하고 있어요.</p>}
+        <DiscoverMain today={today} />
         <aside className="space-y-8 lg:border-l lg:border-[#E3E8EE] lg:pl-6">
           {today.aim_latest.length > 0 && (
             <div>

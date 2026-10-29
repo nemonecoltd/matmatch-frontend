@@ -42,6 +42,9 @@ for i in $(seq 1 15); do
 done
 
 echo "▶ 빌드"
+# 로컬 .next/cache/fetch-cache에 남은 며칠 전 /portal/today 응답이 그대로 index.html에 구워져 배포되던 문제(2026-10-29,
+# 배포 직후 10분간 포털이 6일 전 데이터로 보임) — 빌드 전에 비워 터널로 받은 최신 데이터만 쓰게 한다.
+rm -rf .next/cache/fetch-cache
 npm run build
 
 kill $TUNNEL_PID 2>/dev/null || true
