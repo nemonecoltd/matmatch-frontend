@@ -13,6 +13,7 @@ import { getServicePostMap } from '@/lib/serviceHome';
 import RelatedAndNext from './RelatedAndNext';
 import MoreToRead from './MoreToRead';
 import { getInternalLinks } from '@/lib/internalLinks';
+import { postDescription } from '@/lib/postDescription';
 import NavLinks from '@/components/NavLinks';
 import BottomTabBar from '@/components/BottomTabBar';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
@@ -123,10 +124,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
     const imageUrl = data?.image_url || `https://nemoneai.com/api/og-image?title=${encodeURIComponent(data?.title || '네모네AIM.')}`; // OG 이미지 URL
     const pageTitle = data?.title || "네모네AIM";
-    const pageDescription = (data?.body_text || "")
-      .replace(/<[^>]*>/g, '')
-      .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').replace(/&quot;/g, '"')
-      .replace(/\s+/g, ' ').trim().substring(0, 150) || "네모네AIM, 당신의 시간을 알차게 채워줄 프리미엄 콘텐츠.";
+    const pageDescription = await postDescription(data);
 
     return {
       title: pageTitle,
