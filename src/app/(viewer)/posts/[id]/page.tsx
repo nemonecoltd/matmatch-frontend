@@ -11,6 +11,8 @@ import ArticleNavArrows from './ArticleNavArrows';
 import MediaUnit from './MediaUnit';
 import { getServicePostMap } from '@/lib/serviceHome';
 import RelatedAndNext from './RelatedAndNext';
+import MoreToRead from './MoreToRead';
+import { getInternalLinks } from '@/lib/internalLinks';
 import NavLinks from '@/components/NavLinks';
 import BottomTabBar from '@/components/BottomTabBar';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
@@ -54,7 +56,7 @@ const splitTitle = (title: string): { main: string; subtitle: string | null } =>
 // 소제목은 이미 관리자가 "1. 제목" 형태로 본문에 직접 써넣는 관례라(실제 글로 확인됨),
 // 별도 필드 없이 정규식으로 넘버만 큼직하게 분리해 2단 레이아웃으로 승격(지시서 3-3장).
 const SECTION_HEADING_HTML = (num: string, title: string) =>
-  `<div class="section-heading"><span class="section-num">${String(num).padStart(2, '0')}</span><span class="section-title">${title.trim()}</span></div>`;
+  `<h2 class="section-heading"><span class="section-num">${String(num).padStart(2, '0')}</span><span class="section-title">${title.trim()}</span></h2>`;
 
 const promoteSectionHeadings = (bodyHtml: string): string =>
   bodyHtml
@@ -74,6 +76,23 @@ const promoteSectionHeadings = (bodyHtml: string): string =>
 // 그대로 노출되던 문제(2026-09-05 사용자 리포트, id 218 확인) — 어떤 이유로든
 // 로드 실패 시 그 이미지만 조용히 숨김. 원인 자체(외부 스토리지 URL을 직접 박아
 // 넣는 관행)는 어드민 콘텐츠 작성 습관 문제라 여기서 고칠 수 없어 방어만 추가.
+// 본문 <h1>은 글 제목(h1)과 겹쳐 제목이 2개가 된다(id 280) — 본문 안의 h1은 h2로 낮춘다(모양은 같은 클래스 규칙이라 그대로).
+const demoteBodyH1 = (bodyHtml: string): string =>
+  bodyHtml.replace(/<h1(\s[^>]*)?>/gi, '<h2$1>').replace(/<\/h1>/gi, '</h2>');
+
+// alt가 없거나 빈 본문 이미지에 글 제목 기반 대체 텍스트를 붙인다(표본 30개 글의 이미지 약 15%가 alt 없음).
+const ensureImgAlt = (bodyHtml: string, title: string): string => {
+  const base = (title.split(':')[0] || title).replace(/[<>"&]/g, '').trim().slice(0, 60) || '기사';
+  let n = 0;
+  return bodyHtml.replace(/<img\b[^>]*>/gi, (tag) => {
+    n += 1;
+    const m = tag.match(/\balt\s*=\s*(?:"([^"]*)"|'([^']*)')/i);
+    if (m && (m[1] ?? m[2] ?? '').trim()) return tag;
+    const cleaned = tag.replace(/\salt\s*=\s*(?:"[^"]*"|'[^']*')/i, '');
+    return cleaned.replace(/<img\b/i, `<img alt="${base} 이미지 ${n}"`);
+  });
+};
+
 const guardBrokenImages = (bodyHtml: string): string =>
   bodyHtml.replace(/<img /g, `<img onerror="this.style.display='none'" `);
 
@@ -218,6 +237,9 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
     }
   }
 
+  // 함께 읽으면 좋은 글(같은 Special·같은 태그) — 위 관련 카드 3개와 겹치지 않게 뺀다
+  const internalLinks = await getInternalLinks(data, [...relatedPosts.slice(0, 3).map((p: any) => Number(p.id)), ...(related3Override ? [Number(related3Override.id)] : [])]);
+
   // 관리자가 직접 고른 상품이 있으면 우선, 없으면 태그로 자동매칭(전체 상품 목록은
   // 자주 안 바뀌므로 1시간 캐시 — 게시글 fetch와 동일한 revalidate 주기)
   let recommendedProduct: AffiliateProduct | null = null;
@@ -335,11 +357,11 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
           <div className="text-gray-200 leading-[2] text-lg max-w-[720px] mx-auto mb-12 prose-custom font-light tracking-[-0.01em] not-italic">
             {(() => {
               if (!data.body_text) return null;
-              const bodyHtml = guardBrokenImages(promoteSectionHeadings(data.body_text));
+              const bodyHtml = guardBrokenImages(ensureImgAlt(promoteSectionHeadings(demoteBodyH1(data.body_text)), data.title || ''));
               const paragraphs = bodyHtml.split('</p>');
               const mid = Math.floor(paragraphs.length / 2);
               if (paragraphs.length < 5) {
-                return <div dangerouslySetInnerHTML={{ __html: data.body_text }} />;
+                return <div dangerouslySetInnerHTML={{ __html: ensureImgAlt(demoteBodyH1(data.body_text), data.title || '') }} />;
               }
               const firstHalf = paragraphs.slice(0, mid).join('</p>') + '</p>';
               const secondHalf = paragraphs.slice(mid).join('</p>');
@@ -359,6 +381,7 @@ export default async function PostDetail({ params }: { params: Promise<{ id: str
               ArticleNavArrows 좌우 고정 화살표가 계속 담당). 3번째 칸은 related3Override가
               있으면 그걸, 없으면 기존처럼 자동(같은 카테고리)으로 채움 */}
           <RelatedAndNext related={relatedPosts} override3={related3Override} />
+          <MoreToRead links={internalLinks} />
 
           <div className="flex flex-wrap gap-3 mb-10 max-w-7xl mx-auto">
             {data.tags?.split(',').map((tag: string) => (

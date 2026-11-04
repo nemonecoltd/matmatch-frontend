@@ -186,6 +186,14 @@
     margin-top: 3.5rem;
     margin-bottom: 1.5rem;
   }
+  /* 소제목을 진짜 <h2>로 내보내도(검색엔진이 글 구조를 읽도록) 겉모양은 예전 div와 같게 — .prose-custom h2의 글자 규칙을 덮는다 */
+  .prose-custom h2.section-heading {
+    font-size: inherit;
+    line-height: inherit;
+    font-weight: inherit;
+    font-style: inherit;
+    color: inherit;
+  }
   .prose-custom .section-num {
     font-size: 3rem;
     line-height: 1;
