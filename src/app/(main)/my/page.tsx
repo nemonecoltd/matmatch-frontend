@@ -10,6 +10,7 @@ const AUTH_URL = process.env.NEXT_PUBLIC_AUTH_URL || 'https://auth.nemoneai.com'
 // 계정은 하나인데 서비스끼리 이동할 동선이 없어서 하단에 배치(PACE 마이페이지와 동일 패턴).
 // 맛매치(AIM)는 이 페이지 자신이라 목록에서 제외.
 const NEMONE_SERVICES = [
+  { name: '산타의 칭찬카드', href: 'https://santa.nemoneai.com', icon: '🎅', desc: 'MBTI·혈액형으로 받는 칭찬카드' },
   { name: 'NEMONE PACE', href: 'https://now.nemoneai.com', icon: '🗺️', desc: '당신의 다음 3시간을 설계합니다' },
   { name: 'NEMONE PLANTS', href: 'https://plants.nemoneai.com', icon: '🪴', desc: '식물도감 & 케어 가이드' },
   { name: 'NEMONE MSM', href: 'https://msm.nemoneai.com', icon: '📈', desc: '국내 주식 AI 분석' },
