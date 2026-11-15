@@ -14,6 +14,9 @@ export type PortalItem = {
   scores?: Record<string, number | null>
   rank?: number
   image_square?: string | null // 작은 정사각 썸네일용(없으면 image를 쓴다)
+  price?: number // 네모네스토어 상품: 판매가(할인가가 있으면 할인가)
+  list_price?: number | null // 할인 전 정가(할인 없으면 null)
+  discount_pct?: number
 }
 
 export type DiscoverPanel = {
@@ -34,6 +37,7 @@ export type PortalToday = {
   lii: PortalItem[]
   observe: { all: PortalItem[]; place: PortalItem[]; taste: PortalItem[]; plant: PortalItem[]; mind: PortalItem[]; future: PortalItem[] }
   aim_latest: PortalItem[]
+  store?: PortalItem[] // 네모네스토어(네이버 스마트스토어) 최신 상품
   service_images: Record<string, string | null>
   news: { id: number; title: string; url: string; date: string }[]
   status: Record<string, string | boolean>
@@ -42,7 +46,7 @@ export type PortalToday = {
 export const EMPTY_TODAY: PortalToday = {
   date: '', generated_at: null, discover: [], lii: [],
   observe: { all: [], place: [], taste: [], plant: [], mind: [], future: [] },
-  aim_latest: [], service_images: {}, news: [], status: {},
+  aim_latest: [], store: [], service_images: {}, news: [], status: {},
 }
 
 export function fmtDate(iso?: string | null): string {

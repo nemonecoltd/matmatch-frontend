@@ -34,8 +34,23 @@ async function getToday(): Promise<PortalToday> {
 export default async function PortalPage() {
   const today = await getToday()
   const date = today.date || new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10)
+  // 네모네스토어(스마트스토어) 상품 목록 구조화 데이터 — 포털이 소개하는 스토어 상품을 검색엔진이 목록으로 이해하게 한다(가격·Offer는 넣지 않는다: 구매 페이지가 아니다)
+  const storeItems = (today.store ?? []).filter((it) => it.url && it.title)
+  const storeJsonLd = storeItems.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: '네모네스토어 최신 상품',
+    itemListElement: storeItems.map((it, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: it.url.split('?')[0],
+      name: it.title,
+      ...(it.image ? { image: it.image.split('?')[0] } : {}),
+    })),
+  } : null
   return (
     <>
+      {storeJsonLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(storeJsonLd) }} />}
       <Hero date={date} />
       <main>
         <DiscoverSection today={today} />

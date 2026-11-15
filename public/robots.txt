@@ -1,3 +1,4 @@
+#DaumWebMasterTool:da60e1d42a45ced1efc9d589c8d63df37f7548be843f0e361d69975065966e8e:CNSJIIGOISrSV2aL3hPlgQ==
 User-agent: *
 Allow: /
 # admin 페이지 차단 (admin.nemoneai.com 별도 운영)

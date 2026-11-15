@@ -72,11 +72,12 @@ function DiscoverPanelCard({ panel }: { panel: DiscoverPanel }) {
 export function Hero({ date }: { date: string }) {
   const d = date ? date.replace(/-/g, '.') : ''
   return (
-    <section className="relative isolate min-h-[320px] overflow-hidden bg-[#16212e] md:h-[360px]" aria-label="오늘의 네모네">
-      {/* 히어로: 제주 정원의 클린 이미지(텍스트 없음). 왼쪽은 어둡게 눌러 글자를 읽히게 한다 */}
-      <div className="absolute inset-0 -z-10 bg-cover bg-[position:62%_center] md:bg-center" style={{ backgroundImage: "url('/portal/hero.webp')" }} />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0f1a26]/70 via-[#0f1a26]/45 to-[#0f1a26]/80 md:bg-gradient-to-r md:from-[#0f1a26]/78 md:via-[#0f1a26]/35 md:via-[42%] md:to-[#0f1a26]/0 md:to-[70%]" />
-      <div className="mx-auto flex h-full min-h-[320px] max-w-[1200px] flex-col justify-end px-4 pb-8 pt-32 md:min-h-0 md:px-10 md:pt-20">
+    <section className="relative isolate min-h-[410px] overflow-hidden bg-[#16212e] md:h-[clamp(400px,32vw,500px)]" aria-label="오늘의 네모네">
+      {/* 히어로(2026-11-09 교체): 원형 창(거울) 너머 제주 바다 — 1983x793 한 장. 오른쪽의 창이 항상 보이도록 모바일은 right center로 맞춘다(사용자 지정).
+          왼쪽은 타일 벽이라 남색 그라데이션으로 눌러 글자를 읽히게 하고, 오른쪽 창은 거의 그대로 둔다 */}
+      <div className="absolute inset-0 -z-10 bg-cover bg-[position:right_center] md:bg-[position:center_55%]" style={{ backgroundImage: "url('/portal/hero-v2.webp')" }} />
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#0f1a26]/65 via-[#0f1a26]/25 to-[#0f1a26]/80 md:bg-gradient-to-r md:from-[#0f1a26]/80 md:via-[#0f1a26]/45 md:via-[42%] md:to-transparent" />
+      <div className="mx-auto flex h-full min-h-[410px] max-w-[1200px] flex-col justify-end px-4 pb-8 pt-32 md:min-h-0 md:px-10 md:pt-20">
         <p className="text-[11px] uppercase tracking-[0.12em] text-white/80">The world, observed by Nemone</p>
         <h1 className="not-italic mt-3 text-[30px] font-semibold leading-[1.25] text-white md:text-[40px]">오늘, 세상은<br />어떻게 달라지고 있을까?</h1>
         <p className="mt-3 max-w-[560px] text-[14px] leading-relaxed text-white/85 md:text-[15px]">도시의 새로운 취향부터 한 접시의 변화,<br className="hidden md:block" /> 자라는 식물과 마음, 기업의 긴 흐름까지.</p>
@@ -218,13 +219,21 @@ export function ObserveSection({ today }: { today: PortalToday }) {
       <div className="grid gap-8 lg:grid-cols-[3fr_1fr]">
         <DiscoverMain today={today} />
         <aside className="space-y-8 lg:border-l lg:border-[#E3E8EE] lg:pl-6">
-          {today.aim_latest.length > 0 && (
+          {(today.store?.length ?? 0) > 0 && (
             <div>
-              <div className="mb-2 flex items-center justify-between"><h3 className="not-italic text-[15px] font-bold text-[#1A2430]">네모네 AIM 최신 글</h3><a href="/aim" className="text-[12px] text-[#6B7785] no-underline">AIM 홈 →</a></div>
-              {today.aim_latest.map((it) => (
-                <OutLink key={it.id} href={it.url} service="aim" slot={it.slot} className="block border-b border-[#E3E8EE] py-3 no-underline last:border-b-0">
-                  <p className="text-[13px] font-medium leading-snug text-[#1A2430] line-clamp-2">{it.title}</p>
-                  <p className="mt-1 text-[11px] text-[#8A95A3]">{fmtDate(it.published_at)}</p>
+              <div className="mb-2 flex items-center justify-between"><h3 className="not-italic text-[15px] font-bold text-[#1A2430]">네모네스토어</h3><a href="https://smartstore.naver.com/nemone24" target="_blank" rel="noopener noreferrer" className="text-[12px] text-[#6B7785] no-underline">스토어 →</a></div>
+              {today.store!.map((it) => (
+                <OutLink key={it.id} href={it.url} service="store" slot={it.slot} className="flex items-center gap-3 border-b border-[#E3E8EE] py-3 no-underline last:border-b-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  {it.image && <img src={it.image} alt={it.title} width={72} height={72} loading="lazy" className="h-[72px] w-[72px] flex-none rounded-lg bg-[#F1F4F8] object-cover" />}
+                  <div className="min-w-0">
+                    <p className="text-[13px] font-medium leading-snug text-[#1A2430] line-clamp-2">{it.title}</p>
+                    <p className="mt-1 text-[13px] font-semibold text-[#1A2430]">
+                      {(it.discount_pct ?? 0) > 0 && <span className="mr-1 text-[#D6453D]">{it.discount_pct}%</span>}
+                      {(it.price ?? 0).toLocaleString('ko-KR')}원
+                    </p>
+                    {it.list_price ? <p className="text-[11px] text-[#8A95A3] line-through">{it.list_price.toLocaleString('ko-KR')}원</p> : null}
+                  </div>
                 </OutLink>
               ))}
             </div>

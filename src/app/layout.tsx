@@ -1,7 +1,6 @@
 import "./globals.css"; // 전역 CSS 임포트
 import Provider from './Provider';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
-import SideAds from '@/components/SideAds';
 import NaverAnalytics from '@/components/NaverAnalytics';
 import Script from 'next/script';
 import { Metadata } from 'next';
@@ -35,6 +34,14 @@ const organizationJsonLd = {
   url: 'https://nemoneai.com',
   logo: 'https://nemoneai.com/icon-512.png',
   contactPoint: { '@type': 'ContactPoint', email: 'nemonecoltd@gmail.com', contactType: 'customer service' },
+  // 푸터에 노출하는 공식 채널과 같은 목록(2026-11-15 페이스북 추가) — 검색엔진이 같은 주체의 계정으로 묶어 읽게 한다
+  sameAs: [
+    'https://www.youtube.com/@nemoneaim',
+    'https://podcasts.apple.com/kr/channel/%EB%84%A4%EB%AA%A8%EB%84%A4aim/id6753140870',
+    'https://brunch.co.kr/@you1',
+    'https://www.facebook.com/profile.php?id=61572151718459',
+    'https://smartstore.naver.com/nemone24',
+  ],
 };
 
 export default function RootLayout({
@@ -74,7 +81,7 @@ export default function RootLayout({
         
         <Provider>
           <AnalyticsTracker />
-          <SideAds />
+          {/* 사이드 광고(SideAds) 제거 — 2026-11-09 사용자 결정. 컴포넌트 파일은 남겨 둠(다시 켜려면 import 후 여기에 <SideAds />) */}
           {children}
         </Provider>
 

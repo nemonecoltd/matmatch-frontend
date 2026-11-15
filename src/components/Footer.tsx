@@ -3,10 +3,11 @@
 import Link from 'next/link';
 
 const footerLinks = [
-  { name: '글로벌미식탐험대', href: 'https://www.youtube.com/@nemoneaim' },
-  { name: 'PODCAST', href: 'https://podcasts.apple.com/kr/channel/%EB%84%A4%EB%AA%A8%EB%84%A4aim/id6753140870' },
   { name: 'ABOUT', href: 'https://home.nemoneai.com' },
+  { name: 'YOUTUBE', href: 'https://www.youtube.com/@nemoneaim' },
+  { name: 'PODCAST', href: 'https://podcasts.apple.com/kr/channel/%EB%84%A4%EB%AA%A8%EB%84%A4aim/id6753140870' },
   { name: 'BLOG', href: 'https://brunch.co.kr/@you1' },
+  { name: 'FACEBOOK', href: 'https://www.facebook.com/profile.php?id=61572151718459' },
 ];
 
 const Footer = () => {
